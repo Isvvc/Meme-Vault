@@ -18,8 +18,6 @@ class ActionSetCollectionViewController: UICollectionViewController, UICollectio
         super.viewDidLoad()
         
         collectionView.backgroundColor = .systemGroupedBackground
-        
-        self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     /*
@@ -85,19 +83,14 @@ class ActionSetCollectionViewController: UICollectionViewController, UICollectio
     */
     
     override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        tempData.swapAt(sourceIndexPath.item, destinationIndexPath.item)
+        let temp = tempData.remove(at: sourceIndexPath.item)
+        tempData.insert(temp, at: destinationIndexPath.item)
     }
     
     //MARK: Collection view delegate flow layout
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: UIScreen.main.bounds.width - (2 * 20), height: 50)
-    }
-    
-    //MARK: UICollectionView
-    
-    func beginInteractiveMovementForItem(at indexPath: IndexPath) -> Bool {
-        return true
     }
 
 }
