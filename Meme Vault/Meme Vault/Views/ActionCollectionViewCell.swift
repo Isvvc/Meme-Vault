@@ -11,14 +11,9 @@ import UIKit
 class ActionCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var textLabel: UILabel!
-    @IBOutlet weak var widthConstraint: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        let screenWidth = UIScreen.main.bounds.width
-        widthConstraint.constant = screenWidth - (2 * 20)
         
         backgroundColor = .secondarySystemGroupedBackground
         layer.cornerRadius = 12
@@ -28,6 +23,7 @@ class ActionCollectionViewCell: UICollectionViewCell {
         layer.shadowOffset = CGSize(width:0,height: 2.0)
         layer.shadowRadius = 8
         layer.masksToBounds = false
+        let bounds = CGRect(x: self.bounds.minX, y: self.bounds.minY, width: UIScreen.main.bounds.width - (2 * 20), height: self.bounds.height)
         layer.shadowPath = UIBezierPath(roundedRect: bounds, cornerRadius: layer.cornerRadius).cgPath
     }
 }

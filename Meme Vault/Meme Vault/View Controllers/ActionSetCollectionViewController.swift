@@ -10,18 +10,13 @@ import UIKit
 
 private let reuseIdentifier = "ActionCell"
 
-class ActionSetCollectionViewController: UICollectionViewController {
-
+class ActionSetCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+    
+    var tempData: [String] = ["Test 1", "Test two", "Test III"]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
-//        self.collectionView!.register(ActionCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-
-        // Do any additional setup after loading the view.
+        
         collectionView.backgroundColor = .systemGroupedBackground
         
         self.navigationItem.rightBarButtonItem = self.editButtonItem
@@ -46,33 +41,17 @@ class ActionSetCollectionViewController: UICollectionViewController {
 
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of items
-        return 2
+        return tempData.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? ActionCollectionViewCell else { return UICollectionViewCell() }
     
-        cell.textLabel.text = "Test label \(indexPath.item)"
+        cell.textLabel.text = tempData[indexPath.row]
     
         return cell
     }
     
-    override func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    
-//    override func collectionView(_ collectionView: UICollectionView, targetIndexPathForMoveFromItemAt originalIndexPath: IndexPath, toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {
-//        if proposedIndexPath.row == 0 {
-//            return proposedIndexPath
-//        } else {
-//            return originalIndexPath
-//        }
-//    }
-    
-    override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        return
-    }
 
     // MARK: UICollectionViewDelegate
 
@@ -104,6 +83,16 @@ class ActionSetCollectionViewController: UICollectionViewController {
     
     }
     */
+    
+    override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        tempData.swapAt(sourceIndexPath.item, destinationIndexPath.item)
+    }
+    
+    //MARK: Collection view delegate flow layout
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        CGSize(width: UIScreen.main.bounds.width - (2 * 20), height: 50)
+    }
     
     //MARK: UICollectionView
     
