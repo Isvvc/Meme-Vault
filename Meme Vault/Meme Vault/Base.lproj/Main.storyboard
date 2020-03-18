@@ -16,13 +16,32 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="d65-aQ-9qp">
-                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="ActionSetCell" textLabel="kCX-pA-T2f" detailTextLabel="XKL-9l-SI9" style="IBUITableViewCellStyleSubtitle" id="d65-aQ-9qp">
+                                <rect key="frame" x="0.0" y="28" width="414" height="55.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="d65-aQ-9qp" id="ulD-3P-wRb">
-                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="383" height="55.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="kCX-pA-T2f">
+                                            <rect key="frame" x="20" y="10" width="33.5" height="20.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XKL-9l-SI9">
+                                            <rect key="frame" x="20" y="31.5" width="44" height="14.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="mKd-AP-bhj" kind="presentation" id="bss-1f-wDx"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -31,7 +50,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="Kuh-3I-zwr">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="86n-w4-TgT">
+                        <barButtonItem key="leftBarButtonItem" systemItem="add" id="86n-w4-TgT">
                             <connections>
                                 <segue destination="mKd-AP-bhj" kind="presentation" id="Geg-dG-JwM"/>
                             </connections>
@@ -106,7 +125,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="Sb4-I2-SHs">
             <objects>
-                <tabBarController id="xXf-u1-IS6" sceneMemberID="viewController">
+                <tabBarController id="xXf-u1-IS6" customClass="TabBarController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="DGz-BH-nAM">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -220,4 +239,7 @@
         <image name="rectangle.stack.fill" catalog="system" width="64" height="60"/>
         <image name="square.stack.3d.up.fill" catalog="system" width="64" height="62"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="bss-1f-wDx"/>
+    </inferredMetricsTieBreakers>
 </document>

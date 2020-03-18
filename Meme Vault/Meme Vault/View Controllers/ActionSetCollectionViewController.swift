@@ -8,13 +8,17 @@
 
 import UIKit
 
-private let reuseIdentifier = "ActionCell"
+protocol ActionSetViewControllerDelegate {
+    func actionChanged(actionSet: ActionSet?)
+}
 
 class ActionSetCollectionViewController: UICollectionViewController {
     
     //MARK: Properties
     
-    var tempData: [String] = ["Test 1", "Test two", "Test III"]
+    var actionController: ActionController?
+    var actionSet: ActionSet?
+    var delegate: ActionSetViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,16 +33,18 @@ class ActionSetCollectionViewController: UICollectionViewController {
     }
     
     @IBAction func addAction(_ sender: Any) {
+        guard let actionSet = actionSet else { return }
+        
         let actionSheet = UIAlertController(title: "Add Action", message: nil, preferredStyle: .actionSheet)
         
-        let actions = ["Enter a name", "Share Square", "Choose upload destination", "Upload", "Delete"]
-        
+        let actions = ActionSet.Action.allCases
         for action in actions {
-            let alertAction = UIAlertAction(title: action, style: .default) { _ in
-                self.tempData.append(action)
+            let alertAction = UIAlertAction(title: action.name, style: .default) { _ in
+                self.actionSet?.actions.append(action)
                 DispatchQueue.main.async {
-                    let indexPath = IndexPath(item: self.tempData.count - 1, section: 0)
+                    let indexPath = IndexPath(item: actionSet.actions.count - 1, section: 0)
                     self.collectionView.insertItems(at: [indexPath])
+                    self.delegate?.actionChanged(actionSet: self.actionSet)
                 }
             }
             actionSheet.addAction(alertAction)
@@ -63,20 +69,14 @@ class ActionSetCollectionViewController: UICollectionViewController {
 
     // MARK: UICollectionViewDataSource
 
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return tempData.count
+        return actionSet?.actions.count ?? 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? ActionCollectionViewCell else { return UICollectionViewCell() }
-    
-        cell.textLabel.text = tempData[indexPath.row]
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActionCell", for: indexPath) as? ActionCollectionViewCell else { return UICollectionViewCell() }
+        
+        cell.textLabel.text = actionSet?.actions[indexPath.row].name
     
         return cell
     }
@@ -114,8 +114,9 @@ class ActionSetCollectionViewController: UICollectionViewController {
     */
     
     override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let temp = tempData.remove(at: sourceIndexPath.item)
-        tempData.insert(temp, at: destinationIndexPath.item)
+        if let temp = actionSet?.actions.remove(at: sourceIndexPath.item) {
+            actionSet?.actions.insert(temp, at: destinationIndexPath.item)
+        }
     }
 
 }

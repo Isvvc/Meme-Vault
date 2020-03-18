@@ -18,6 +18,9 @@
 		594ACC7124208F5400DEFCBF /* ActionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594ACC7024208F5400DEFCBF /* ActionCollectionViewCell.swift */; };
 		59685A4A2421A63400710539 /* UIAlertController+Fixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59685A492421A63400710539 /* UIAlertController+Fixes.swift */; };
 		59685A4C2421AC9600710539 /* AlbumsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59685A4B2421AC9600710539 /* AlbumsTableViewController.swift */; };
+		598962A32421BEE600B3C670 /* ActionSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A22421BEE600B3C670 /* ActionSet.swift */; };
+		598962A62421C01C00B3C670 /* ActionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A52421C01C00B3C670 /* ActionController.swift */; };
+		598962A82421C29000B3C670 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A72421C29000B3C670 /* TabBarController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +37,9 @@
 		594ACC7024208F5400DEFCBF /* ActionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionCollectionViewCell.swift; sourceTree = "<group>"; };
 		59685A492421A63400710539 /* UIAlertController+Fixes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Fixes.swift"; sourceTree = "<group>"; };
 		59685A4B2421AC9600710539 /* AlbumsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsTableViewController.swift; sourceTree = "<group>"; };
+		598962A22421BEE600B3C670 /* ActionSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSet.swift; sourceTree = "<group>"; };
+		598962A52421C01C00B3C670 /* ActionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionController.swift; sourceTree = "<group>"; };
+		598962A72421C29000B3C670 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +74,8 @@
 			children = (
 				594ACC51242088BA00DEFCBF /* AppDelegate.swift */,
 				594ACC53242088BA00DEFCBF /* SceneDelegate.swift */,
+				598962A12421BEBA00B3C670 /* Model */,
+				598962A42421C00C00B3C670 /* Model Controllers */,
 				594ACC6824208A7500DEFCBF /* View Controllers */,
 				594ACC6F24208F4400DEFCBF /* Views */,
 				59685A482421A62500710539 /* Helpers */,
@@ -75,7 +83,6 @@
 				594ACC5D242088BC00DEFCBF /* Assets.xcassets */,
 				594ACC5F242088BC00DEFCBF /* LaunchScreen.storyboard */,
 				594ACC62242088BC00DEFCBF /* Info.plist */,
-				594ACC5A242088BA00DEFCBF /* Meme_Vault.xcdatamodeld */,
 			);
 			path = "Meme Vault";
 			sourceTree = "<group>";
@@ -83,6 +90,7 @@
 		594ACC6824208A7500DEFCBF /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				598962A72421C29000B3C670 /* TabBarController.swift */,
 				59685A4B2421AC9600710539 /* AlbumsTableViewController.swift */,
 				594ACC6924208A9700DEFCBF /* ActionSetsTableViewController.swift */,
 				594ACC6D24208F1B00DEFCBF /* ActionSetCollectionViewController.swift */,
@@ -104,6 +112,23 @@
 				59685A492421A63400710539 /* UIAlertController+Fixes.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		598962A12421BEBA00B3C670 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				594ACC5A242088BA00DEFCBF /* Meme_Vault.xcdatamodeld */,
+				598962A22421BEE600B3C670 /* ActionSet.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		598962A42421C00C00B3C670 /* Model Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				598962A52421C01C00B3C670 /* ActionController.swift */,
+			);
+			path = "Model Controllers";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,10 +204,13 @@
 			files = (
 				594ACC52242088BA00DEFCBF /* AppDelegate.swift in Sources */,
 				594ACC5C242088BA00DEFCBF /* Meme_Vault.xcdatamodeld in Sources */,
+				598962A82421C29000B3C670 /* TabBarController.swift in Sources */,
 				594ACC6E24208F1B00DEFCBF /* ActionSetCollectionViewController.swift in Sources */,
 				59685A4A2421A63400710539 /* UIAlertController+Fixes.swift in Sources */,
+				598962A32421BEE600B3C670 /* ActionSet.swift in Sources */,
 				594ACC6A24208A9700DEFCBF /* ActionSetsTableViewController.swift in Sources */,
 				59685A4C2421AC9600710539 /* AlbumsTableViewController.swift in Sources */,
+				598962A62421C01C00B3C670 /* ActionController.swift in Sources */,
 				594ACC7124208F5400DEFCBF /* ActionCollectionViewCell.swift in Sources */,
 				594ACC54242088BA00DEFCBF /* SceneDelegate.swift in Sources */,
 			);

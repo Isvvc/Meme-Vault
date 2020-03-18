@@ -11,6 +11,8 @@ import Photos
 
 class AlbumsTableViewController: UITableViewController {
     
+    var actionController: ActionController?
+    
     var userCollections: PHFetchResult<PHCollection>?
     var albums: PHFetchResult<PHAssetCollection>?
 
