@@ -17,6 +17,7 @@
 		594ACC6E24208F1B00DEFCBF /* ActionSetCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594ACC6D24208F1B00DEFCBF /* ActionSetCollectionViewController.swift */; };
 		594ACC7124208F5400DEFCBF /* ActionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594ACC7024208F5400DEFCBF /* ActionCollectionViewCell.swift */; };
 		59685A4A2421A63400710539 /* UIAlertController+Fixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59685A492421A63400710539 /* UIAlertController+Fixes.swift */; };
+		59685A4C2421AC9600710539 /* AlbumsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59685A4B2421AC9600710539 /* AlbumsTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		594ACC6D24208F1B00DEFCBF /* ActionSetCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSetCollectionViewController.swift; sourceTree = "<group>"; };
 		594ACC7024208F5400DEFCBF /* ActionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionCollectionViewCell.swift; sourceTree = "<group>"; };
 		59685A492421A63400710539 /* UIAlertController+Fixes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Fixes.swift"; sourceTree = "<group>"; };
+		59685A4B2421AC9600710539 /* AlbumsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +83,7 @@
 		594ACC6824208A7500DEFCBF /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				59685A4B2421AC9600710539 /* AlbumsTableViewController.swift */,
 				594ACC6924208A9700DEFCBF /* ActionSetsTableViewController.swift */,
 				594ACC6D24208F1B00DEFCBF /* ActionSetCollectionViewController.swift */,
 			);
@@ -179,6 +182,7 @@
 				594ACC6E24208F1B00DEFCBF /* ActionSetCollectionViewController.swift in Sources */,
 				59685A4A2421A63400710539 /* UIAlertController+Fixes.swift in Sources */,
 				594ACC6A24208A9700DEFCBF /* ActionSetsTableViewController.swift in Sources */,
+				59685A4C2421AC9600710539 /* AlbumsTableViewController.swift in Sources */,
 				594ACC7124208F5400DEFCBF /* ActionCollectionViewCell.swift in Sources */,
 				594ACC54242088BA00DEFCBF /* SceneDelegate.swift in Sources */,
 			);
