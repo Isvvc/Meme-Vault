@@ -10,7 +10,9 @@ import UIKit
 
 private let reuseIdentifier = "ActionCell"
 
-class ActionSetCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class ActionSetCollectionViewController: UICollectionViewController {
+    
+    //MARK: Properties
     
     var tempData: [String] = ["Test 1", "Test two", "Test III"]
     
@@ -19,7 +21,36 @@ class ActionSetCollectionViewController: UICollectionViewController, UICollectio
         
         collectionView.backgroundColor = .systemGroupedBackground
     }
-
+    
+    //MARK: Actions
+    
+    @IBAction func done(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func addAction(_ sender: Any) {
+        let actionSheet = UIAlertController(title: "Add Action", message: nil, preferredStyle: .actionSheet)
+        
+        let actions = ["Enter a name", "Share Square", "Choose upload destination", "Upload", "Delete"]
+        
+        for action in actions {
+            let alertAction = UIAlertAction(title: action, style: .default) { _ in
+                self.tempData.append(action)
+                DispatchQueue.main.async {
+                    let indexPath = IndexPath(item: self.tempData.count - 1, section: 0)
+                    self.collectionView.insertItems(at: [indexPath])
+                }
+            }
+            actionSheet.addAction(alertAction)
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        actionSheet.addAction(cancel)
+        
+        actionSheet.pruneNegativeWidthConstraints()
+        present(actionSheet, animated: true, completion: nil)
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -86,11 +117,13 @@ class ActionSetCollectionViewController: UICollectionViewController, UICollectio
         let temp = tempData.remove(at: sourceIndexPath.item)
         tempData.insert(temp, at: destinationIndexPath.item)
     }
-    
-    //MARK: Collection view delegate flow layout
-    
+
+}
+
+//MARK: Collection view delegate flow layout
+
+extension ActionSetCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         CGSize(width: UIScreen.main.bounds.width - (2 * 20), height: 50)
     }
-
 }

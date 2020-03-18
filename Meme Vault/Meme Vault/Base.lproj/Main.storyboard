@@ -33,7 +33,7 @@
                     <navigationItem key="navigationItem" id="Kuh-3I-zwr">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="86n-w4-TgT">
                             <connections>
-                                <segue destination="ekg-bx-dBd" kind="show" id="Geg-dG-JwM"/>
+                                <segue destination="mKd-AP-bhj" kind="presentation" id="Geg-dG-JwM"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -47,7 +47,7 @@
             <objects>
                 <collectionViewController id="ekg-bx-dBd" customClass="ActionSetCollectionViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="4a7-bJ-4Ay">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.92549019610000005" green="0.93725490199999995" blue="0.94509803920000002" alpha="1" colorSpace="calibratedRGB"/>
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9sT-aN-9eE">
@@ -86,11 +86,22 @@
                             <outlet property="delegate" destination="ekg-bx-dBd" id="Bh9-cv-lYn"/>
                         </connections>
                     </collectionView>
-                    <navigationItem key="navigationItem" title="Action" id="K3B-eO-C7x"/>
+                    <navigationItem key="navigationItem" title="Action" id="K3B-eO-C7x">
+                        <barButtonItem key="leftBarButtonItem" systemItem="add" id="lfp-J0-NIe">
+                            <connections>
+                                <action selector="addAction:" destination="ekg-bx-dBd" id="2s4-ny-oSv"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="qDk-nG-ogw">
+                            <connections>
+                                <action selector="done:" destination="ekg-bx-dBd" id="u6g-qb-Sxa"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ykM-Bd-lnw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2183" y="-86"/>
+            <point key="canvasLocation" x="3092.753623188406" y="-86.383928571428569"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Sb4-I2-SHs">
@@ -176,6 +187,24 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vUf-On-sre" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="318.84057971014494" y="-86.383928571428569"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="tHK-rI-8mh">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="mKd-AP-bhj" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="H6W-DA-8eh">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="ekg-bx-dBd" kind="relationship" relationship="rootViewController" id="o4o-0z-75e"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="djg-HT-s8j" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2182.608695652174" y="-86.383928571428569"/>
         </scene>
     </scenes>
     <resources>
