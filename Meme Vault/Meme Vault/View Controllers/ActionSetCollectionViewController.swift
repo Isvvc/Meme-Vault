@@ -57,6 +57,13 @@ class ActionSetCollectionViewController: UICollectionViewController {
         present(actionSheet, animated: true, completion: nil)
     }
     
+    @objc private func removeAction(sender: UIButton) {
+        actionSet?.actions.remove(at: sender.tag)
+        let indexPath = IndexPath(item: sender.tag, section: 0)
+        collectionView.deleteItems(at: [indexPath])
+        delegate?.actionChanged(actionSet: actionSet)
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -77,6 +84,9 @@ class ActionSetCollectionViewController: UICollectionViewController {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActionCell", for: indexPath) as? ActionCollectionViewCell else { return UICollectionViewCell() }
         
         cell.textLabel.text = actionSet?.actions[indexPath.row].name
+        
+        cell.removeButton.tag = indexPath.row
+        cell.removeButton.addTarget(self, action: #selector(removeAction(sender:)), for: .touchUpInside)
     
         return cell
     }

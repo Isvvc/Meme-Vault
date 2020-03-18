@@ -11,9 +11,12 @@ import UIKit
 class ActionCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var textLabel: UILabel!
+    @IBOutlet weak var removeButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        removeButton.tintColor = .lightGray
         
         backgroundColor = .secondarySystemGroupedBackground
         layer.cornerRadius = 12
