@@ -61,7 +61,16 @@ class ActionSetCollectionViewController: UICollectionViewController {
         actionSet?.actions.remove(at: sender.tag)
         let indexPath = IndexPath(item: sender.tag, section: 0)
         collectionView.deleteItems(at: [indexPath])
+        updateTags(afterIndex: sender.tag)
         delegate?.actionChanged(actionSet: actionSet)
+    }
+    
+    private func updateTags(afterIndex: Int) {
+        let totalItems = collectionView.numberOfItems(inSection: 0)
+        for index in afterIndex..<totalItems {
+            guard let cell = collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? ActionCollectionViewCell else { continue }
+            cell.removeButton.tag = index
+        }
     }
     
     /*
