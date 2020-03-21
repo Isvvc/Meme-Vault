@@ -92,10 +92,15 @@ class ActionSetCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ActionCell", for: indexPath) as? ActionCollectionViewCell else { return UICollectionViewCell() }
         
-        cell.textLabel.text = actionSet?.actions[indexPath.row].name
+        let action = actionSet?.actions[indexPath.row]
+        cell.textLabel.text = action?.name
         
         cell.removeButton.tag = indexPath.row
         cell.removeButton.addTarget(self, action: #selector(removeAction(sender:)), for: .touchUpInside)
+        
+        cell.action = action
+        cell.toggleSwitch.tag = indexPath.row
+        cell.delegate = self
     
         return cell
     }
@@ -136,6 +141,9 @@ class ActionSetCollectionViewController: UICollectionViewController {
         if let temp = actionSet?.actions.remove(at: sourceIndexPath.item) {
             actionSet?.actions.insert(temp, at: destinationIndexPath.item)
         }
+        
+        let reloadStartIndex = min(sourceIndexPath.row, destinationIndexPath.row)
+        updateTags(afterIndex: reloadStartIndex)
     }
 
 }
@@ -144,6 +152,31 @@ class ActionSetCollectionViewController: UICollectionViewController {
 
 extension ActionSetCollectionViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        CGSize(width: UIScreen.main.bounds.width - (2 * 20), height: 50)
+        let action = actionSet?.actions[indexPath.row]
+        
+        let height: CGFloat
+        switch action {
+        case .name(skipIfDone: _, preset: _):
+            height = 96
+        default:
+            height = 64
+        }
+        return CGSize(width: UIScreen.main.bounds.width - (2 * 20), height: height)
+    }
+}
+
+//MARK: Action cell delegate
+
+extension ActionSetCollectionViewController: ActionCellDelegate {
+    func switchToggle(sender: UISwitch) {
+        let oldAction = actionSet?.actions[sender.tag]
+        switch oldAction {
+        case .name(skipIfDone: _, preset: let preset):
+            actionSet?.actions[sender.tag] = .name(skipIfDone: sender.isOn, preset: preset)
+        default:
+            break
+        }
+        
+        updateTags(afterIndex: sender.tag)
     }
 }

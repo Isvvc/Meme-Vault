@@ -9,7 +9,7 @@
 import Foundation
 
 class ActionController {
-    var actionSets: [ActionSet] = [ActionSet(name: "Queue", actions: [.name, .destination, .upload, .share, .delete])]
+    var actionSets: [ActionSet] = [ActionSet(name: "Queue", actions: [.name(), .destination, .upload, .share, .delete])]
     
     @discardableResult func createActionSet(name: String = "New Action Set", actions: [ActionSet.Action] = []) -> ActionSet {
         let action = ActionSet(name: name, actions: actions)

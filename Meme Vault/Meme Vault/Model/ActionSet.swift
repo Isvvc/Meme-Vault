@@ -10,8 +10,8 @@ import Foundation
 
 class ActionSet: Equatable {
     
-    public enum Action: CaseIterable {
-        case name
+    public enum Action: Equatable {
+        case name(skipIfDone: Bool = true, preset: String? = nil)
         case share
         case destination
         case upload
@@ -30,6 +30,16 @@ class ActionSet: Equatable {
             case .delete:
                 return "Delete"
             }
+        }
+        
+        static var allCases: [Action] {
+            return [
+                .name(),
+                .share,
+                .destination,
+                .upload,
+                .delete
+            ]
         }
     }
     
