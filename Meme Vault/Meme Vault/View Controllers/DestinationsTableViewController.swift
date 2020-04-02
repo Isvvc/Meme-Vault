@@ -40,11 +40,35 @@ class DestinationsTableViewController: UITableViewController {
     //MARK: Actions
     
     @IBAction func addDestination(_ sender: Any) {
-//        let alert = UIAlertController(title: "New Destination", message: nil, preferredStyle: .actionSheet)
-//
-//        let nameTextField = UIalert
+        let alert = UIAlertController(title: "New Destination", message: nil, preferredStyle: .alert)
+
+        var nameTextField: UITextField?
+        alert.addTextField { textField in
+            textField.placeholder = "Name"
+            textField.autocapitalizationType = .words
+            nameTextField = textField
+        }
         
-        destinationController?.createDestination(named: UUID().uuidString, path: UUID().uuidString, context: CoreDataStack.shared.mainContext)
+        var pathTextField: UITextField?
+        alert.addTextField { textField in
+            textField.placeholder = "Path (optional)"
+            textField.autocorrectionType = .no
+            pathTextField = textField
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        let save = UIAlertAction(title: "Save", style: .default) { _ in
+            guard let name = nameTextField?.text,
+                !name.isEmpty else { return }
+            
+            self.destinationController?.createDestination(named: name, path: pathTextField?.text, context: CoreDataStack.shared.mainContext)
+        }
+        
+        alert.addAction(cancel)
+        alert.addAction(save)
+        
+        present(alert, animated: true, completion: nil)
     }
     
     // MARK: - Table view data source
