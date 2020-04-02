@@ -75,6 +75,57 @@
             </objects>
             <point key="canvasLocation" x="2197" y="-86"/>
         </scene>
+        <!--Destinations-->
+        <scene sceneID="WXs-7U-eFt">
+            <objects>
+                <tableViewController id="raC-eB-Iam" customClass="DestinationsTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Se7-9j-gil">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="DestinationCell" textLabel="5g9-ky-8lT" detailTextLabel="XFS-O8-Kan" style="IBUITableViewCellStyleSubtitle" id="evD-UY-m4v">
+                                <rect key="frame" x="0.0" y="28" width="414" height="55.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="evD-UY-m4v" id="lJO-iK-tB1">
+                                    <rect key="frame" x="0.0" y="0.0" width="383" height="55.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5g9-ky-8lT">
+                                            <rect key="frame" x="20" y="10" width="33.5" height="20.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="XFS-O8-Kan">
+                                            <rect key="frame" x="20" y="31.5" width="44" height="14.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="raC-eB-Iam" id="tf4-vD-Ima"/>
+                            <outlet property="delegate" destination="raC-eB-Iam" id="RR2-v6-xQ0"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Destinations" id="wU7-gm-YnO">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="HYP-o0-3Eg">
+                            <connections>
+                                <action selector="addDestination:" destination="raC-eB-Iam" id="CeV-Fc-RCp"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="GTs-wR-r5y" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2196" y="642"/>
+        </scene>
         <!--Settings-->
         <scene sceneID="efV-IU-XyS">
             <objects>
@@ -106,6 +157,30 @@
                                 </tableViewCellContentView>
                                 <connections>
                                     <segue destination="jDQ-BV-6P0" kind="show" id="04M-e3-1ss"/>
+                                </connections>
+                            </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="DestinationsCell" textLabel="Xd5-Nr-as2" imageView="486-4K-XTr" style="IBUITableViewCellStyleDefault" id="baC-GI-a1v">
+                                <rect key="frame" x="0.0" y="99" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="baC-GI-a1v" id="KAh-hY-HdQ">
+                                    <rect key="frame" x="0.0" y="0.0" width="383" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Destinations" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Xd5-Nr-as2">
+                                            <rect key="frame" x="59" y="0.0" width="316" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" image="folder.fill" catalog="system" id="486-4K-XTr">
+                                            <rect key="frame" x="20.25" y="12.5" width="23.5" height="17.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </imageView>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="raC-eB-Iam" kind="show" id="JSG-HY-9db"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -378,6 +453,7 @@
         <segue reference="vWX-eg-jEl"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="folder.fill" catalog="system" width="128" height="95"/>
         <image name="gear" catalog="system" width="128" height="119"/>
         <image name="rectangle.stack.fill" catalog="system" width="128" height="122"/>
         <image name="square.stack.3d.up.fill" catalog="system" width="128" height="124"/>

@@ -19,7 +19,7 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -27,7 +27,16 @@ class SettingsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ActionSetsCell", for: indexPath)
+        let identifier: String
+        
+        switch indexPath.section {
+        case 0:
+            identifier = "ActionSetsCell"
+        default:
+            identifier = "DestinationsCell"
+        }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
 
         return cell
     }
