@@ -15,10 +15,22 @@ class ActionSetsTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         title = "Action Sets"
+    }
+    
+    //MARK: Private
+    
+    private func setDefaultActionSet(at indexPath: IndexPath) {
+        guard let actionController = actionController else { return }
+        
+        let oldIndex = actionController.defaultActionSetIndex
+        actionController.defaultActionSetIndex = indexPath.row
+        
+        let oldIndexPath = IndexPath(row: oldIndex, section: 0)
+        tableView.reloadRows(at: [oldIndexPath], with: .automatic)
+        tableView.reloadRows(at: [indexPath], with: .right)
     }
 
     // MARK: - Table view data source
@@ -32,6 +44,10 @@ class ActionSetsTableViewController: UITableViewController {
 
         if let actionSet = actionController?.actionSets[indexPath.row] {
             cell.textLabel?.text = actionSet.name
+            if actionController?.defaultActionSetIndex == indexPath.row {
+                cell.textLabel?.text? += " (default)"
+            }
+            
             cell.detailTextLabel?.text = "\(actionSet.actions.count) actions"
         }
 
@@ -51,6 +67,20 @@ class ActionSetsTableViewController: UITableViewController {
         if let temp = actionController?.actionSets.remove(at: fromIndexPath.row) {
             actionController?.actionSets.insert(temp, at: to.row)
         }
+    }
+    
+    //MARK: Table view delegate
+    
+    override func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let setDefault = UIContextualAction(style: .normal, title: "Set as default") { action, view, completionHandler in
+            DispatchQueue.main.async {
+                self.setDefaultActionSet(at: indexPath)
+            }
+            completionHandler(true)
+        }
+        setDefault.backgroundColor = UIColor.systemGreen
+
+        return UISwipeActionsConfiguration(actions: [setDefault])
     }
 
     // MARK: - Navigation
