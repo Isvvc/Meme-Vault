@@ -20,8 +20,8 @@ class TabBarController: UITabBarController {
                 let firstVC = navigationVC.viewControllers.first {
                 if let albumsVC = firstVC as? AlbumsTableViewController {
                     albumsVC.actionController = actionController
-                } else if let actionSetsVC = firstVC as? ActionSetsTableViewController {
-                    actionSetsVC.actionController = actionController
+                } else if let settingsVC = firstVC as? SettingsTableViewController {
+                    settingsVC.actionController = actionController
                 }
             }
         }
