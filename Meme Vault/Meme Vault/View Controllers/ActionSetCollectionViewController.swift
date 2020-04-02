@@ -23,6 +23,9 @@ class ActionSetCollectionViewController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let name = actionSet?.name {
+            title = name
+        }
         collectionView.backgroundColor = .systemGroupedBackground
     }
     
@@ -72,16 +75,6 @@ class ActionSetCollectionViewController: UICollectionViewController {
             cell.removeButton.tag = index
         }
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     // MARK: UICollectionViewDataSource
 
@@ -145,6 +138,15 @@ class ActionSetCollectionViewController: UICollectionViewController {
         let reloadStartIndex = min(sourceIndexPath.row, destinationIndexPath.row)
         updateTags(afterIndex: reloadStartIndex)
     }
+    
+    // MARK: - Navigation
+
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let nameVC = segue.destination as? NameTableViewController {
+            nameVC.delegate = self
+            nameVC.name = actionSet?.name
+        }
+    }
 
 }
 
@@ -178,5 +180,14 @@ extension ActionSetCollectionViewController: ActionCellDelegate {
         }
         
         updateTags(afterIndex: sender.tag)
+    }
+}
+
+//MARK: Name table delegate
+
+extension ActionSetCollectionViewController: NameTableDelegate {
+    func setName(_ name: String) {
+        actionSet?.name = name
+        delegate?.actionChanged(actionSet: actionSet)
     }
 }

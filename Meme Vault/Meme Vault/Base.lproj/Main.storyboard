@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xXf-u1-IS6">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="xXf-u1-IS6">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -139,16 +139,67 @@
                                 <action selector="addAction:" destination="ekg-bx-dBd" id="2s4-ny-oSv"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="qDk-nG-ogw">
-                            <connections>
-                                <action selector="done:" destination="ekg-bx-dBd" id="u6g-qb-Sxa"/>
-                            </connections>
-                        </barButtonItem>
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="done" id="qDk-nG-ogw">
+                                <connections>
+                                    <action selector="done:" destination="ekg-bx-dBd" id="u6g-qb-Sxa"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Next" id="qFg-Qp-RvC">
+                                <connections>
+                                    <segue destination="ZxA-0x-nlD" kind="show" id="eej-n6-Lly"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
                     </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ykM-Bd-lnw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3092.753623188406" y="-86.383928571428569"/>
+        </scene>
+        <!--Name-->
+        <scene sceneID="99V-fA-JHl">
+            <objects>
+                <tableViewController id="ZxA-0x-nlD" customClass="NameTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" scrollEnabled="NO" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="ghq-AT-7jP">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NameCell" id="UjI-Jt-Fhw" customClass="TextFieldTableViewCell" customModule="Meme_Vault" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="55.5" width="414" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="UjI-Jt-Fhw" id="NHK-Bp-i5r">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C5Q-K4-Lie">
+                                            <rect key="frame" x="20" y="12.5" width="374" height="18.5"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                            <textInputTraits key="textInputTraits"/>
+                                        </textField>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="C5Q-K4-Lie" firstAttribute="leading" secondItem="NHK-Bp-i5r" secondAttribute="leadingMargin" id="F5M-RA-AWd"/>
+                                        <constraint firstItem="C5Q-K4-Lie" firstAttribute="centerY" secondItem="NHK-Bp-i5r" secondAttribute="centerY" id="Ufc-jN-719"/>
+                                        <constraint firstAttribute="trailingMargin" secondItem="C5Q-K4-Lie" secondAttribute="trailing" id="uvT-Nj-Hsh"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="textField" destination="C5Q-K4-Lie" id="Yva-uS-QfV"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="ZxA-0x-nlD" id="m5j-3W-icv"/>
+                            <outlet property="delegate" destination="ZxA-0x-nlD" id="hUY-53-QcJ"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="Name" id="RkQ-ZJ-Qea"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cKX-O6-rde" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4025" y="-86"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="Sb4-I2-SHs">
@@ -225,11 +276,11 @@
             </objects>
             <point key="canvasLocation" x="318.84057971014494" y="-779.46428571428567"/>
         </scene>
-        <!--Actions-->
+        <!--Action Sets-->
         <scene sceneID="N2y-Vo-DK3">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="bRr-fu-qbE" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Actions" image="square.stack.3d.up.fill" catalog="system" id="zqj-RM-RsS"/>
+                    <tabBarItem key="tabBarItem" title="Action Sets" image="square.stack.3d.up.fill" catalog="system" id="zqj-RM-RsS"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" largeTitles="YES" id="OSB-Mk-21o">
                         <rect key="frame" x="0.0" y="44" width="414" height="96"/>
@@ -263,12 +314,12 @@
             <point key="canvasLocation" x="2182.608695652174" y="-86.383928571428569"/>
         </scene>
     </scenes>
-    <resources>
-        <image name="rectangle.stack.fill" catalog="system" width="64" height="60"/>
-        <image name="square.stack.3d.up.fill" catalog="system" width="64" height="62"/>
-        <image name="xmark.circle.fill" catalog="system" width="64" height="60"/>
-    </resources>
     <inferredMetricsTieBreakers>
         <segue reference="bss-1f-wDx"/>
     </inferredMetricsTieBreakers>
+    <resources>
+        <image name="rectangle.stack.fill" catalog="system" width="128" height="122"/>
+        <image name="square.stack.3d.up.fill" catalog="system" width="128" height="124"/>
+        <image name="xmark.circle.fill" catalog="system" width="128" height="121"/>
+    </resources>
 </document>
