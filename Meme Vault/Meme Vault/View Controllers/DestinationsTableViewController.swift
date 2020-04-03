@@ -49,24 +49,24 @@ class DestinationsTableViewController: UITableViewController {
             nameTextField = textField
         }
         
-        var pathTextField: UITextField?
-        alert.addTextField { textField in
-            textField.placeholder = "Path (optional)"
-            textField.autocorrectionType = .no
-            pathTextField = textField
-        }
-        
         let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
         
-        let save = UIAlertAction(title: "Save", style: .default) { _ in
+        let save = UIAlertAction(title: "Save without path", style: .default) { _ in
             guard let name = nameTextField?.text,
                 !name.isEmpty else { return }
             
-            self.destinationController?.createDestination(named: name, path: pathTextField?.text, context: CoreDataStack.shared.mainContext)
+            self.destinationController?.createDestination(named: name, path: nil, context: CoreDataStack.shared.mainContext)
+        }
+        
+        let pathAction = UIAlertAction(title: "Choose Path", style: .default) { _ in
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "ChoosePath", sender: self)
+            }
         }
         
         alert.addAction(cancel)
         alert.addAction(save)
+        alert.addAction(pathAction)
         
         present(alert, animated: true, completion: nil)
     }

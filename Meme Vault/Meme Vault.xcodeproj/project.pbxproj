@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -25,6 +25,8 @@
 		597D632B2436A35400056FD1 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597D632A2436A35400056FD1 /* CoreDataStack.swift */; };
 		597D632D2436A3FA00056FD1 /* UITableViewController+FRCDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597D632C2436A3FA00056FD1 /* UITableViewController+FRCDelegate.swift */; };
 		597D632F2436A64900056FD1 /* DestinationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597D632E2436A64900056FD1 /* DestinationController.swift */; };
+		597D63322436A9B900056FD1 /* FilesProvider in Frameworks */ = {isa = PBXBuildFile; productRef = 597D63312436A9B900056FD1 /* FilesProvider */; };
+		597D63342436AB4B00056FD1 /* FileBrowserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597D63332436AB4B00056FD1 /* FileBrowserTableViewController.swift */; };
 		598962A32421BEE600B3C670 /* ActionSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A22421BEE600B3C670 /* ActionSet.swift */; };
 		598962A62421C01C00B3C670 /* ActionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A52421C01C00B3C670 /* ActionController.swift */; };
 		598962A82421C29000B3C670 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A72421C29000B3C670 /* TabBarController.swift */; };
@@ -51,6 +53,7 @@
 		597D632A2436A35400056FD1 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		597D632C2436A3FA00056FD1 /* UITableViewController+FRCDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewController+FRCDelegate.swift"; sourceTree = "<group>"; };
 		597D632E2436A64900056FD1 /* DestinationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationController.swift; sourceTree = "<group>"; };
+		597D63332436AB4B00056FD1 /* FileBrowserTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileBrowserTableViewController.swift; sourceTree = "<group>"; };
 		598962A22421BEE600B3C670 /* ActionSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSet.swift; sourceTree = "<group>"; };
 		598962A52421C01C00B3C670 /* ActionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionController.swift; sourceTree = "<group>"; };
 		598962A72421C29000B3C670 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
@@ -61,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				597D63322436A9B900056FD1 /* FilesProvider in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,6 +115,7 @@
 				594ACC6D24208F1B00DEFCBF /* ActionSetCollectionViewController.swift */,
 				597D63222436854600056FD1 /* NameTableViewController.swift */,
 				597D63282436A1B800056FD1 /* DestinationsTableViewController.swift */,
+				597D63332436AB4B00056FD1 /* FileBrowserTableViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -168,6 +173,9 @@
 			dependencies = (
 			);
 			name = "Meme Vault";
+			packageProductDependencies = (
+				597D63312436A9B900056FD1 /* FilesProvider */,
+			);
 			productName = "Meme Vault";
 			productReference = 594ACC4E242088BA00DEFCBF /* Meme Vault.app */;
 			productType = "com.apple.product-type.application";
@@ -196,6 +204,9 @@
 				Base,
 			);
 			mainGroup = 594ACC45242088BA00DEFCBF;
+			packageReferences = (
+				597D63302436A9B900056FD1 /* XCRemoteSwiftPackageReference "FileProvider" */,
+			);
 			productRefGroup = 594ACC4F242088BA00DEFCBF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -238,6 +249,7 @@
 				594ACC6A24208A9700DEFCBF /* ActionSetsTableViewController.swift in Sources */,
 				59685A4C2421AC9600710539 /* AlbumsTableViewController.swift in Sources */,
 				597D63232436854600056FD1 /* NameTableViewController.swift in Sources */,
+				597D63342436AB4B00056FD1 /* FileBrowserTableViewController.swift in Sources */,
 				598962A62421C01C00B3C670 /* ActionController.swift in Sources */,
 				594ACC7124208F5400DEFCBF /* ActionCollectionViewCell.swift in Sources */,
 				594ACC54242088BA00DEFCBF /* SceneDelegate.swift in Sources */,
@@ -438,6 +450,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		597D63302436A9B900056FD1 /* XCRemoteSwiftPackageReference "FileProvider" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/amosavian/FileProvider";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.26.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		597D63312436A9B900056FD1 /* FilesProvider */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 597D63302436A9B900056FD1 /* XCRemoteSwiftPackageReference "FileProvider" */;
+			productName = FilesProvider;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		594ACC5A242088BA00DEFCBF /* Meme_Vault.xcdatamodeld */ = {
