@@ -30,6 +30,7 @@
 		598962A32421BEE600B3C670 /* ActionSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A22421BEE600B3C670 /* ActionSet.swift */; };
 		598962A62421C01C00B3C670 /* ActionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A52421C01C00B3C670 /* ActionController.swift */; };
 		598962A82421C29000B3C670 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A72421C29000B3C670 /* TabBarController.swift */; };
+		59B924FA243D7E13002440E2 /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924F9243D7E13002440E2 /* LoginTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,6 +58,7 @@
 		598962A22421BEE600B3C670 /* ActionSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSet.swift; sourceTree = "<group>"; };
 		598962A52421C01C00B3C670 /* ActionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionController.swift; sourceTree = "<group>"; };
 		598962A72421C29000B3C670 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
+		59B924F9243D7E13002440E2 /* LoginTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 				597D63222436854600056FD1 /* NameTableViewController.swift */,
 				597D63282436A1B800056FD1 /* DestinationsTableViewController.swift */,
 				597D63332436AB4B00056FD1 /* FileBrowserTableViewController.swift */,
+				59B924F9243D7E13002440E2 /* LoginTableViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 				597D63292436A1B800056FD1 /* DestinationsTableViewController.swift in Sources */,
 				597D632D2436A3FA00056FD1 /* UITableViewController+FRCDelegate.swift in Sources */,
 				598962A82421C29000B3C670 /* TabBarController.swift in Sources */,
+				59B924FA243D7E13002440E2 /* LoginTableViewController.swift in Sources */,
 				594ACC6E24208F1B00DEFCBF /* ActionSetCollectionViewController.swift in Sources */,
 				59685A4A2421A63400710539 /* UIAlertController+Fixes.swift in Sources */,
 				598962A32421BEE600B3C670 /* ActionSet.swift in Sources */,

@@ -19,7 +19,7 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -31,6 +31,8 @@ class SettingsTableViewController: UITableViewController {
         
         switch indexPath.section {
         case 0:
+            identifier = "AccountCell"
+        case 1:
             identifier = "ActionSetsCell"
         default:
             identifier = "DestinationsCell"
