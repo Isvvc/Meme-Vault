@@ -173,10 +173,10 @@
             </objects>
             <point key="canvasLocation" x="2196" y="642"/>
         </scene>
-        <!--File Browser Table View Controller-->
+        <!--FileBrowser-->
         <scene sceneID="U8v-F5-z0x">
             <objects>
-                <tableViewController id="F01-iM-kpB" customClass="FileBrowserTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController title="FileBrowser" id="F01-iM-kpB" customClass="FileBrowserTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="7A8-7s-adX">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -198,6 +198,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="F01-iM-kpB" kind="show" id="hWt-D3-LAu"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
