@@ -11,6 +11,8 @@ import UIKit
 class SettingsTableViewController: UITableViewController {
     
     var actionController: ActionController?
+    var providerController: ProviderController?
+    var destinationController: DestinationController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,6 +50,11 @@ class SettingsTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let actionSetsVC = segue.destination as? ActionSetsTableViewController {
             actionSetsVC.actionController = actionController
+        } else if let loginVC = segue.destination as? LoginTableViewController {
+            loginVC.providerController = providerController
+        } else if let destinationVC = segue.destination as? DestinationsTableViewController {
+            destinationVC.destinationController = destinationController
+            destinationVC.providerController = providerController
         }
     }
 
