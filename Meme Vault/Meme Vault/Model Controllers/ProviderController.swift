@@ -10,18 +10,47 @@ import Foundation
 import FilesProvider
 
 class ProviderController {
-    var webdavProvider: WebDAVFileProvider?
+    private(set) var webdavProvider: WebDAVFileProvider?
+    
+    private(set) var host: URL?
+    private(set) var credential: URLCredential?
+    
+    init() {
+        host = UserDefaults.standard.url(forKey: "host")
+        loadCredentials()
+        login()
+    }
     
     func login(host: URL, username: String, password: String) {
-        let credential: URLCredential
+        self.host = host
+        UserDefaults.standard.set(host, forKey: "host")
         
-        let space = URLProtectionSpace(host: host.absoluteString, port: 443, protocol: nil, realm: nil, authenticationMethod: nil)
+        setCredentials(username: username, password: password)
+        login()
+    }
+    
+    private func loadCredentials() {
+        guard let host = host?.absoluteString else { return }
+        
+        let space = URLProtectionSpace(host: host, port: 443, protocol: nil, realm: nil, authenticationMethod: nil)
         if let spaceCred = URLCredentialStorage.shared.defaultCredential(for: space) {
             credential = spaceCred
-        } else {
-            credential = URLCredential(user: username, password: password, persistence: .permanent)
-            URLCredentialStorage.shared.set(credential, for: space)
         }
+    }
+    
+    private func setCredentials(username: String, password: String) {
+        guard let host = host?.absoluteString else { return }
+        
+        let space = URLProtectionSpace(host: host, port: 443, protocol: nil, realm: nil, authenticationMethod: nil)
+
+        let credential = URLCredential(user: username, password: password, persistence: .permanent)
+        URLCredentialStorage.shared.set(credential, for: space)
+        
+        self.credential = credential
+    }
+    
+    private func login() {
+        guard let host = host, let credential = credential else { return }
         
         webdavProvider = WebDAVFileProvider(baseURL: host, credential: credential)
         webdavProvider?.delegate = self

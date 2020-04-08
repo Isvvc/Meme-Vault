@@ -47,10 +47,12 @@ class LoginTableViewController: UITableViewController {
             case (0,0):  // Server
                 cell.textField.placeholder = "https://nextcloud.example.com/remote.php/webdav/"
                 cell.textField.returnKeyType = .next
+                cell.textField.text = providerController?.host?.absoluteString
                 serverTextField = cell.textField
             case (1, 0): // Username
                 cell.textField.placeholder = "Username"
                 cell.textField.returnKeyType = .next
+                cell.textField.text = providerController?.credential?.user
                 usernameTextField = cell.textField
             case (1, 1): // Password
                 cell.textField.placeholder = "Password"
