@@ -14,6 +14,8 @@ class DestinationsTableViewController: UITableViewController {
     var destinationController: DestinationController?
     var providerController: ProviderController?
     
+    var newDestinationName: String?
+    
     lazy var frc: NSFetchedResultsController<Destination> = {
         let fetchRequest: NSFetchRequest<Destination> = Destination.fetchRequest()
         
@@ -41,6 +43,8 @@ class DestinationsTableViewController: UITableViewController {
     //MARK: Actions
     
     @IBAction func addDestination(_ sender: Any) {
+        newDestinationName = nil
+        
         let alert = UIAlertController(title: "New Destination", message: nil, preferredStyle: .alert)
 
         var nameTextField: UITextField?
@@ -60,6 +64,11 @@ class DestinationsTableViewController: UITableViewController {
         }
         
         let pathAction = UIAlertAction(title: "Choose Path", style: .default) { _ in
+            guard let name = nameTextField?.text,
+                !name.isEmpty else { return }
+            
+            self.newDestinationName = name
+            
             DispatchQueue.main.async {
                 self.performSegue(withIdentifier: "ChoosePath", sender: self)
             }
@@ -110,7 +119,18 @@ class DestinationsTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navigationVC = segue.destination as? UINavigationController, let fileBrowserVC = navigationVC.viewControllers.first as? FileBrowserTableViewController {
             fileBrowserVC.providerController = providerController
+            fileBrowserVC.delegate = self
         }
     }
 
+}
+
+//MARK: File browser view controller delegate
+
+extension DestinationsTableViewController: FileBrowserViewControllerDelegate {
+    func pickFolder(path: String) {
+        guard let name = newDestinationName else { return }
+        
+        destinationController?.createDestination(named: name, path: path, context: CoreDataStack.shared.mainContext)
+    }
 }

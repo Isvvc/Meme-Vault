@@ -208,7 +208,13 @@
                             <outlet property="delegate" destination="F01-iM-kpB" id="LSi-84-zP4"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="4pb-Jd-LX6"/>
+                    <navigationItem key="navigationItem" id="4pb-Jd-LX6">
+                        <barButtonItem key="rightBarButtonItem" title="Choose this folder" id="lA3-O0-eM1">
+                            <connections>
+                                <action selector="choose:" destination="F01-iM-kpB" id="qry-Ar-r1x"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hrm-eW-sxj" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
