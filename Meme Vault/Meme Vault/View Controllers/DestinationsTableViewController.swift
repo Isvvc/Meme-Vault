@@ -13,6 +13,7 @@ class DestinationsTableViewController: UITableViewController {
     
     var destinationController: DestinationController?
     var providerController: ProviderController?
+    var parentDestination: Destination?
     
     var newDestinationName: String?
     
@@ -20,6 +21,11 @@ class DestinationsTableViewController: UITableViewController {
         let fetchRequest: NSFetchRequest<Destination> = Destination.fetchRequest()
         
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        if let parentDestination = parentDestination {
+            fetchRequest.predicate = NSPredicate(format: "parent == %@", parentDestination)
+        } else {
+            fetchRequest.predicate = NSPredicate(format: "parent == nil")
+        }
        
         let frc = NSFetchedResultsController(fetchRequest: fetchRequest,
                                              managedObjectContext: CoreDataStack.shared.mainContext,
@@ -38,6 +44,10 @@ class DestinationsTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let parentName = parentDestination?.name {
+            title = parentName
+        }
     }
     
     //MARK: Actions
@@ -60,7 +70,7 @@ class DestinationsTableViewController: UITableViewController {
             guard let name = nameTextField?.text,
                 !name.isEmpty else { return }
             
-            self.destinationController?.createDestination(named: name, path: nil, context: CoreDataStack.shared.mainContext)
+            self.destinationController?.createDestination(named: name, path: nil, parent: self.parentDestination, context: CoreDataStack.shared.mainContext)
         }
         
         let pathAction = UIAlertAction(title: "Choose Path", style: .default) { _ in
@@ -117,9 +127,17 @@ class DestinationsTableViewController: UITableViewController {
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let navigationVC = segue.destination as? UINavigationController, let fileBrowserVC = navigationVC.viewControllers.first as? FileBrowserTableViewController {
+        if let navigationVC = segue.destination as? UINavigationController,
+            let fileBrowserVC = navigationVC.viewControllers.first as? FileBrowserTableViewController {
             fileBrowserVC.providerController = providerController
             fileBrowserVC.delegate = self
+        } else if let destinationsVC = segue.destination as? DestinationsTableViewController,
+            let indexPath = tableView.indexPathForSelectedRow {
+            let destination = frc.object(at: indexPath)
+            destinationsVC.parentDestination = destination
+            
+            destinationsVC.destinationController = destinationController
+            destinationsVC.providerController = providerController
         }
     }
 
@@ -130,7 +148,8 @@ class DestinationsTableViewController: UITableViewController {
 extension DestinationsTableViewController: FileBrowserViewControllerDelegate {
     func pickFolder(path: String) {
         guard let name = newDestinationName else { return }
+        newDestinationName = nil
         
-        destinationController?.createDestination(named: name, path: path, context: CoreDataStack.shared.mainContext)
+        destinationController?.createDestination(named: name, path: path, parent: self.parentDestination, context: CoreDataStack.shared.mainContext)
     }
 }

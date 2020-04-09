@@ -3,8 +3,8 @@
     <entity name="Destination" representedClassName="Destination" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="path" optional="YES" attributeType="String"/>
-        <relationship name="children" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Destination" inverseName="parents" inverseEntity="Destination"/>
-        <relationship name="parents" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Destination" inverseName="children" inverseEntity="Destination"/>
+        <relationship name="children" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Destination" inverseName="parent" inverseEntity="Destination"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Destination" inverseName="children" inverseEntity="Destination"/>
     </entity>
     <elements>
         <element name="Destination" positionX="-63" positionY="-18" width="128" height="103"/>

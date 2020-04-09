@@ -10,10 +10,11 @@ import CoreData
 
 class DestinationController {
     
-    func createDestination(named name: String, path: String?, context: NSManagedObjectContext) {
+    func createDestination(named name: String, path: String?, parent: Destination? = nil, context: NSManagedObjectContext) {
         let destination = Destination(context: context)
         destination.name = name
         destination.path = path
+        destination.parent = parent
         CoreDataStack.shared.save(context: context)
     }
     

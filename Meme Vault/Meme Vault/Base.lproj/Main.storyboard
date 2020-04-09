@@ -151,6 +151,9 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="raC-eB-Iam" kind="show" id="Wbq-AS-csw"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
