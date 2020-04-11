@@ -131,6 +131,21 @@ class DestinationsTableViewController: UITableViewController {
             let fileBrowserVC = navigationVC.viewControllers.first as? FileBrowserTableViewController {
             fileBrowserVC.providerController = providerController
             fileBrowserVC.delegate = self
+            
+            if let parentComponents = parentDestination?.path?.split(separator: "/") {
+                for i in 0..<parentComponents.count {
+                    let pathComponents = parentComponents.prefix(through: i)
+                    let path = "/" + pathComponents.joined(separator: "/")
+                    
+                    guard let childFileBrowserVC = storyboard?.instantiateViewController(identifier: "FileBrowser") as? FileBrowserTableViewController else { return }
+                    childFileBrowserVC.providerController = providerController
+                    childFileBrowserVC.delegate = self
+                    childFileBrowserVC.path = path
+                    childFileBrowserVC.title = String(pathComponents.last!)
+                    
+                    navigationVC.pushViewController(childFileBrowserVC, animated: false)
+                }
+            }
         } else if let destinationsVC = segue.destination as? DestinationsTableViewController,
             let indexPath = tableView.indexPathForSelectedRow {
             let destination = frc.object(at: indexPath)

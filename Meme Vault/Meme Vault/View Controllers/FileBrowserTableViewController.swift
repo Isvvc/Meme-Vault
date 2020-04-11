@@ -85,6 +85,7 @@ class FileBrowserTableViewController: UITableViewController {
             
             let folder = folders[indexPath.row]
             fileBrowserVC.path = folder.path
+            fileBrowserVC.title = String(folder.path.split(separator: "/").last!)
         }
     }
 

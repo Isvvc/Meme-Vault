@@ -179,7 +179,7 @@
         <!--FileBrowser-->
         <scene sceneID="U8v-F5-z0x">
             <objects>
-                <tableViewController title="FileBrowser" id="F01-iM-kpB" customClass="FileBrowserTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="FileBrowser" title="FileBrowser" id="F01-iM-kpB" customClass="FileBrowserTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="7A8-7s-adX">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -212,7 +212,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="4pb-Jd-LX6">
-                        <barButtonItem key="rightBarButtonItem" title="Choose this folder" id="lA3-O0-eM1">
+                        <barButtonItem key="rightBarButtonItem" title="Choose" id="lA3-O0-eM1">
                             <connections>
                                 <action selector="choose:" destination="F01-iM-kpB" id="qry-Ar-r1x"/>
                             </connections>
