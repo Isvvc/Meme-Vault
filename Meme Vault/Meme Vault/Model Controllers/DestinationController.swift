@@ -19,7 +19,17 @@ class DestinationController {
     }
     
     func delete(destination: Destination, context: NSManagedObjectContext) {
+        deleteChildren(destination: destination, context: context)
         context.delete(destination)
         CoreDataStack.shared.save(context: context)
+    }
+    
+    func deleteChildren(destination: Destination, context: NSManagedObjectContext) {
+        guard let children = destination.children as? Set<Destination> else { return }
+        
+        for child in children {
+            deleteChildren(destination: child, context: context)
+            context.delete(child)
+        }
     }
 }
