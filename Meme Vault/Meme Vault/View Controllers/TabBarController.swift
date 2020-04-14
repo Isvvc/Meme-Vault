@@ -11,6 +11,8 @@ import UIKit
 class TabBarController: UITabBarController {
     
     let actionController = ActionController()
+    let providerController = ProviderController()
+    let destinationController = DestinationController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +24,8 @@ class TabBarController: UITabBarController {
                     albumsVC.actionController = actionController
                 } else if let settingsVC = firstVC as? SettingsTableViewController {
                     settingsVC.actionController = actionController
+                    settingsVC.providerController = providerController
+                    settingsVC.destinationController = destinationController
                 }
             }
         }

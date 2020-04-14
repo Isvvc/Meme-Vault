@@ -11,6 +11,8 @@ import UIKit
 class SettingsTableViewController: UITableViewController {
     
     var actionController: ActionController?
+    var providerController: ProviderController?
+    var destinationController: DestinationController?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,7 +21,7 @@ class SettingsTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 3
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -27,7 +29,18 @@ class SettingsTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ActionSetsCell", for: indexPath)
+        let identifier: String
+        
+        switch indexPath.section {
+        case 0:
+            identifier = "AccountCell"
+        case 1:
+            identifier = "ActionSetsCell"
+        default:
+            identifier = "DestinationsCell"
+        }
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
 
         return cell
     }
@@ -37,6 +50,11 @@ class SettingsTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let actionSetsVC = segue.destination as? ActionSetsTableViewController {
             actionSetsVC.actionController = actionController
+        } else if let loginVC = segue.destination as? LoginTableViewController {
+            loginVC.providerController = providerController
+        } else if let destinationVC = segue.destination as? DestinationsTableViewController {
+            destinationVC.destinationController = destinationController
+            destinationVC.providerController = providerController
         }
     }
 
