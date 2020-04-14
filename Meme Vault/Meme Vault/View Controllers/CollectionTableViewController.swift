@@ -1,5 +1,5 @@
 //
-//  CollectionsTableViewController.swift
+//  CollectionTableViewController.swift
 //  Meme Vault
 //
 //  Created by Isaac Lyons on 4/14/20.
@@ -8,9 +8,10 @@
 
 import UIKit
 
-class CollectionsTableViewController: UITableViewController {
+class CollectionTableViewController: UITableViewController {
     
     var collectionController: CollectionController?
+    var collection: AlbumCollection?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,18 +21,43 @@ class CollectionsTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        if let collection = collection {
+            title = collection.name
+        }
     }
 
     // MARK: - Table view data source
-    
+
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return collectionController?.collections.count ?? 0
+        return collection?.conditions.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CollectionCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
 
-        cell.textLabel?.text = collectionController?.collections[indexPath.row].name
+        if let condition = collection?.conditions[indexPath.row] {
+            var label = ""
+            
+            if let conjunction = condition.conjunction {
+                label += conjunction.rawValue + " "
+            }
+            
+            if condition.not {
+                label += "not "
+            }
+            
+            if let name = condition.id {
+                label += name
+            } else if condition.conjunction == .none,
+                indexPath.row != 0 {
+                label += ")"
+            } else {
+                label += "("
+            }
+            
+            cell.textLabel?.text = label
+        }
 
         return cell
     }
@@ -70,23 +96,15 @@ class CollectionsTableViewController: UITableViewController {
         return true
     }
     */
-    
-    //MARK: Table view delegate
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "Collection", sender: self)
-    }
 
+    /*
     // MARK: - Navigation
 
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let collectionVC = segue.destination as? CollectionTableViewController {
-            collectionVC.collectionController = collectionController
-            
-            if let indexPath = tableView.indexPathForSelectedRow {
-                collectionVC.collection = collectionController?.collections[indexPath.row]
-            }
-        }
+        // Get the new view controller using segue.destination.
+        // Pass the selected object to the new view controller.
     }
+    */
 
 }

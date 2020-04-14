@@ -15,11 +15,11 @@ class Condition {
         case or
     }
     
-    var conjunction: Conjunction
+    var conjunction: Conjunction?
     var not: Bool
     var id: String?
     
-    init(conjunction: Conjunction = .and, not: Bool, id: String?) {
+    init(conjunction: Conjunction? = .none, not: Bool, id: String?) {
         self.conjunction = conjunction
         self.not = not
         self.id = id
