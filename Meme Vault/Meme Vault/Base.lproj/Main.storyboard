@@ -327,7 +327,7 @@
                         <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="9sT-aN-9eE">
                             <size key="itemSize" width="374" height="100"/>
                             <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="50" height="50"/>
                             <inset key="sectionInset" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
@@ -383,29 +383,39 @@
                                 </connections>
                             </collectionViewCell>
                         </cells>
+                        <collectionReusableView key="sectionFooterView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="AddAction" id="0Ys-dv-bdz" customClass="ButtonCollectionReusableView" customModule="Meme_Vault" customModuleProvider="target">
+                            <rect key="frame" x="0.0" y="100" width="414" height="50"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aos-Oz-bpC">
+                                    <rect key="frame" x="169.5" y="10" width="75" height="30"/>
+                                    <state key="normal" title="Add Action"/>
+                                </button>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="aos-Oz-bpC" firstAttribute="centerY" secondItem="0Ys-dv-bdz" secondAttribute="centerY" id="UKs-g9-5Af"/>
+                                <constraint firstItem="aos-Oz-bpC" firstAttribute="centerX" secondItem="0Ys-dv-bdz" secondAttribute="centerX" id="pnS-7M-fsS"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="button" destination="aos-Oz-bpC" id="B7v-ko-B4k"/>
+                            </connections>
+                        </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="ekg-bx-dBd" id="dZ3-tS-4a7"/>
                             <outlet property="delegate" destination="ekg-bx-dBd" id="Bh9-cv-lYn"/>
                         </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" title="Action" id="K3B-eO-C7x">
-                        <barButtonItem key="leftBarButtonItem" systemItem="add" id="lfp-J0-NIe">
+                        <barButtonItem key="leftBarButtonItem" systemItem="done" id="qDk-nG-ogw">
                             <connections>
-                                <action selector="addAction:" destination="ekg-bx-dBd" id="2s4-ny-oSv"/>
+                                <action selector="done:" destination="ekg-bx-dBd" id="u6g-qb-Sxa"/>
                             </connections>
                         </barButtonItem>
-                        <rightBarButtonItems>
-                            <barButtonItem systemItem="done" id="qDk-nG-ogw">
-                                <connections>
-                                    <action selector="done:" destination="ekg-bx-dBd" id="u6g-qb-Sxa"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Next" id="qFg-Qp-RvC">
-                                <connections>
-                                    <segue destination="ZxA-0x-nlD" kind="show" id="eej-n6-Lly"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" title="Next" id="qFg-Qp-RvC">
+                            <connections>
+                                <segue destination="ZxA-0x-nlD" kind="show" id="eej-n6-Lly"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ykM-Bd-lnw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
