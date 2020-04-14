@@ -19,6 +19,9 @@
 		59685A4A2421A63400710539 /* UIAlertController+Fixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59685A492421A63400710539 /* UIAlertController+Fixes.swift */; };
 		59685A4C2421AC9600710539 /* AlbumsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59685A4B2421AC9600710539 /* AlbumsTableViewController.swift */; };
 		5978B84424465F7800CACC7A /* ButtonCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5978B84324465F7800CACC7A /* ButtonCollectionReusableView.swift */; };
+		5978B84624466A3100CACC7A /* CollectionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5978B84524466A3100CACC7A /* CollectionsTableViewController.swift */; };
+		5978B84824466AA900CACC7A /* CollectionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5978B84724466AA900CACC7A /* CollectionController.swift */; };
+		5978B84A24466AD600CACC7A /* Condition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5978B84924466AD600CACC7A /* Condition.swift */; };
 		597D63232436854600056FD1 /* NameTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597D63222436854600056FD1 /* NameTableViewController.swift */; };
 		597D63252436856D00056FD1 /* TextFieldTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597D63242436856D00056FD1 /* TextFieldTableViewCell.swift */; };
 		597D6327243697EE00056FD1 /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597D6326243697EE00056FD1 /* SettingsTableViewController.swift */; };
@@ -33,6 +36,7 @@
 		598962A82421C29000B3C670 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A72421C29000B3C670 /* TabBarController.swift */; };
 		59B924FA243D7E13002440E2 /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924F9243D7E13002440E2 /* LoginTableViewController.swift */; };
 		59B924FE243D84BA002440E2 /* ProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924FD243D84BA002440E2 /* ProviderController.swift */; };
+		59D3AF8A24466EF500B066BA /* AlbumCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D3AF8924466EF500B066BA /* AlbumCollection.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,6 +54,9 @@
 		59685A492421A63400710539 /* UIAlertController+Fixes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Fixes.swift"; sourceTree = "<group>"; };
 		59685A4B2421AC9600710539 /* AlbumsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsTableViewController.swift; sourceTree = "<group>"; };
 		5978B84324465F7800CACC7A /* ButtonCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCollectionReusableView.swift; sourceTree = "<group>"; };
+		5978B84524466A3100CACC7A /* CollectionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsTableViewController.swift; sourceTree = "<group>"; };
+		5978B84724466AA900CACC7A /* CollectionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionController.swift; sourceTree = "<group>"; };
+		5978B84924466AD600CACC7A /* Condition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Condition.swift; sourceTree = "<group>"; };
 		597D63222436854600056FD1 /* NameTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NameTableViewController.swift; sourceTree = "<group>"; };
 		597D63242436856D00056FD1 /* TextFieldTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldTableViewCell.swift; sourceTree = "<group>"; };
 		597D6326243697EE00056FD1 /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +70,7 @@
 		598962A72421C29000B3C670 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		59B924F9243D7E13002440E2 /* LoginTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
 		59B924FD243D84BA002440E2 /* ProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderController.swift; sourceTree = "<group>"; };
+		59D3AF8924466EF500B066BA /* AlbumCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +131,7 @@
 				597D63282436A1B800056FD1 /* DestinationsTableViewController.swift */,
 				597D63332436AB4B00056FD1 /* FileBrowserTableViewController.swift */,
 				59B924F9243D7E13002440E2 /* LoginTableViewController.swift */,
+				5978B84524466A3100CACC7A /* CollectionsTableViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -150,8 +159,10 @@
 			isa = PBXGroup;
 			children = (
 				594ACC5A242088BA00DEFCBF /* Meme_Vault.xcdatamodeld */,
-				598962A22421BEE600B3C670 /* ActionSet.swift */,
 				597D632A2436A35400056FD1 /* CoreDataStack.swift */,
+				598962A22421BEE600B3C670 /* ActionSet.swift */,
+				5978B84924466AD600CACC7A /* Condition.swift */,
+				59D3AF8924466EF500B066BA /* AlbumCollection.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -162,6 +173,7 @@
 				598962A52421C01C00B3C670 /* ActionController.swift */,
 				597D632E2436A64900056FD1 /* DestinationController.swift */,
 				59B924FD243D84BA002440E2 /* ProviderController.swift */,
+				5978B84724466AA900CACC7A /* CollectionController.swift */,
 			);
 			path = "Model Controllers";
 			sourceTree = "<group>";
@@ -249,13 +261,16 @@
 				597D632D2436A3FA00056FD1 /* UITableViewController+FRCDelegate.swift in Sources */,
 				598962A82421C29000B3C670 /* TabBarController.swift in Sources */,
 				59B924FA243D7E13002440E2 /* LoginTableViewController.swift in Sources */,
+				5978B84A24466AD600CACC7A /* Condition.swift in Sources */,
 				594ACC6E24208F1B00DEFCBF /* ActionSetCollectionViewController.swift in Sources */,
 				59685A4A2421A63400710539 /* UIAlertController+Fixes.swift in Sources */,
 				598962A32421BEE600B3C670 /* ActionSet.swift in Sources */,
+				5978B84824466AA900CACC7A /* CollectionController.swift in Sources */,
 				597D632F2436A64900056FD1 /* DestinationController.swift in Sources */,
 				597D632B2436A35400056FD1 /* CoreDataStack.swift in Sources */,
 				59B924FE243D84BA002440E2 /* ProviderController.swift in Sources */,
 				597D6327243697EE00056FD1 /* SettingsTableViewController.swift in Sources */,
+				59D3AF8A24466EF500B066BA /* AlbumCollection.swift in Sources */,
 				597D63252436856D00056FD1 /* TextFieldTableViewCell.swift in Sources */,
 				594ACC6A24208A9700DEFCBF /* ActionSetsTableViewController.swift in Sources */,
 				59685A4C2421AC9600710539 /* AlbumsTableViewController.swift in Sources */,
@@ -265,6 +280,7 @@
 				598962A62421C01C00B3C670 /* ActionController.swift in Sources */,
 				594ACC7124208F5400DEFCBF /* ActionCollectionViewCell.swift in Sources */,
 				594ACC54242088BA00DEFCBF /* SceneDelegate.swift in Sources */,
+				5978B84624466A3100CACC7A /* CollectionsTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -13,6 +13,7 @@ class TabBarController: UITabBarController {
     let actionController = ActionController()
     let providerController = ProviderController()
     let destinationController = DestinationController()
+    let collectionController = CollectionController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,7 @@ class TabBarController: UITabBarController {
                     settingsVC.actionController = actionController
                     settingsVC.providerController = providerController
                     settingsVC.destinationController = destinationController
+                    settingsVC.collectionController = collectionController
                 }
             }
         }
