@@ -8,7 +8,7 @@
 
 import Foundation
 
-class Condition: Equatable {
+class Condition: NSObject {
     
     public enum Conjunction: String, CaseIterable {
         case and
@@ -23,10 +23,6 @@ class Condition: Equatable {
         self.conjunction = conjunction
         self.not = not
         self.id = id
-    }
-    
-    static func == (lhs: Condition, rhs: Condition) -> Bool {
-        return lhs.id == rhs.id && lhs.conjunction == rhs.conjunction && lhs.not == rhs.not
     }
     
 }

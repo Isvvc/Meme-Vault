@@ -59,8 +59,7 @@ class CollectionTableViewController: UITableViewController {
             
             cell.textLabel?.text = label
             
-            if let insetLevel = collectionController?.insetLevel(for: condition, in: collection), insetLevel != 0 {
-                print(insetLevel)
+            if let insetLevel = collectionController?.insetLevel(for: condition, in: collection) {
                 cell.contentView.layoutMargins.left = CGFloat(insetLevel % 4 * 40)
             }
         }
