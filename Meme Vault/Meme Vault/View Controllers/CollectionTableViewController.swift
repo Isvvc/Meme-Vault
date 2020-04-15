@@ -36,7 +36,8 @@ class CollectionTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
 
-        if let condition = collection?.conditions[indexPath.row] {
+        if let collection = collection {
+            let condition = collection.conditions[indexPath.row]
             var label = ""
             
             if let conjunction = condition.conjunction {
@@ -57,7 +58,13 @@ class CollectionTableViewController: UITableViewController {
             }
             
             cell.textLabel?.text = label
+            
+            if let insetLevel = collectionController?.insetLevel(for: condition, in: collection), insetLevel != 0 {
+                print(insetLevel)
+                cell.contentView.layoutMargins.left = CGFloat(insetLevel % 4 * 40)
+            }
         }
+        
 
         return cell
     }

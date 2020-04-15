@@ -23,4 +23,34 @@ class CollectionController {
         let presetCollection = AlbumCollection(name: "Test", conditions: presetConditions)
         self.collections = [presetCollection]
     }
+    
+    func insetLevel(for inputCondition: Condition, in collection: AlbumCollection) -> Int {
+        var inset = 0
+        
+        if inputCondition == collection.conditions.first {
+            return 0
+        }
+        
+        for i in 1..<collection.conditions.count {
+            let previousCondition = collection.conditions[i - 1]
+            if previousCondition.id == nil,
+                previousCondition.conjunction != .none {
+                // Previous condition was an open parenthesis
+                inset += 1
+            }
+            
+            let condition = collection.conditions[i]
+            if condition.id == nil,
+                condition.conjunction == .none {
+                // This condition is a close parenthesis
+                inset -= 1
+            }
+            
+            if inputCondition == condition {
+                return inset
+            }
+        }
+        
+        return 0
+    }
 }
