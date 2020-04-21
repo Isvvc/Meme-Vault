@@ -17,11 +17,8 @@ class CollectionTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         if let collection = collection {
             title = collection.name
@@ -47,6 +44,9 @@ class CollectionTableViewController: UITableViewController {
             
             if condition.not {
                 label += "not "
+                if indexPath.row == 0 {
+                    label = label.capitalized
+                }
             }
             
             if let id = condition.id {
@@ -79,24 +79,25 @@ class CollectionTableViewController: UITableViewController {
     }
     */
 
-    /*
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            // Delete the row from the data source
+            collection?.conditions.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
+        }
     }
-    */
 
-    /*
     // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
+        guard let collection = collection else { return }
+        let condition = collection.conditions[fromIndexPath.row]
+        collection.conditions.remove(at: fromIndexPath.row)
+        collection.conditions.insert(condition, at: to.row)
+        
+        // Ideally this should only be reloading the cells between the old and new positions,
+        // but I can't for the life of me get it to do that right for some reason
+        tableView.reloadData()
     }
-    */
 
     /*
     // Override to support conditional rearranging of the table view.
