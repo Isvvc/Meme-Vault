@@ -81,7 +81,7 @@ class CollectionsTableViewController: UITableViewController {
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let collectionVC = segue.destination as? CollectionTableViewController {
-            collectionVC.collectionController = collectionController
+            //collectionVC.collectionController = collectionController
             
             if let indexPath = tableView.indexPathForSelectedRow {
                 collectionVC.collection = collectionController?.collections[indexPath.row]

@@ -11,7 +11,7 @@ import Photos
 
 class CollectionTableViewController: UITableViewController {
     
-    var collectionController: CollectionController?
+    //var collectionController: CollectionController?
     var collection: AlbumCollection?
 
     override func viewDidLoad() {
@@ -36,6 +36,17 @@ class CollectionTableViewController: UITableViewController {
 
         if let collection = collection {
             let condition = collection.conditions[indexPath.row]
+            
+            if collection.conditionIsFirst(condition) {
+                // Conditions that are first shouldn't have a conjunction
+                condition.conjunction = .none
+            } else if condition.id != nil,
+                condition.conjunction == .none {
+                // Conditions that aren't first should have a conjunction unless they're closing parenthases
+                // If one is rearranged out of being first, default it to AND
+                condition.conjunction = .and
+            }
+            
             var label = ""
             
             if let conjunction = condition.conjunction {
@@ -62,9 +73,8 @@ class CollectionTableViewController: UITableViewController {
             
             cell.textLabel?.text = label
             
-            if let insetLevel = collectionController?.insetLevel(for: condition, in: collection) {
-                cell.contentView.layoutMargins.left = CGFloat(insetLevel % 4 * 40)
-            }
+            let insetLevel = collection.insetLevel(for: condition)
+            cell.contentView.layoutMargins.left = CGFloat(insetLevel % 4 * 40)
         }
         
 
