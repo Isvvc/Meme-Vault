@@ -233,7 +233,7 @@
                                     <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
                                     <state key="normal" title="Add Condition"/>
                                     <connections>
-                                        <segue destination="JbR-XU-gwh" kind="show" id="h9Q-B5-8yk"/>
+                                        <segue destination="JbR-XU-gwh" kind="show" identifier="Condition" id="h9Q-B5-8yk"/>
                                     </connections>
                                 </button>
                             </subviews>
@@ -262,9 +262,6 @@
                                         </label>
                                     </subviews>
                                 </tableViewCellContentView>
-                                <connections>
-                                    <segue destination="JbR-XU-gwh" kind="show" id="Qzt-lO-VyL"/>
-                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -287,7 +284,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ConjunctionCell" id="FZ0-25-Gkh">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="ConjunctionCell" id="FZ0-25-Gkh" customClass="ConjunctionTableViewCell" customModule="Meme_Vault" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="55.5" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="FZ0-25-Gkh" id="F5r-Lq-Rxb">
@@ -300,6 +297,9 @@
                                                 <segment title="AND"/>
                                                 <segment title="OR"/>
                                             </segments>
+                                            <connections>
+                                                <action selector="valueChanged:" destination="FZ0-25-Gkh" eventType="valueChanged" id="7JR-m5-glb"/>
+                                            </connections>
                                         </segmentedControl>
                                     </subviews>
                                     <constraints>
@@ -308,8 +308,11 @@
                                         <constraint firstItem="SEQ-4s-YMf" firstAttribute="centerY" secondItem="F5r-Lq-Rxb" secondAttribute="centerY" id="c4n-oj-eWZ"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="segmentedControl" destination="SEQ-4s-YMf" id="2Sw-G0-Xat"/>
+                                </connections>
                             </tableViewCell>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotCell" id="Zmv-N7-R16">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="NotCell" id="Zmv-N7-R16" customClass="NotTableViewCell" customModule="Meme_Vault" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="99" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="Zmv-N7-R16" id="IIK-vf-xnY">
@@ -324,6 +327,9 @@
                                         </label>
                                         <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="RBd-xD-bnM">
                                             <rect key="frame" x="345" y="6.5" width="51" height="31"/>
+                                            <connections>
+                                                <action selector="valueChanged:" destination="Zmv-N7-R16" eventType="valueChanged" id="CI6-1p-VH8"/>
+                                            </connections>
                                         </switch>
                                     </subviews>
                                     <constraints>
@@ -334,6 +340,9 @@
                                         <constraint firstItem="ZVU-17-yVG" firstAttribute="leading" secondItem="IIK-vf-xnY" secondAttribute="leadingMargin" id="peV-xn-8DP"/>
                                     </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="toggle" destination="RBd-xD-bnM" id="ANJ-vX-UJx"/>
+                                </connections>
                             </tableViewCell>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="AlbumCell" textLabel="lLz-rg-IOj" style="IBUITableViewCellStyleDefault" id="Acu-zN-Lvm">
                                 <rect key="frame" x="0.0" y="142.5" width="414" height="43.5"/>
@@ -810,7 +819,6 @@
     <inferredMetricsTieBreakers>
         <segue reference="vWX-eg-jEl"/>
         <segue reference="oAK-KV-3Ln"/>
-        <segue reference="h9Q-B5-8yk"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cloud.fill" catalog="system" width="128" height="84"/>

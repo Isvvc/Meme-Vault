@@ -36,6 +36,10 @@
 		598962A62421C01C00B3C670 /* ActionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A52421C01C00B3C670 /* ActionController.swift */; };
 		598962A82421C29000B3C670 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A72421C29000B3C670 /* TabBarController.swift */; };
 		598D596E244F8055005899A7 /* ConditionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598D596D244F8055005899A7 /* ConditionTableViewController.swift */; };
+		598D5970244F8F2A005899A7 /* Bool+Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598D596F244F8F29005899A7 /* Bool+Int.swift */; };
+		598D5972244F92BD005899A7 /* ConjunctionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598D5971244F92BD005899A7 /* ConjunctionTableViewCell.swift */; };
+		598D5974244F952B005899A7 /* NotTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598D5973244F952B005899A7 /* NotTableViewCell.swift */; };
+		598D5976244F979A005899A7 /* ControlCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598D5975244F979A005899A7 /* ControlCellDelegate.swift */; };
 		59B924FA243D7E13002440E2 /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924F9243D7E13002440E2 /* LoginTableViewController.swift */; };
 		59B924FE243D84BA002440E2 /* ProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924FD243D84BA002440E2 /* ProviderController.swift */; };
 		59D3AF8A24466EF500B066BA /* AlbumCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D3AF8924466EF500B066BA /* AlbumCollection.swift */; };
@@ -72,6 +76,10 @@
 		598962A52421C01C00B3C670 /* ActionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionController.swift; sourceTree = "<group>"; };
 		598962A72421C29000B3C670 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		598D596D244F8055005899A7 /* ConditionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionTableViewController.swift; sourceTree = "<group>"; };
+		598D596F244F8F29005899A7 /* Bool+Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+Int.swift"; sourceTree = "<group>"; };
+		598D5971244F92BD005899A7 /* ConjunctionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjunctionTableViewCell.swift; sourceTree = "<group>"; };
+		598D5973244F952B005899A7 /* NotTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotTableViewCell.swift; sourceTree = "<group>"; };
+		598D5975244F979A005899A7 /* ControlCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCellDelegate.swift; sourceTree = "<group>"; };
 		59B924F9243D7E13002440E2 /* LoginTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
 		59B924FD243D84BA002440E2 /* ProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderController.swift; sourceTree = "<group>"; };
 		59D3AF8924466EF500B066BA /* AlbumCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollection.swift; sourceTree = "<group>"; };
@@ -148,6 +156,8 @@
 				594ACC7024208F5400DEFCBF /* ActionCollectionViewCell.swift */,
 				5978B84324465F7800CACC7A /* ButtonCollectionReusableView.swift */,
 				597D63242436856D00056FD1 /* TextFieldTableViewCell.swift */,
+				598D5971244F92BD005899A7 /* ConjunctionTableViewCell.swift */,
+				598D5973244F952B005899A7 /* NotTableViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -157,6 +167,8 @@
 			children = (
 				59685A492421A63400710539 /* UIAlertController+Fixes.swift */,
 				597D632C2436A3FA00056FD1 /* UITableViewController+FRCDelegate.swift */,
+				598D596F244F8F29005899A7 /* Bool+Int.swift */,
+				598D5975244F979A005899A7 /* ControlCellDelegate.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -274,14 +286,18 @@
 				598962A32421BEE600B3C670 /* ActionSet.swift in Sources */,
 				59090B3D244676D300E2EF5B /* CollectionTableViewController.swift in Sources */,
 				5978B84824466AA900CACC7A /* CollectionController.swift in Sources */,
+				598D5970244F8F2A005899A7 /* Bool+Int.swift in Sources */,
 				597D632F2436A64900056FD1 /* DestinationController.swift in Sources */,
 				597D632B2436A35400056FD1 /* CoreDataStack.swift in Sources */,
+				598D5976244F979A005899A7 /* ControlCellDelegate.swift in Sources */,
 				59B924FE243D84BA002440E2 /* ProviderController.swift in Sources */,
+				598D5974244F952B005899A7 /* NotTableViewCell.swift in Sources */,
 				597D6327243697EE00056FD1 /* SettingsTableViewController.swift in Sources */,
 				59D3AF8A24466EF500B066BA /* AlbumCollection.swift in Sources */,
 				597D63252436856D00056FD1 /* TextFieldTableViewCell.swift in Sources */,
 				594ACC6A24208A9700DEFCBF /* ActionSetsTableViewController.swift in Sources */,
 				59685A4C2421AC9600710539 /* AlbumsTableViewController.swift in Sources */,
+				598D5972244F92BD005899A7 /* ConjunctionTableViewCell.swift in Sources */,
 				597D63232436854600056FD1 /* NameTableViewController.swift in Sources */,
 				5978B84424465F7800CACC7A /* ButtonCollectionReusableView.swift in Sources */,
 				597D63342436AB4B00056FD1 /* FileBrowserTableViewController.swift in Sources */,

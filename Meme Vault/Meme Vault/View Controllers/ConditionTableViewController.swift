@@ -35,24 +35,37 @@ class ConditionTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 1 + (condition?.id != nil).int + (condition?.conjunction != nil).int
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier: String
         
         switch indexPath.row {
-        case 0:
+        case 0 - (condition?.conjunction == nil).int:
             identifier = "ConjunctionCell"
-        case 1:
+        case 1 - (condition?.conjunction == nil).int:
             identifier = "NotCell"
         default:
             identifier = "AlbumCell"
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
-
-        if indexPath.row == 2 {
+        
+        switch indexPath.row {
+        case 0 - (condition?.conjunction == nil).int:
+            if let conjunctionCell = cell as? ConjunctionTableViewCell {
+                conjunctionCell.segmentedControl.selectedSegmentIndex = condition?.conjunction?.rawValue ?? 0
+                conjunctionCell.delegate = self
+            }
+            
+        case 1 - (condition?.conjunction == nil).int:
+            if let notCell = cell as? NotTableViewCell {
+                notCell.toggle.isOn = condition?.not ?? false
+                notCell.delegate = self
+            }
+            
+        default:
             if let id = condition?.id {
                 let collections = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [id], options: nil)
                 cell.textLabel?.text = collections.firstObject?.localizedTitle
@@ -84,5 +97,24 @@ extension ConditionTableViewController: AlbumsTableDelegate {
         navigationController?.popViewController(animated: true)
         tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .none)
         delegate?.update(condition)
+    }
+}
+
+//MARK: Segmented control cell delegate
+
+extension ConditionTableViewController: ControlCellDelegate {
+    func valueChanged<Control: UIControl>(_ sender: Control) {
+        
+        if let segmentedControl = sender as? UISegmentedControl {
+            guard let condition = condition else { return }
+            condition.conjunction = Condition.Conjunction(rawValue: segmentedControl.selectedSegmentIndex)
+            delegate?.update(condition)
+            
+        } else if let toggle = sender as? UISwitch {
+            guard let condition = condition else { return }
+            condition.not = toggle.isOn
+            delegate?.update(condition)
+            
+        }
     }
 }

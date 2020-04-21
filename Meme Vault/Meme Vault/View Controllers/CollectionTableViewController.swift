@@ -42,7 +42,7 @@ class CollectionTableViewController: UITableViewController {
             var label = ""
             
             if let conjunction = condition.conjunction {
-                label += conjunction.rawValue + " "
+                label += conjunction.string + " "
             }
             
             if condition.not {
@@ -55,6 +55,7 @@ class CollectionTableViewController: UITableViewController {
             } else if condition.conjunction == .none,
                 indexPath.row != 0 {
                 label += ")"
+                cell.accessoryType = .none
             } else {
                 label += "("
             }
@@ -104,6 +105,19 @@ class CollectionTableViewController: UITableViewController {
         return true
     }
     */
+    
+    //MARK: Table view delegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let collection = collection else { return }
+        let condition = collection.conditions[indexPath.row]
+        // Only segue if the row isn't a ')'
+        if condition.id == nil && condition.conjunction == .none {
+            tableView.deselectRow(at: indexPath, animated: true)
+        } else {
+            performSegue(withIdentifier: "Condition", sender: self)
+        }
+    }
 
     // MARK: - Navigation
 

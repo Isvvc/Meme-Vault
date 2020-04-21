@@ -10,9 +10,18 @@ import Foundation
 
 class Condition: NSObject {
     
-    public enum Conjunction: String, CaseIterable {
+    public enum Conjunction: Int, CaseIterable {
         case and
         case or
+        
+        var string: String {
+            switch self {
+            case .and:
+                return "and"
+            default:
+                return "or"
+            }
+        }
     }
     
     var conjunction: Conjunction?
