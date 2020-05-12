@@ -21,8 +21,8 @@ class TabBarController: UITabBarController {
         for vc in viewControllers ?? [] {
             if let navigationVC = vc as? UINavigationController,
                 let firstVC = navigationVC.viewControllers.first {
-                if let albumsVC = firstVC as? AlbumsTableViewController {
-                    albumsVC.actionController = actionController
+                if let collectionsVC = firstVC as? CollectionsTableViewController {
+                    collectionsVC.collectionController = collectionController
                 } else if let settingsVC = firstVC as? SettingsTableViewController {
                     settingsVC.actionController = actionController
                     settingsVC.providerController = providerController

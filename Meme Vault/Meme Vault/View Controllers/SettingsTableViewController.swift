@@ -73,6 +73,7 @@ class SettingsTableViewController: UITableViewController {
             destinationVC.providerController = providerController
         } else if let collectionsVC = segue.destination as? CollectionsTableViewController {
             collectionsVC.collectionController = collectionController
+            collectionsVC.editCollections = true
         }
     }
 

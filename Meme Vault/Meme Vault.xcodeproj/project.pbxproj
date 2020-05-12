@@ -40,6 +40,8 @@
 		598D5972244F92BD005899A7 /* ConjunctionTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598D5971244F92BD005899A7 /* ConjunctionTableViewCell.swift */; };
 		598D5974244F952B005899A7 /* NotTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598D5973244F952B005899A7 /* NotTableViewCell.swift */; };
 		598D5976244F979A005899A7 /* ControlCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598D5975244F979A005899A7 /* ControlCellDelegate.swift */; };
+		59B054A9246A589500C31CE3 /* MemeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B054A8246A589500C31CE3 /* MemeViewController.swift */; };
+		59B054AB246A5A5700C31CE3 /* UIImageView+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B054AA246A5A5700C31CE3 /* UIImageView+PHAsset.swift */; };
 		59B924FA243D7E13002440E2 /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924F9243D7E13002440E2 /* LoginTableViewController.swift */; };
 		59B924FE243D84BA002440E2 /* ProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924FD243D84BA002440E2 /* ProviderController.swift */; };
 		59D3AF8A24466EF500B066BA /* AlbumCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D3AF8924466EF500B066BA /* AlbumCollection.swift */; };
@@ -80,6 +82,8 @@
 		598D5971244F92BD005899A7 /* ConjunctionTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConjunctionTableViewCell.swift; sourceTree = "<group>"; };
 		598D5973244F952B005899A7 /* NotTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotTableViewCell.swift; sourceTree = "<group>"; };
 		598D5975244F979A005899A7 /* ControlCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlCellDelegate.swift; sourceTree = "<group>"; };
+		59B054A8246A589500C31CE3 /* MemeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeViewController.swift; sourceTree = "<group>"; };
+		59B054AA246A5A5700C31CE3 /* UIImageView+PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+PHAsset.swift"; sourceTree = "<group>"; };
 		59B924F9243D7E13002440E2 /* LoginTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
 		59B924FD243D84BA002440E2 /* ProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderController.swift; sourceTree = "<group>"; };
 		59D3AF8924466EF500B066BA /* AlbumCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollection.swift; sourceTree = "<group>"; };
@@ -146,6 +150,7 @@
 				5978B84524466A3100CACC7A /* CollectionsTableViewController.swift */,
 				59090B3C244676D300E2EF5B /* CollectionTableViewController.swift */,
 				598D596D244F8055005899A7 /* ConditionTableViewController.swift */,
+				59B054A8246A589500C31CE3 /* MemeViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -169,6 +174,7 @@
 				597D632C2436A3FA00056FD1 /* UITableViewController+FRCDelegate.swift */,
 				598D596F244F8F29005899A7 /* Bool+Int.swift */,
 				598D5975244F979A005899A7 /* ControlCellDelegate.swift */,
+				59B054AA246A5A5700C31CE3 /* UIImageView+PHAsset.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -288,6 +294,7 @@
 				5978B84824466AA900CACC7A /* CollectionController.swift in Sources */,
 				598D5970244F8F2A005899A7 /* Bool+Int.swift in Sources */,
 				597D632F2436A64900056FD1 /* DestinationController.swift in Sources */,
+				59B054AB246A5A5700C31CE3 /* UIImageView+PHAsset.swift in Sources */,
 				597D632B2436A35400056FD1 /* CoreDataStack.swift in Sources */,
 				598D5976244F979A005899A7 /* ControlCellDelegate.swift in Sources */,
 				59B924FE243D84BA002440E2 /* ProviderController.swift in Sources */,
@@ -301,6 +308,7 @@
 				597D63232436854600056FD1 /* NameTableViewController.swift in Sources */,
 				5978B84424465F7800CACC7A /* ButtonCollectionReusableView.swift in Sources */,
 				597D63342436AB4B00056FD1 /* FileBrowserTableViewController.swift in Sources */,
+				59B054A9246A589500C31CE3 /* MemeViewController.swift in Sources */,
 				598962A62421C01C00B3C670 /* ActionController.swift in Sources */,
 				594ACC7124208F5400DEFCBF /* ActionCollectionViewCell.swift in Sources */,
 				594ACC54242088BA00DEFCBF /* SceneDelegate.swift in Sources */,

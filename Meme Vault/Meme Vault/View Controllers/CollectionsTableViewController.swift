@@ -11,6 +11,7 @@ import UIKit
 class CollectionsTableViewController: UITableViewController {
     
     var collectionController: CollectionController?
+    var editCollections = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,18 +75,24 @@ class CollectionsTableViewController: UITableViewController {
     //MARK: Table view delegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "Collection", sender: self)
+        if editCollections {
+            performSegue(withIdentifier: "Collection", sender: self)
+        } else {
+            performSegue(withIdentifier: "Meme", sender: self)
+        }
     }
 
     // MARK: - Navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let collectionVC = segue.destination as? CollectionTableViewController {
-            //collectionVC.collectionController = collectionController
+        if let indexPath = tableView.indexPathForSelectedRow {
             
-            if let indexPath = tableView.indexPathForSelectedRow {
+            if let collectionVC = segue.destination as? CollectionTableViewController {
                 collectionVC.collection = collectionController?.collections[indexPath.row]
+            } else if let memeVC = segue.destination as? MemeViewController {
+                memeVC.collection = collectionController?.collections[indexPath.row]
             }
+            
         }
     }
 

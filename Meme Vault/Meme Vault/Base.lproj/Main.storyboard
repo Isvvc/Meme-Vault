@@ -3,6 +3,7 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -176,6 +177,38 @@
             </objects>
             <point key="canvasLocation" x="2196" y="642"/>
         </scene>
+        <!--Meme View Controller-->
+        <scene sceneID="lFf-81-K4y">
+            <objects>
+                <viewController id="Ky6-JI-Esr" customClass="MemeViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="mJo-4w-g4B">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="x3y-FO-d01">
+                                <rect key="frame" x="0.0" y="241" width="414" height="414"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="x3y-FO-d01" secondAttribute="height" multiplier="1:1" id="R39-OT-LNo"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="x3y-FO-d01" firstAttribute="leading" secondItem="njq-kG-7La" secondAttribute="leading" id="GXS-EG-o6o"/>
+                            <constraint firstItem="njq-kG-7La" firstAttribute="trailing" secondItem="x3y-FO-d01" secondAttribute="trailing" id="Sf9-8R-6WY"/>
+                            <constraint firstItem="x3y-FO-d01" firstAttribute="centerY" secondItem="mJo-4w-g4B" secondAttribute="centerY" id="bFB-IL-y6d"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="njq-kG-7La"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="QwV-ht-Zvg"/>
+                    <connections>
+                        <outlet property="imageView" destination="x3y-FO-d01" id="Hwb-Vy-PCU"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="u3N-iH-17H" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1229" y="-1492"/>
+        </scene>
         <!--Collections-->
         <scene sceneID="EkF-bu-Pwz">
             <objects>
@@ -211,11 +244,12 @@
                     <navigationItem key="navigationItem" title="Collections" id="IL3-ZR-IBf"/>
                     <connections>
                         <segue destination="VTK-3P-ebL" kind="show" identifier="Collection" id="r1F-1D-t1A"/>
+                        <segue destination="Ky6-JI-Esr" kind="show" identifier="Meme" id="irt-n7-HGd"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1u5-yp-313" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2196" y="1353"/>
+            <point key="canvasLocation" x="1229" y="-779"/>
         </scene>
         <!--Collection-->
         <scene sceneID="uht-Q8-bpA">
@@ -273,7 +307,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9xQ-WH-Thk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3151" y="1353"/>
+            <point key="canvasLocation" x="2196" y="-779"/>
         </scene>
         <!--Condition-->
         <scene sceneID="vnY-k0-mNd">
@@ -374,7 +408,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="hlG-RH-tij" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4061" y="1353"/>
+            <point key="canvasLocation" x="3151" y="-779"/>
         </scene>
         <!--FileBrowser-->
         <scene sceneID="U8v-F5-z0x">
@@ -738,7 +772,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ppE-rC-uP8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1228.985507246377" y="-779.46428571428567"/>
+            <point key="canvasLocation" x="4061" y="-779"/>
         </scene>
         <!--Collections-->
         <scene sceneID="luF-NH-Xdt">
@@ -752,7 +786,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="y2v-TK-weF" kind="relationship" relationship="rootViewController" id="wrQ-JI-Y1r"/>
+                        <segue destination="vyV-VR-WHI" kind="relationship" relationship="rootViewController" id="hZj-BL-mnq"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="BPC-fz-KHC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -818,7 +852,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="vWX-eg-jEl"/>
-        <segue reference="oAK-KV-3Ln"/>
+        <segue reference="WnB-5s-WJs"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cloud.fill" catalog="system" width="128" height="84"/>
