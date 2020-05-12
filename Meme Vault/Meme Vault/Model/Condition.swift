@@ -6,7 +6,7 @@
 //  Copyright © 2020 Isaac Lyons. All rights reserved.
 //
 
-import Foundation
+import Photos
 
 class Condition: NSObject {
     
@@ -32,6 +32,29 @@ class Condition: NSObject {
         self.conjunction = conjunction
         self.not = not
         self.id = id
+    }
+    
+    func matches(asset: PHAsset, cache: Cache<String, Set<PHAsset>>) -> Bool {
+        guard let id = self.id  else { return false }
+        let set: Set<PHAsset>
+        
+        if let cachedSet = cache.value(forKey: id) {
+            set = cachedSet
+        } else {
+            let fetchOptions = PHFetchOptions()
+            fetchOptions.predicate = NSPredicate(format: "localIdentifier = %@", id)
+            let collections: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions)
+            if let collection = collections.firstObject {
+                let assets = PHAsset.fetchAssets(in: collection, options: nil)
+                set = Set(assets.objects(at: IndexSet(0..<assets.count)))
+            } else {
+                set = Set<PHAsset>()
+            }
+            
+            cache.cache(set, forKey: id)
+        }
+        
+        return set.contains(asset) != self.not
     }
     
 }

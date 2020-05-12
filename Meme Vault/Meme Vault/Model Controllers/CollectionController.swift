@@ -6,10 +6,12 @@
 //  Copyright © 2020 Isaac Lyons. All rights reserved.
 //
 
-import Foundation
+import Photos
 
 class CollectionController {
+    
     var collections: [AlbumCollection]
+    var cache = Cache<String, Set<PHAsset>>()
     
     init() {
         let presetConditions = [
@@ -23,4 +25,24 @@ class CollectionController {
         let presetCollection = AlbumCollection(name: "Test", conditions: presetConditions)
         self.collections = [presetCollection]
     }
+    
+    func fetchFirstImage(from collection: AlbumCollection) -> PHAsset? {
+        let allAssets = PHAsset.fetchAssets(with: nil)
+        
+        var i = 0
+        while i < allAssets.count {
+            let asset = allAssets.object(at: i)
+            if collection.contains(asset: asset, cache: cache) {
+                cache.clear()
+                return asset
+            }
+            print(asset)
+            
+            i += 1
+        }
+        
+        cache.clear()
+        return nil
+    }
+    
 }

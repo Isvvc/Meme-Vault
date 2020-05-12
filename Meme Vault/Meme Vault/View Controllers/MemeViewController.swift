@@ -12,21 +12,20 @@ import Photos
 class MemeViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
+    
+    var collectionController: CollectionController?
     var collection: AlbumCollection?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let collection = collection else {
+        guard let collection = collection,
+            let photo = collectionController?.fetchFirstImage(from: collection) else {
             navigationController?.popViewController(animated: true)
             return
         }
         
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.predicate = NSPredicate(format: "localIdentifier = %@", collection.conditions.first!.id!)
-        let excludeCollection: PHFetchResult = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions)
-        let allMatches = PHAsset.fetchAssets(in: excludeCollection.firstObject!, options: nil)
-        imageView.fetchImage(asset: allMatches.firstObject!, contentMode: .aspectFit)
+        imageView.fetchImage(asset: photo, contentMode: .aspectFit)
     }
 
 }

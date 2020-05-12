@@ -95,7 +95,7 @@ extension ConditionTableViewController: AlbumsTableDelegate {
         condition.id = album.localIdentifier
         print(album.localIdentifier)
         navigationController?.popViewController(animated: true)
-        tableView.reloadRows(at: [IndexPath(row: 2, section: 0)], with: .none)
+        tableView.reloadRows(at: [IndexPath(row: 2 - (condition.conjunction == nil).int, section: 0)], with: .none)
         delegate?.update(condition)
     }
 }

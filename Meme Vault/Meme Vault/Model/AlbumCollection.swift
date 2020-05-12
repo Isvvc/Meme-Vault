@@ -6,7 +6,7 @@
 //  Copyright © 2020 Isaac Lyons. All rights reserved.
 //
 
-import Foundation
+import Photos
 
 class AlbumCollection {
     var name: String
@@ -60,5 +60,17 @@ class AlbumCollection {
         }
         
         return false
+    }
+    
+    func contains(asset: PHAsset, cache: Cache<String, Set<PHAsset>>) -> Bool {
+        for condition in conditions {
+            if !condition.matches(asset: asset, cache: cache) {
+                // If any condition doesn't match
+                return false
+            }
+        }
+        
+        // If all the conditions matched
+        return true
     }
 }

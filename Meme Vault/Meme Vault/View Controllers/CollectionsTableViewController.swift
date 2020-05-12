@@ -90,6 +90,7 @@ class CollectionsTableViewController: UITableViewController {
             if let collectionVC = segue.destination as? CollectionTableViewController {
                 collectionVC.collection = collectionController?.collections[indexPath.row]
             } else if let memeVC = segue.destination as? MemeViewController {
+                memeVC.collectionController = collectionController
                 memeVC.collection = collectionController?.collections[indexPath.row]
             }
             

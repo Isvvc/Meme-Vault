@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		59090B3D244676D300E2EF5B /* CollectionTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59090B3C244676D300E2EF5B /* CollectionTableViewController.swift */; };
+		59322142246B5DCD00D2D2DF /* Cache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59322141246B5DCD00D2D2DF /* Cache.swift */; };
 		594ACC52242088BA00DEFCBF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594ACC51242088BA00DEFCBF /* AppDelegate.swift */; };
 		594ACC54242088BA00DEFCBF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594ACC53242088BA00DEFCBF /* SceneDelegate.swift */; };
 		594ACC59242088BA00DEFCBF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 594ACC57242088BA00DEFCBF /* Main.storyboard */; };
@@ -49,6 +50,7 @@
 
 /* Begin PBXFileReference section */
 		59090B3C244676D300E2EF5B /* CollectionTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionTableViewController.swift; sourceTree = "<group>"; };
+		59322141246B5DCD00D2D2DF /* Cache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cache.swift; sourceTree = "<group>"; };
 		594ACC4E242088BA00DEFCBF /* Meme Vault.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Meme Vault.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		594ACC51242088BA00DEFCBF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		594ACC53242088BA00DEFCBF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -187,6 +189,7 @@
 				598962A22421BEE600B3C670 /* ActionSet.swift */,
 				5978B84924466AD600CACC7A /* Condition.swift */,
 				59D3AF8924466EF500B066BA /* AlbumCollection.swift */,
+				59322141246B5DCD00D2D2DF /* Cache.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				59B924FE243D84BA002440E2 /* ProviderController.swift in Sources */,
 				598D5974244F952B005899A7 /* NotTableViewCell.swift in Sources */,
 				597D6327243697EE00056FD1 /* SettingsTableViewController.swift in Sources */,
+				59322142246B5DCD00D2D2DF /* Cache.swift in Sources */,
 				59D3AF8A24466EF500B066BA /* AlbumCollection.swift in Sources */,
 				597D63252436856D00056FD1 /* TextFieldTableViewCell.swift in Sources */,
 				594ACC6A24208A9700DEFCBF /* ActionSetsTableViewController.swift in Sources */,
