@@ -63,11 +63,34 @@ class AlbumCollection {
     }
     
     func contains(asset: PHAsset, cache: Cache<String, Set<PHAsset>>) -> Bool {
-        for condition in conditions {
+        var i = 0
+        var failed = false
+        
+//        for condition in conditions {
+        while i < conditions.count {
+            let condition = conditions[i]
+            
+            if condition.conjunction == .or, !failed {
+                // Everything up to this point matched,
+                // so we don't need to check anything after the OR
+                return true
+            }
+            
+            failed = false
+            
             if !condition.matches(asset: asset, cache: cache) {
-                // If any condition doesn't match
+                // Move i to the next OR to see if that matches
+                if let j = conditions.dropFirst(i + 1).firstIndex(where: { $0.conjunction == .or }) {
+                    i += j
+                    failed = true
+                    continue
+                }
+                
+                // If there is no OR later
                 return false
             }
+            
+            i += 1
         }
         
         // If all the conditions matched
