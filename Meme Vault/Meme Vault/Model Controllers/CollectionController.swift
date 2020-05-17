@@ -27,7 +27,9 @@ class CollectionController {
     }
     
     func fetchFirstImage(from collection: AlbumCollection) -> PHAsset? {
-        let allAssets = PHAsset.fetchAssets(with: nil)
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+        let allAssets = PHAsset.fetchAssets(with: fetchOptions)
         
         var i = 0
         while i < allAssets.count {

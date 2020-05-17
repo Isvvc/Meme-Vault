@@ -34,6 +34,11 @@ class Condition: NSObject {
         self.id = id
     }
     
+    /// Checks if the given asset meets this conditon.
+    /// - Parameters:
+    ///   - asset: The asset to check
+    ///   - cache: A cache for storing `PHAssets` from specific albums
+    /// - Returns: `true` if the asset meets this condition.
     func matches(asset: PHAsset, cache: Cache<String, Set<PHAsset>>) -> Bool {
         guard let id = self.id  else { return false }
         let set: Set<PHAsset>
@@ -55,6 +60,20 @@ class Condition: NSObject {
         }
         
         return set.contains(asset) != self.not
+    }
+    
+    override var description: String {
+        var output = String()
+        if let conjunction = conjunction {
+            output += conjunction.string + " "
+        }
+        if not {
+            output += "not "
+        }
+        if let id = id {
+            output += "album ID: \(id)"
+        }
+        return output
     }
     
 }

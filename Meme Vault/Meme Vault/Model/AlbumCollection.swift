@@ -62,13 +62,28 @@ class AlbumCollection {
         return false
     }
     
-    func contains(asset: PHAsset, cache: Cache<String, Set<PHAsset>>) -> Bool {
+    /// Checks if the collection contains the given `PHAsset`. In other words, checks if the given `PHAsset` matches the requirements for this collection.
+    /// - Parameters:
+    ///   - asset: The asset to be checking
+    ///   - cache: A cache for storing `PHAssets` from specific albums
+    ///   - inputConditions: The conditions to be checking the asset against. If left empty or set to `nil`, uses this collection's assets.
+    /// - Returns: `true` if this collection contains the given `asset`.
+    func contains(asset: PHAsset, cache: Cache<String, Set<PHAsset>>, conditions inputConditions: [Condition]? = nil) -> Bool {
+        let conditions: [Condition]
+        if let inputConditions = inputConditions {
+            conditions = inputConditions
+        } else {
+            conditions = self.conditions
+        }
+        
         var i = 0
         var failed = false
         
-//        for condition in conditions {
         while i < conditions.count {
             let condition = conditions[i]
+            
+            // `failed` being true means a condition wasn't met,
+            // so it's moving forward to the next "OR" to see if that condition is met
             
             if condition.conjunction == .or, !failed {
                 // Everything up to this point matched,
@@ -78,10 +93,25 @@ class AlbumCollection {
             
             failed = false
             
-            if !condition.matches(asset: asset, cache: cache) {
+            let matches: Bool
+            
+            if condition.id == nil {
+                // Opening parenthesis
+                // Get index of the closing parenthesis
+                let splitConditions = conditions.dropFirst(i + 1)
+                guard let j = splitConditions.lastIndex(where: { $0.conjunction == nil && $0.id == nil }) else { return false }
+                let newConditions = Array(splitConditions.prefix(upTo: j))
+                
+                matches = contains(asset: asset, cache: cache, conditions: newConditions)
+                i += j
+            } else {
+                matches = condition.matches(asset: asset, cache: cache)
+            }
+            
+            if !matches {
                 // Move i to the next OR to see if that matches
-                if let j = conditions.dropFirst(i + 1).firstIndex(where: { $0.conjunction == .or }) {
-                    i += j
+                if let j = findNextOr(startingAt: i + 1, conditions: conditions) {
+                    i = j
                     failed = true
                     continue
                 }
@@ -94,6 +124,40 @@ class AlbumCollection {
         }
         
         // If all the conditions matched
-        return true
+        return !failed
+    }
+    
+    /// Finds the next `or` condition in an array of conditions. Useful if a condition fails so the next condition can be checked.
+    /// - Parameters:
+    ///   - startIndex: The index of the input conditons array to start searching from
+    ///   - inputConditions: The conditions to be checking the asset against. If left empty or set to `nil`, uses this collection's assets.
+    /// - Returns: The index of the next `or` condition in the array if one exists, otherwise `nil`.
+    func findNextOr(startingAt startIndex: Int, conditions inputConditions: [Condition]? = nil) -> Int? {
+        let conditions: [Condition]
+        if let inputConditions = inputConditions {
+            conditions = inputConditions
+        } else {
+            conditions = self.conditions
+        }
+        
+        var i = startIndex
+        while i < conditions.count {
+            let condition = conditions[i]
+            
+            if condition.conjunction == .or {
+                return i
+            }
+            
+            if condition.id == nil {
+                // Opening parenthesis
+                // Get index of the closing parenthesis to continue from there
+                guard let j = conditions.dropFirst(i + 1).lastIndex(where: { $0.conjunction == nil && $0.id == nil }) else { return nil }
+                i = j
+            }
+            
+            i += 1
+        }
+        
+        return nil
     }
 }
