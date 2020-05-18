@@ -45,6 +45,8 @@
 		59B054AB246A5A5700C31CE3 /* UIImageView+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B054AA246A5A5700C31CE3 /* UIImageView+PHAsset.swift */; };
 		59B924FA243D7E13002440E2 /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924F9243D7E13002440E2 /* LoginTableViewController.swift */; };
 		59B924FE243D84BA002440E2 /* ProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924FD243D84BA002440E2 /* ProviderController.swift */; };
+		59C68168247210090037EB6D /* ToggleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C68166247210090037EB6D /* ToggleTableViewCell.swift */; };
+		59C68169247210090037EB6D /* ToggleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59C68167247210090037EB6D /* ToggleTableViewCell.xib */; };
 		59D3AF8A24466EF500B066BA /* AlbumCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D3AF8924466EF500B066BA /* AlbumCollection.swift */; };
 /* End PBXBuildFile section */
 
@@ -88,6 +90,8 @@
 		59B054AA246A5A5700C31CE3 /* UIImageView+PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+PHAsset.swift"; sourceTree = "<group>"; };
 		59B924F9243D7E13002440E2 /* LoginTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
 		59B924FD243D84BA002440E2 /* ProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderController.swift; sourceTree = "<group>"; };
+		59C68166247210090037EB6D /* ToggleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleTableViewCell.swift; sourceTree = "<group>"; };
+		59C68167247210090037EB6D /* ToggleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToggleTableViewCell.xib; sourceTree = "<group>"; };
 		59D3AF8924466EF500B066BA /* AlbumCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollection.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -165,6 +169,8 @@
 				597D63242436856D00056FD1 /* TextFieldTableViewCell.swift */,
 				598D5971244F92BD005899A7 /* ConjunctionTableViewCell.swift */,
 				598D5973244F952B005899A7 /* NotTableViewCell.swift */,
+				59C68166247210090037EB6D /* ToggleTableViewCell.swift */,
+				59C68167247210090037EB6D /* ToggleTableViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -270,6 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				594ACC61242088BC00DEFCBF /* LaunchScreen.storyboard in Resources */,
+				59C68169247210090037EB6D /* ToggleTableViewCell.xib in Resources */,
 				594ACC5E242088BC00DEFCBF /* Assets.xcassets in Resources */,
 				594ACC59242088BA00DEFCBF /* Main.storyboard in Resources */,
 			);
@@ -283,6 +290,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				594ACC52242088BA00DEFCBF /* AppDelegate.swift in Sources */,
+				59C68168247210090037EB6D /* ToggleTableViewCell.swift in Sources */,
 				594ACC5C242088BA00DEFCBF /* Meme_Vault.xcdatamodeld in Sources */,
 				597D63292436A1B800056FD1 /* DestinationsTableViewController.swift in Sources */,
 				597D632D2436A3FA00056FD1 /* UITableViewController+FRCDelegate.swift in Sources */,

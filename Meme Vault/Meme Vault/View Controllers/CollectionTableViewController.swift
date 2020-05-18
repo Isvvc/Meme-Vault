@@ -23,71 +23,86 @@ class CollectionTableViewController: UITableViewController {
         if let collection = collection {
             title = collection.name
         }
+        
+        tableView.register(UINib(nibName: "ToggleTableViewCell", bundle: nil), forCellReuseIdentifier: "ToggleCell")
     }
 
     // MARK: - Table view data source
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return collection?.conditions.count ?? 0
+        return section == 0 ? 1 : collection?.conditions.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
-
-        if let collection = collection {
-            let condition = collection.conditions[indexPath.row]
+        let cell: UITableViewCell
+        
+        switch indexPath.section {
+        case 0:
+            cell = tableView.dequeueReusableCell(withIdentifier: "ToggleCell", for: indexPath)
+            guard let toggleCell = cell as? ToggleTableViewCell else { break }
+            toggleCell.delegate = self
+            toggleCell.label.text = "Oldest first"
+            toggleCell.toggle.isOn = collection?.oldestFirst ?? true
+        default:
+            cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
             
-            if collection.conditionIsFirst(condition) {
-                // Conditions that are first shouldn't have a conjunction
-                condition.conjunction = .none
-            } else if condition.id != nil,
-                condition.conjunction == .none {
-                // Conditions that aren't first should have a conjunction unless they're closing parenthases
-                // If one is rearranged out of being first, default it to AND
-                condition.conjunction = .and
-            }
-            
-            var label = ""
-            
-            if let conjunction = condition.conjunction {
-                label += conjunction.string + " "
-            }
-            
-            if condition.not {
-                label += "not "
-                if indexPath.row == 0 {
-                    label = label.capitalized
+            if let collection = collection {
+                let condition = collection.conditions[indexPath.row]
+                
+                if collection.conditionIsFirst(condition) {
+                    // Conditions that are first shouldn't have a conjunction
+                    condition.conjunction = .none
+                } else if condition.id != nil,
+                    condition.conjunction == .none {
+                    // Conditions that aren't first should have a conjunction unless they're closing parenthases
+                    // If one is rearranged out of being first, default it to AND
+                    condition.conjunction = .and
                 }
+                
+                var label = ""
+                
+                if let conjunction = condition.conjunction {
+                    label += conjunction.string + " "
+                }
+                
+                if condition.not {
+                    label += "not "
+                    if indexPath.row == 0 {
+                        label = label.capitalized
+                    }
+                }
+                
+                if let id = condition.id {
+                    let collections = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [id], options: nil)
+                    label += collections.firstObject?.localizedTitle ?? "Unknown Album"
+                } else if condition.conjunction == .none,
+                    indexPath.row != 0 {
+                    label += ")"
+                    cell.accessoryType = .none
+                } else {
+                    label += "("
+                }
+                
+                cell.textLabel?.text = label
+                
+                let insetLevel = collection.insetLevel(for: condition)
+                cell.contentView.layoutMargins.left = CGFloat(insetLevel % 4 * 40)
             }
-            
-            if let id = condition.id {
-                let collections = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [id], options: nil)
-                label += collections.firstObject?.localizedTitle ?? "Unknown Album"
-            } else if condition.conjunction == .none,
-                indexPath.row != 0 {
-                label += ")"
-                cell.accessoryType = .none
-            } else {
-                label += "("
-            }
-            
-            cell.textLabel?.text = label
-            
-            let insetLevel = collection.insetLevel(for: condition)
-            cell.contentView.layoutMargins.left = CGFloat(insetLevel % 4 * 40)
         }
+        
         
 
         return cell
     }
 
-    /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+        return indexPath.section == 1
     }
-    */
 
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -149,6 +164,16 @@ class CollectionTableViewController: UITableViewController {
 extension CollectionTableViewController: ConditionTableDelegate {
     func update(_ condition: Condition) {
         guard let index = collection?.conditions.firstIndex(of: condition) else { return }
-        tableView.reloadRows(at: [IndexPath(row: index, section: 0)], with: .none)
+        tableView.reloadRows(at: [IndexPath(row: index, section: 1)], with: .none)
+    }
+}
+
+//MARK: Control cell delegate
+
+extension CollectionTableViewController: ControlCellDelegate {
+    func valueChanged<Control>(_ sender: Control) where Control : UIControl {
+        if let toggle = sender as? UISwitch {
+            collection?.oldestFirst = toggle.isOn
+        }
     }
 }

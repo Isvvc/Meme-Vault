@@ -11,6 +11,7 @@ import Photos
 class AlbumCollection {
     var name: String
     var conditions: [Condition]
+    var oldestFirst: Bool = true
     
     init(name: String, conditions: [Condition]) {
         self.name = name
