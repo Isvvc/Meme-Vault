@@ -26,6 +26,42 @@ class CollectionTableViewController: UITableViewController {
         
         tableView.register(UINib(nibName: "ToggleTableViewCell", bundle: nil), forCellReuseIdentifier: "ToggleCell")
     }
+    
+    //MARK: Cell loading
+    
+    /// Loads the content of the cells at the given index paths.
+    /// - Parameter indexPaths: An array of the index paths of the cells to load data into
+    private func loadCells(at indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            loadCell(at: indexPath)
+        }
+    }
+    
+    /// Loads the content of the cell at the given index path.
+    /// - Parameter indexPath: The index path of the cell to load data into
+    private func loadCell(at indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) else { return }
+        loadCell(cell, for: indexPath)
+    }
+    
+    /// Loads the content of the given cell.
+    /// - Parameters:
+    ///   - cell: The cell to load data into
+    ///   - indexPath: The index path of the cell
+    private func loadCell(_ cell: UITableViewCell, for indexPath: IndexPath) {
+        guard let collection = collection else { return }
+        let condition = collection.conditions[indexPath.row]
+        
+        let label = collection.textForCondition(at: indexPath.row)
+        cell.textLabel?.text = label
+        
+        if label == ")" {
+            cell.accessoryType = .none
+        }
+        
+        let insetLevel = collection.insetLevel(for: condition)
+        cell.contentView.layoutMargins.left = CGFloat(insetLevel % 4 * 40)
+    }
 
     // MARK: - Table view data source
     
@@ -49,53 +85,9 @@ class CollectionTableViewController: UITableViewController {
             toggleCell.toggle.isOn = collection?.oldestFirst ?? true
         default:
             cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
-            
-            if let collection = collection {
-                let condition = collection.conditions[indexPath.row]
-                
-                if collection.conditionIsFirst(condition) {
-                    // Conditions that are first shouldn't have a conjunction
-                    condition.conjunction = .none
-                } else if condition.id != nil,
-                    condition.conjunction == .none {
-                    // Conditions that aren't first should have a conjunction unless they're closing parenthases
-                    // If one is rearranged out of being first, default it to AND
-                    condition.conjunction = .and
-                }
-                
-                var label = ""
-                
-                if let conjunction = condition.conjunction {
-                    label += conjunction.string + " "
-                }
-                
-                if condition.not {
-                    label += "not "
-                    if indexPath.row == 0 {
-                        label = label.capitalized
-                    }
-                }
-                
-                if let id = condition.id {
-                    let collections = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [id], options: nil)
-                    label += collections.firstObject?.localizedTitle ?? "Unknown Album"
-                } else if condition.conjunction == .none,
-                    indexPath.row != 0 {
-                    label += ")"
-                    cell.accessoryType = .none
-                } else {
-                    label += "("
-                }
-                
-                cell.textLabel?.text = label
-                
-                let insetLevel = collection.insetLevel(for: condition)
-                cell.contentView.layoutMargins.left = CGFloat(insetLevel % 4 * 40)
-            }
+            loadCell(cell, for: indexPath)
         }
         
-        
-
         return cell
     }
 
@@ -104,15 +96,26 @@ class CollectionTableViewController: UITableViewController {
         return indexPath.section == 1
     }
 
-    // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            collection?.conditions.remove(at: indexPath.row)
+            guard let collection = collection else { return }
+            
+            let conditon = collection.conditions[indexPath.row]
+            var cellsToReload: [IndexPath] = []
+            
+            // If this is a first condition, reload the cell after this
+            if collection.conditionIsFirst(conditon) {
+                // After this cell is deleted, the next cell will have the indexPath that this one has now
+                cellsToReload.append(indexPath)
+            }
+            
+            collection.conditions.remove(at: indexPath.row)
+            
             tableView.deleteRows(at: [indexPath], with: .fade)
+            loadCells(at: cellsToReload)
         }
     }
 
-    // Override to support rearranging the table view.
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
         guard let collection = collection else { return }
         let condition = collection.conditions[fromIndexPath.row]

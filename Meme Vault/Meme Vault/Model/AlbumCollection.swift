@@ -18,6 +18,9 @@ class AlbumCollection {
         self.conditions = conditions
     }
     
+    /// Checks how deep a condition is in parentheses.
+    /// - Parameter inputCondition: The condition to check the inset level of.
+    /// - Returns: an `Int` of how many parenthetical layers deep the condition is.
     func insetLevel(for inputCondition: Condition) -> Int {
         var inset = 0
         
@@ -48,19 +51,73 @@ class AlbumCollection {
         return 0
     }
     
-    func conditionIsFirst(_ condition: Condition) -> Bool {
-        guard let index = conditions.firstIndex(of: condition) else { return false }
+    /// Checks if a condition is the first, either of a whole collection or the inside of parentheses.
+    /// - Parameter index: The index of the condition in the `conditions` array.
+    /// - Returns: `true` if the condition is the first in the collection or the first after an opening parenthesis.
+    func conditionIsFirst(index: Int) -> Bool {
         if index == 0 {
+            // The first condition
             return true
         }
         
         let previousCondition = conditions[index - 1]
         if previousCondition.id == nil,
             previousCondition.conjunction != .none {
+            // The condition is directly after an opening parenthasis
             return true
         }
         
         return false
+    }
+    
+    /// Checks if a condition is the first, either of a whole collection or the inside of parentheses.
+    /// - Parameter condition: The condition to check.
+    /// - Returns: `true` if the condition is the first in the collection or the first after an opening parenthesis; `false` if the condition is not in this collection.
+    func conditionIsFirst(_ condition: Condition) -> Bool {
+        guard let index = conditions.firstIndex(of: condition) else { return false }
+        return conditionIsFirst(index: index)
+    }
+    
+    /// Generates the text representation for a condition in the collection.
+    /// - Parameter index: The index of the condition in the `conditions` array.
+    /// - Returns: A `String` of the text representing the condition.
+    func textForCondition(at index: Int) -> String {
+        let condition = conditions[index]
+        
+        if conditionIsFirst(index: index) {
+            // Conditions that are first shouldn't have a conjunction
+            condition.conjunction = .none
+        } else if condition.id != nil,
+            condition.conjunction == .none {
+            // Conditions that aren't first should have a conjunction unless they're closing parenthases
+            // If one is rearranged out of being first, default it to AND
+            condition.conjunction = .and
+        }
+        
+        var output = ""
+        
+        if let conjunction = condition.conjunction {
+            output += conjunction.string + " "
+        }
+        
+        if condition.not {
+            output += "not "
+            if index == 0 {
+                output = output.capitalized
+            }
+        }
+        
+        if let id = condition.id {
+            let collections = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [id], options: nil)
+            output += collections.firstObject?.localizedTitle ?? "Unknown Album"
+        } else if condition.conjunction == .none,
+            index != 0 {
+            output += ")"
+        } else {
+            output += "("
+        }
+        
+        return output
     }
     
     /// Checks if the collection contains the given `PHAsset`. In other words, checks if the given `PHAsset` matches the requirements for this collection.
