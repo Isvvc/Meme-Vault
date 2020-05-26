@@ -91,9 +91,10 @@ class CollectionTableViewController: UITableViewController {
         return cell
     }
 
-    // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.section == 1
+        guard indexPath.section == 1 else { return false }
+        let cell = tableView.cellForRow(at: indexPath)
+        return cell?.textLabel?.text != ")"
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -102,16 +103,27 @@ class CollectionTableViewController: UITableViewController {
             
             let conditon = collection.conditions[indexPath.row]
             var cellsToReload: [IndexPath] = []
+            var cellsToDelete: [IndexPath] = [indexPath]
             
-            // If this is a first condition, reload the cell after this
-            if collection.conditionIsFirst(conditon) {
+            let isFirst = collection.conditionIsFirst(conditon)
+            
+            if conditon.id == nil,
+                conditon.conjunction != .none || isFirst {
+                // This is an opening parenthesis. Find its closing parenthesis, delete that, and reload all cells between.
+                let closingParenthesisIndex = collection.indexOfCorrespondingClosingParenthesis(forConditionAt: indexPath.row)
+                for i in indexPath.row..<closingParenthesisIndex-1 {
+                    cellsToReload.append(IndexPath(row: i, section: indexPath.section))
+                }
+                collection.conditions.remove(at: closingParenthesisIndex)
+                cellsToDelete.append(IndexPath(row: closingParenthesisIndex, section: indexPath.section))
+            } else if isFirst {
                 // After this cell is deleted, the next cell will have the indexPath that this one has now
                 cellsToReload.append(indexPath)
             }
             
             collection.conditions.remove(at: indexPath.row)
             
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.deleteRows(at: cellsToDelete, with: .automatic)
             loadCells(at: cellsToReload)
         }
     }

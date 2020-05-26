@@ -18,17 +18,10 @@ class AlbumCollection {
         self.conditions = conditions
     }
     
-    /// Checks how deep a condition is in parentheses.
-    /// - Parameter inputCondition: The condition to check the inset level of.
-    /// - Returns: an `Int` of how many parenthetical layers deep the condition is.
-    func insetLevel(for inputCondition: Condition) -> Int {
+    private func insetLevel(startingAt: Int = 0, shouldBreak: (Int, Condition) -> Bool) -> (inset: Int, index: Int)? {
         var inset = 0
         
-        if inputCondition == conditions.first {
-            return 0
-        }
-        
-        for i in 1..<conditions.count {
+        for i in startingAt+1..<conditions.count {
             let previousCondition = conditions[i - 1]
             if previousCondition.id == nil,
                 previousCondition.conjunction != .none {
@@ -43,12 +36,35 @@ class AlbumCollection {
                 inset -= 1
             }
             
-            if inputCondition == condition {
-                return inset
+            if shouldBreak(inset, condition) {
+                return (inset, i)
             }
         }
         
-        return 0
+        return nil
+    }
+    
+    /// Checks how deep a condition is in parentheses.
+    /// - Parameter inputCondition: The condition to check the inset level of.
+    /// - Returns: an `Int` of how many parenthetical layers deep the condition is.
+    func insetLevel(for inputCondition: Condition) -> Int {
+        if inputCondition == conditions.first {
+            return 0
+        }
+        
+        let inset = insetLevel { _, condition -> Bool in
+            inputCondition == condition
+        }
+        
+        return inset?.inset ?? 0
+    }
+    
+    func indexOfCorrespondingClosingParenthesis(forConditionAt index: Int) -> Int {
+        let inset = insetLevel(startingAt: index) { inset, condition -> Bool in
+            inset == 0
+        }
+        
+        return inset?.index ?? index
     }
     
     /// Checks if a condition is the first, either of a whole collection or the inside of parentheses.
