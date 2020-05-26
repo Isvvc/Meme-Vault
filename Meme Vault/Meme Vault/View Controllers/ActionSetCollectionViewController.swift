@@ -35,7 +35,7 @@ class ActionSetCollectionViewController: UICollectionViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func addAction(_ sender: Any) {
+    @objc func addAction(_ sender: Any) {
         guard let actionSet = actionSet else { return }
         
         let actionSheet = UIAlertController(title: "Add Action", message: nil, preferredStyle: .actionSheet)
@@ -98,6 +98,16 @@ class ActionSetCollectionViewController: UICollectionViewController {
         return cell
     }
     
+    override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        switch kind {
+        case UICollectionView.elementKindSectionFooter:
+            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "AddAction", for: indexPath) as! ButtonCollectionReusableView
+            footer.button.addTarget(self, action: #selector(addAction(_:)), for: .touchUpInside)
+            return footer
+        default:
+            assert(false, "Invalid element type")
+        }
+    }
 
     // MARK: UICollectionViewDelegate
 

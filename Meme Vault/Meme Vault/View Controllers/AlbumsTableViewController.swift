@@ -9,9 +9,14 @@
 import UIKit
 import Photos
 
+protocol AlbumsTableDelegate {
+    func selectAlbum(_ album: PHAssetCollection)
+}
+
 class AlbumsTableViewController: UITableViewController {
     
     var actionController: ActionController?
+    var delegate: AlbumsTableDelegate?
     
     var userCollections: PHFetchResult<PHCollection>?
     var albums: PHFetchResult<PHAssetCollection>?
@@ -51,6 +56,14 @@ class AlbumsTableViewController: UITableViewController {
         }
 
         return cell
+    }
+    
+    //MARK: Table view delegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if let collection = albums?.object(at: indexPath.row) {
+            delegate?.selectAlbum(collection)
+        }
     }
     
     //MARK: Private
