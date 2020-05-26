@@ -13,6 +13,8 @@ class CollectionController {
     var collections: [AlbumCollection]
     var cache = Cache<String, Set<PHAsset>>()
     
+    // Load a test collection based on albums I have on my phone.
+    // This won't work on any other devices
     init() {
         let presetConditions = [
             Condition(conjunction: .none, not: false, id: "C87BD295-F2CA-4D24-AEE3-A4371C6A2D7D/L0/040"),
@@ -26,6 +28,9 @@ class CollectionController {
         self.collections = [presetCollection]
     }
     
+    /// Fetches the first image in the user's photos that is in a collection.
+    /// - Parameter collection: The `albumCollection` to find an image from.
+    /// - Returns: a `PHAsset` of the first (oldest or newest depending on the collection's `oldestFirst` property) that is in a collection. If no images are in the collection, returns `nil`.
     func fetchFirstImage(from collection: AlbumCollection) -> PHAsset? {
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: collection.oldestFirst)]
