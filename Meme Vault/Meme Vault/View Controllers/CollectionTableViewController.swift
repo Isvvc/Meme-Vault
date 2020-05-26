@@ -92,9 +92,7 @@ class CollectionTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        guard indexPath.section == 1 else { return false }
-        let cell = tableView.cellForRow(at: indexPath)
-        return cell?.textLabel?.text != ")"
+        indexPath.section != 0
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -158,6 +156,29 @@ class CollectionTableViewController: UITableViewController {
         } else {
             performSegue(withIdentifier: "Condition", sender: self)
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        guard indexPath.section == 1 else { return .none }
+        let label = collection?.textForCondition(at: indexPath.row)
+        return label == ")" ? .none : .delete
+    }
+    
+    override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        guard let collection = collection else { return proposedDestinationIndexPath }
+        let condition = collection.conditions[sourceIndexPath.row]
+        
+        if condition.id == nil {
+            if condition.conjunction != .none {
+                let closingParenthesisIndex = collection.indexOfCorrespondingClosingParenthesis(forConditionAt: sourceIndexPath.row)
+                return proposedDestinationIndexPath.row >= closingParenthesisIndex ? sourceIndexPath : proposedDestinationIndexPath
+            } else {
+                let openingParenthesisIndex = collection.indexOfCorrespondingOpeningParenthesis(forConditionAt: sourceIndexPath.row)
+                return proposedDestinationIndexPath.row <= openingParenthesisIndex ? sourceIndexPath : proposedDestinationIndexPath
+            }
+        }
+        
+        return proposedDestinationIndexPath
     }
 
     // MARK: - Navigation

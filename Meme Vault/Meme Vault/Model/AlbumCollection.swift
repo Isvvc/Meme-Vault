@@ -18,26 +18,33 @@ class AlbumCollection {
         self.conditions = conditions
     }
     
-    private func insetLevel(startingAt: Int = 0, shouldBreak: (Int, Condition) -> Bool) -> (inset: Int, index: Int)? {
+    private func insetLevel(startingAt: Int = 0, reversed: Bool = false, shouldBreak: (Int, Condition) -> Bool) -> (inset: Int, index: Int)? {
+        let conditions: [Condition] = reversed ? self.conditions.reversed() : self.conditions
+        
         var inset = 0
         
-        for i in startingAt+1..<conditions.count {
-            let previousCondition = conditions[i - 1]
-            if previousCondition.id == nil,
-                previousCondition.conjunction != .none {
-                // Previous condition was an open parenthesis
+        let startingIndex = reversed ? conditions.count - startingAt - 1 : startingAt
+        
+        for i in startingIndex+1..<conditions.count {
+            // If the conditions are reversed, check if the current condition is an open parenthesis
+            // Otherwise, check the previous condition
+            let potentialOpen = conditions[reversed ? i : i - 1]
+            if potentialOpen.id == nil,
+                potentialOpen.conjunction != .none {
                 inset += 1
             }
             
-            let condition = conditions[i]
-            if condition.id == nil,
-                condition.conjunction == .none {
-                // This condition is a close parenthesis
+            // If the conditions are reversed, check if the previous condition is a close parenthesis
+            // Otherwise, check the current condition
+            let potentialClosed = conditions[reversed ? i - 1 : i]
+            if potentialClosed.id == nil,
+                potentialClosed.conjunction == .none {
                 inset -= 1
             }
             
-            if shouldBreak(inset, condition) {
-                return (inset, i)
+            if shouldBreak(inset, potentialClosed) {
+                let index = reversed ? conditions.count - i - 1 : i
+                return (inset, index)
             }
         }
         
@@ -61,6 +68,14 @@ class AlbumCollection {
     
     func indexOfCorrespondingClosingParenthesis(forConditionAt index: Int) -> Int {
         let inset = insetLevel(startingAt: index) { inset, condition -> Bool in
+            inset == 0
+        }
+        
+        return inset?.index ?? index
+    }
+    
+    func indexOfCorrespondingOpeningParenthesis(forConditionAt index: Int) -> Int {
+        let inset = insetLevel(startingAt: index, reversed: true) { inset, condition -> Bool in
             inset == 0
         }
         
