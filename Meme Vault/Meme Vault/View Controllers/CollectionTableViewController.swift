@@ -55,7 +55,8 @@ class CollectionTableViewController: UITableViewController {
         let label = collection.textForCondition(at: indexPath.row)
         cell.textLabel?.text = label
         
-        if label == ")" {
+        if condition.conjunction == .none,
+            condition.id == .none {
             cell.accessoryType = .none
         }
         
@@ -106,15 +107,17 @@ class CollectionTableViewController: UITableViewController {
             let isFirst = collection.conditionIsFirst(conditon)
             
             if conditon.id == nil,
-                conditon.conjunction != .none || isFirst {
+                conditon.conjunction != .none {
                 // This is an opening parenthesis. Find its closing parenthesis, delete that, and reload all cells between.
                 let closingParenthesisIndex = collection.indexOfCorrespondingClosingParenthesis(forConditionAt: indexPath.row)
                 for i in indexPath.row..<closingParenthesisIndex-1 {
                     cellsToReload.append(IndexPath(row: i, section: indexPath.section))
                 }
+                
                 collection.conditions.remove(at: closingParenthesisIndex)
                 cellsToDelete.append(IndexPath(row: closingParenthesisIndex, section: indexPath.section))
             } else if isFirst {
+                // The next cell (the new first) will have its condition hidden
                 // After this cell is deleted, the next cell will have the indexPath that this one has now
                 cellsToReload.append(indexPath)
             }

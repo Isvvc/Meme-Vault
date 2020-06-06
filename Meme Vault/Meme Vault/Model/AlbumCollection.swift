@@ -26,7 +26,8 @@ class AlbumCollection {
         let startingIndex = reversed ? conditions.count - startingAt - 1 : startingAt
         
         for i in startingIndex+1..<conditions.count {
-            // If the conditions are reversed, check if the current condition is an open parenthesis
+            // Check for an open parenthesis
+            // If the conditions are reversed, check the current condition
             // Otherwise, check the previous condition
             let potentialOpen = conditions[reversed ? i : i - 1]
             if potentialOpen.id == nil,
@@ -34,7 +35,8 @@ class AlbumCollection {
                 inset += 1
             }
             
-            // If the conditions are reversed, check if the previous condition is a close parenthesis
+            // Check for a close parenthesis
+            // If the conditions are reversed, check the previous condition
             // Otherwise, check the current condition
             let potentialClosed = conditions[reversed ? i - 1 : i]
             if potentialClosed.id == nil,
@@ -115,20 +117,16 @@ class AlbumCollection {
     func textForCondition(at index: Int) -> String {
         let condition = conditions[index]
         
-        if conditionIsFirst(index: index) {
-            // Conditions that are first shouldn't have a conjunction
-            condition.conjunction = .none
-        } else if condition.id != nil,
-            condition.conjunction == .none {
-            // Conditions that aren't first should have a conjunction unless they're closing parenthases
-            // If one is rearranged out of being first, default it to AND
-            condition.conjunction = .and
-        }
-        
         var output = ""
         
         if let conjunction = condition.conjunction {
-            output += conjunction.string + " "
+            if conditionIsFirst(index: index) {
+                // If a condition is first, it should be treated as if it's an and
+                // Don't show that "and" when printing
+                condition.conjunction = .and
+            } else {
+                output += conjunction.string + " "
+            }
         }
         
         if condition.not {
@@ -141,8 +139,7 @@ class AlbumCollection {
         if let id = condition.id {
             let collections = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [id], options: nil)
             output += collections.firstObject?.localizedTitle ?? "Unknown Album"
-        } else if condition.conjunction == .none,
-            index != 0 {
+        } else if condition.conjunction == .none {
             output += ")"
         } else {
             output += "("
