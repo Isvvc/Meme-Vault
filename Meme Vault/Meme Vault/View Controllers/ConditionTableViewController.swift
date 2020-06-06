@@ -16,6 +16,7 @@ protocol ConditionTableDelegate {
 class ConditionTableViewController: UITableViewController {
     
     var condition: Condition?
+    var newCondition: Bool = false
     var delegate: ConditionTableDelegate?
 
     override func viewDidLoad() {
@@ -35,7 +36,9 @@ class ConditionTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1 + (condition?.id != nil).int + (condition?.conjunction != nil).int
+        return 1
+            + (condition?.id != nil || newCondition).int
+            + (condition?.conjunction != nil).int
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

@@ -18,6 +18,16 @@ class AlbumCollection {
         self.conditions = conditions
     }
     
+    //MARK: CRUD
+    
+    @discardableResult func addCondition(conjunction: Condition.Conjunction? = .and, not: Bool = false, id: String? = nil) -> Condition {
+        let condition = Condition(conjunction: conjunction, not: not, id: id)
+        conditions.append(condition)
+        return condition
+    }
+    
+    //MARK: Helper functions
+    
     private func insetLevel(startingAt: Int = 0, reversed: Bool = false, shouldBreak: (Int, Condition) -> Bool) -> (inset: Int, index: Int)? {
         let conditions: [Condition] = reversed ? self.conditions.reversed() : self.conditions
         

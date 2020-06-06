@@ -11,8 +11,15 @@ import Photos
 
 class CollectionTableViewController: UITableViewController {
     
+    //MARK: Outlets
+    
+    @IBOutlet weak var addConditionButton: UIButton!
+    
+    //MARK: Properties
+    
     //var collectionController: CollectionController?
     var collection: AlbumCollection?
+    var newCondition: Condition?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -183,7 +190,43 @@ class CollectionTableViewController: UITableViewController {
         
         return proposedDestinationIndexPath
     }
-
+    
+    //MARK: Actions
+    
+    @IBAction func addCondition(_ sender: Any) {
+        guard let collection = collection else { return }
+        
+        let alertController = UIAlertController(title: "Add Condition", message: nil, preferredStyle: .actionSheet)
+        
+        let conditionAction = UIAlertAction(title: "Condition", style: .default) { _ in
+            DispatchQueue.main.async {
+                self.newCondition = collection.addCondition()
+                self.tableView.insertRows(at: [IndexPath(row: collection.conditions.count - 1, section: 1)], with: .automatic)
+                self.performSegue(withIdentifier: "Condition", sender: self)
+            }
+        }
+        
+        let parenthesesAction = UIAlertAction(title: "Parentheses", style: .default) { _ in
+//            <#code#>
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(conditionAction)
+        alertController.addAction(parenthesesAction)
+        alertController.addAction(cancelAction)
+        
+        alertController.pruneNegativeWidthConstraints()
+        
+        if let popoverController = alertController.popoverPresentationController {
+            popoverController.sourceView = self.view
+            let buttonBounds = addConditionButton.convert(addConditionButton.bounds, to: self.view)
+            popoverController.sourceRect = buttonBounds
+        }
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -192,6 +235,9 @@ class CollectionTableViewController: UITableViewController {
             conditionVC.delegate = self
             if let indexPath = tableView.indexPathForSelectedRow {
                 conditionVC.condition = collection?.conditions[indexPath.row]
+            } else if let newCondition = newCondition {
+                conditionVC.condition = newCondition
+                conditionVC.newCondition = true
             }
         }
     }
