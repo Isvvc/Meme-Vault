@@ -207,7 +207,16 @@ class CollectionTableViewController: UITableViewController {
         }
         
         let parenthesesAction = UIAlertAction(title: "Parentheses", style: .default) { _ in
-//            <#code#>
+            DispatchQueue.main.async {
+                collection.addParentheses()
+                
+                let count = collection.conditions.count
+                let indexPaths: [IndexPath] = [
+                    IndexPath(row: count - 1, section: 1),
+                    IndexPath(row: count - 2, section: 1)
+                ]
+                self.tableView.insertRows(at: indexPaths, with: .automatic)
+            }
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)

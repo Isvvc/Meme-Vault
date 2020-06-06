@@ -26,6 +26,14 @@ class AlbumCollection {
         return condition
     }
     
+    @discardableResult func addParentheses() -> (opening: Condition, closing: Condition) {
+        let opening = Condition(conjunction: .and, not: false, id: nil)
+        let closing = Condition(conjunction: .none, not: false, id: nil)
+        conditions.append(opening)
+        conditions.append(closing)
+        return (opening: opening, closing: closing)
+    }
+    
     //MARK: Helper functions
     
     private func insetLevel(startingAt: Int = 0, reversed: Bool = false, shouldBreak: (Int, Condition) -> Bool) -> (inset: Int, index: Int)? {
