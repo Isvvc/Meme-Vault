@@ -43,7 +43,6 @@ class CollectionController {
                 cache.clear()
                 return asset
             }
-            print(asset)
             
             i += 1
         }
