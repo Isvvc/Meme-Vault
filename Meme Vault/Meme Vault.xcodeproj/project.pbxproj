@@ -33,6 +33,7 @@
 		597D632F2436A64900056FD1 /* DestinationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597D632E2436A64900056FD1 /* DestinationController.swift */; };
 		597D63322436A9B900056FD1 /* FilesProvider in Frameworks */ = {isa = PBXBuildFile; productRef = 597D63312436A9B900056FD1 /* FilesProvider */; };
 		597D63342436AB4B00056FD1 /* FileBrowserTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 597D63332436AB4B00056FD1 /* FileBrowserTableViewController.swift */; };
+		597DF37C248D7D7100F93AEF /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 597DF37B248D7D7100F93AEF /* SwiftyJSON */; };
 		598962A32421BEE600B3C670 /* ActionSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A22421BEE600B3C670 /* ActionSet.swift */; };
 		598962A62421C01C00B3C670 /* ActionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A52421C01C00B3C670 /* ActionController.swift */; };
 		598962A82421C29000B3C670 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 598962A72421C29000B3C670 /* TabBarController.swift */; };
@@ -100,6 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				597DF37C248D7D7100F93AEF /* SwiftyJSON in Frameworks */,
 				597D63322436A9B900056FD1 /* FilesProvider in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -229,6 +231,7 @@
 			name = "Meme Vault";
 			packageProductDependencies = (
 				597D63312436A9B900056FD1 /* FilesProvider */,
+				597DF37B248D7D7100F93AEF /* SwiftyJSON */,
 			);
 			productName = "Meme Vault";
 			productReference = 594ACC4E242088BA00DEFCBF /* Meme Vault.app */;
@@ -260,6 +263,7 @@
 			mainGroup = 594ACC45242088BA00DEFCBF;
 			packageReferences = (
 				597D63302436A9B900056FD1 /* XCRemoteSwiftPackageReference "FileProvider" */,
+				597DF37A248D7D7100F93AEF /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = 594ACC4F242088BA00DEFCBF /* Products */;
 			projectDirPath = "";
@@ -532,6 +536,14 @@
 				minimumVersion = 0.26.0;
 			};
 		};
+		597DF37A248D7D7100F93AEF /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -539,6 +551,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 597D63302436A9B900056FD1 /* XCRemoteSwiftPackageReference "FileProvider" */;
 			productName = FilesProvider;
+		};
+		597DF37B248D7D7100F93AEF /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 597DF37A248D7D7100F93AEF /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
 /* End XCSwiftPackageProductDependency section */
 
