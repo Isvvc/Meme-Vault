@@ -70,7 +70,10 @@ class AlbumsTableViewController: UITableViewController {
     
     private func fetchAlbums() {
         self.userCollections = PHCollectionList.fetchTopLevelUserCollections(with: nil)
-        self.albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: nil)
+        
+        let options = PHFetchOptions()
+        options.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)]
+        self.albums = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .albumRegular, options: options)
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }

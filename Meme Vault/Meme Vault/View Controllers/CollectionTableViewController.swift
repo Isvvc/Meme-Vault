@@ -11,8 +11,15 @@ import Photos
 
 class CollectionTableViewController: UITableViewController {
     
+    //MARK: Outlets
+    
+    @IBOutlet weak var addConditionButton: UIButton!
+    
+    //MARK: Properties
+    
     //var collectionController: CollectionController?
     var collection: AlbumCollection?
+    var newCondition: Condition?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,7 +62,8 @@ class CollectionTableViewController: UITableViewController {
         let label = collection.textForCondition(at: indexPath.row)
         cell.textLabel?.text = label
         
-        if label == ")" {
+        if condition.conjunction == .none,
+            condition.id == .none {
             cell.accessoryType = .none
         }
         
@@ -91,9 +99,8 @@ class CollectionTableViewController: UITableViewController {
         return cell
     }
 
-    // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.section == 1
+        indexPath.section != 0
     }
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -102,16 +109,29 @@ class CollectionTableViewController: UITableViewController {
             
             let conditon = collection.conditions[indexPath.row]
             var cellsToReload: [IndexPath] = []
+            var cellsToDelete: [IndexPath] = [indexPath]
             
-            // If this is a first condition, reload the cell after this
-            if collection.conditionIsFirst(conditon) {
+            let isFirst = collection.conditionIsFirst(conditon)
+            
+            if conditon.id == nil,
+                conditon.conjunction != .none {
+                // This is an opening parenthesis. Find its closing parenthesis, delete that, and reload all cells between.
+                let closingParenthesisIndex = collection.indexOfCorrespondingClosingParenthesis(forConditionAt: indexPath.row)
+                for i in indexPath.row..<closingParenthesisIndex-1 {
+                    cellsToReload.append(IndexPath(row: i, section: indexPath.section))
+                }
+                
+                collection.conditions.remove(at: closingParenthesisIndex)
+                cellsToDelete.append(IndexPath(row: closingParenthesisIndex, section: indexPath.section))
+            } else if isFirst {
+                // The next cell (the new first) will have its condition hidden
                 // After this cell is deleted, the next cell will have the indexPath that this one has now
                 cellsToReload.append(indexPath)
             }
             
             collection.conditions.remove(at: indexPath.row)
             
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            tableView.deleteRows(at: cellsToDelete, with: .automatic)
             loadCells(at: cellsToReload)
         }
     }
@@ -147,7 +167,75 @@ class CollectionTableViewController: UITableViewController {
             performSegue(withIdentifier: "Condition", sender: self)
         }
     }
-
+    
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        guard indexPath.section == 1 else { return .none }
+        let label = collection?.textForCondition(at: indexPath.row)
+        return label == ")" ? .none : .delete
+    }
+    
+    override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        guard let collection = collection else { return proposedDestinationIndexPath }
+        let condition = collection.conditions[sourceIndexPath.row]
+        
+        if condition.id == nil {
+            if condition.conjunction != .none {
+                let closingParenthesisIndex = collection.indexOfCorrespondingClosingParenthesis(forConditionAt: sourceIndexPath.row)
+                return proposedDestinationIndexPath.row >= closingParenthesisIndex ? sourceIndexPath : proposedDestinationIndexPath
+            } else {
+                let openingParenthesisIndex = collection.indexOfCorrespondingOpeningParenthesis(forConditionAt: sourceIndexPath.row)
+                return proposedDestinationIndexPath.row <= openingParenthesisIndex ? sourceIndexPath : proposedDestinationIndexPath
+            }
+        }
+        
+        return proposedDestinationIndexPath
+    }
+    
+    //MARK: Actions
+    
+    @IBAction func addCondition(_ sender: Any) {
+        guard let collection = collection else { return }
+        
+        let alertController = UIAlertController(title: "Add Condition", message: nil, preferredStyle: .actionSheet)
+        
+        let conditionAction = UIAlertAction(title: "Condition", style: .default) { _ in
+            DispatchQueue.main.async {
+                self.newCondition = collection.addCondition()
+                self.tableView.insertRows(at: [IndexPath(row: collection.conditions.count - 1, section: 1)], with: .automatic)
+                self.performSegue(withIdentifier: "Condition", sender: self)
+            }
+        }
+        
+        let parenthesesAction = UIAlertAction(title: "Parentheses", style: .default) { _ in
+            DispatchQueue.main.async {
+                collection.addParentheses()
+                
+                let count = collection.conditions.count
+                let indexPaths: [IndexPath] = [
+                    IndexPath(row: count - 1, section: 1),
+                    IndexPath(row: count - 2, section: 1)
+                ]
+                self.tableView.insertRows(at: indexPaths, with: .automatic)
+            }
+        }
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        alertController.addAction(conditionAction)
+        alertController.addAction(parenthesesAction)
+        alertController.addAction(cancelAction)
+        
+        alertController.pruneNegativeWidthConstraints()
+        
+        if let popoverController = alertController.popoverPresentationController {
+            popoverController.sourceView = self.view
+            let buttonBounds = addConditionButton.convert(addConditionButton.bounds, to: self.view)
+            popoverController.sourceRect = buttonBounds
+        }
+        
+        present(alertController, animated: true, completion: nil)
+    }
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -156,6 +244,9 @@ class CollectionTableViewController: UITableViewController {
             conditionVC.delegate = self
             if let indexPath = tableView.indexPathForSelectedRow {
                 conditionVC.condition = collection?.conditions[indexPath.row]
+            } else if let newCondition = newCondition {
+                conditionVC.condition = newCondition
+                conditionVC.newCondition = true
             }
         }
     }

@@ -18,37 +18,88 @@ class AlbumCollection {
         self.conditions = conditions
     }
     
+    //MARK: CRUD
+    
+    @discardableResult func addCondition(conjunction: Condition.Conjunction? = .and, not: Bool = false, id: String? = nil) -> Condition {
+        let condition = Condition(conjunction: conjunction, not: not, id: id)
+        conditions.append(condition)
+        return condition
+    }
+    
+    @discardableResult func addParentheses() -> (opening: Condition, closing: Condition) {
+        let opening = Condition(conjunction: .and, not: false, id: nil)
+        let closing = Condition(conjunction: .none, not: false, id: nil)
+        conditions.append(opening)
+        conditions.append(closing)
+        return (opening: opening, closing: closing)
+    }
+    
+    //MARK: Helper functions
+    
+    private func insetLevel(startingAt: Int = 0, reversed: Bool = false, shouldBreak: (Int, Condition) -> Bool) -> (inset: Int, index: Int)? {
+        let conditions: [Condition] = reversed ? self.conditions.reversed() : self.conditions
+        
+        var inset = 0
+        
+        let startingIndex = reversed ? conditions.count - startingAt - 1 : startingAt
+        
+        for i in startingIndex+1..<conditions.count {
+            // Check for an open parenthesis
+            // If the conditions are reversed, check the current condition
+            // Otherwise, check the previous condition
+            let potentialOpen = conditions[reversed ? i : i - 1]
+            if potentialOpen.id == nil,
+                potentialOpen.conjunction != .none {
+                inset += 1
+            }
+            
+            // Check for a close parenthesis
+            // If the conditions are reversed, check the previous condition
+            // Otherwise, check the current condition
+            let potentialClosed = conditions[reversed ? i - 1 : i]
+            if potentialClosed.id == nil,
+                potentialClosed.conjunction == .none {
+                inset -= 1
+            }
+            
+            if shouldBreak(inset, potentialClosed) {
+                let index = reversed ? conditions.count - i - 1 : i
+                return (inset, index)
+            }
+        }
+        
+        return nil
+    }
+    
     /// Checks how deep a condition is in parentheses.
     /// - Parameter inputCondition: The condition to check the inset level of.
     /// - Returns: an `Int` of how many parenthetical layers deep the condition is.
     func insetLevel(for inputCondition: Condition) -> Int {
-        var inset = 0
-        
         if inputCondition == conditions.first {
             return 0
         }
         
-        for i in 1..<conditions.count {
-            let previousCondition = conditions[i - 1]
-            if previousCondition.id == nil,
-                previousCondition.conjunction != .none {
-                // Previous condition was an open parenthesis
-                inset += 1
-            }
-            
-            let condition = conditions[i]
-            if condition.id == nil,
-                condition.conjunction == .none {
-                // This condition is a close parenthesis
-                inset -= 1
-            }
-            
-            if inputCondition == condition {
-                return inset
-            }
+        let inset = insetLevel { _, condition -> Bool in
+            inputCondition == condition
         }
         
-        return 0
+        return inset?.inset ?? 0
+    }
+    
+    func indexOfCorrespondingClosingParenthesis(forConditionAt index: Int) -> Int {
+        let inset = insetLevel(startingAt: index) { inset, condition -> Bool in
+            inset == 0
+        }
+        
+        return inset?.index ?? index
+    }
+    
+    func indexOfCorrespondingOpeningParenthesis(forConditionAt index: Int) -> Int {
+        let inset = insetLevel(startingAt: index, reversed: true) { inset, condition -> Bool in
+            inset == 0
+        }
+        
+        return inset?.index ?? index
     }
     
     /// Checks if a condition is the first, either of a whole collection or the inside of parentheses.
@@ -84,20 +135,16 @@ class AlbumCollection {
     func textForCondition(at index: Int) -> String {
         let condition = conditions[index]
         
-        if conditionIsFirst(index: index) {
-            // Conditions that are first shouldn't have a conjunction
-            condition.conjunction = .none
-        } else if condition.id != nil,
-            condition.conjunction == .none {
-            // Conditions that aren't first should have a conjunction unless they're closing parenthases
-            // If one is rearranged out of being first, default it to AND
-            condition.conjunction = .and
-        }
-        
         var output = ""
         
         if let conjunction = condition.conjunction {
-            output += conjunction.string + " "
+            if conditionIsFirst(index: index) {
+                // If a condition is first, it should be treated as if it's an and
+                // Don't show that "and" when printing
+                condition.conjunction = .and
+            } else {
+                output += conjunction.string + " "
+            }
         }
         
         if condition.not {
@@ -110,8 +157,7 @@ class AlbumCollection {
         if let id = condition.id {
             let collections = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [id], options: nil)
             output += collections.firstObject?.localizedTitle ?? "Unknown Album"
-        } else if condition.conjunction == .none,
-            index != 0 {
+        } else if condition.conjunction == .none {
             output += ")"
         } else {
             output += "("

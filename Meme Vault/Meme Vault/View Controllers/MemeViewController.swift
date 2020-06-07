@@ -19,13 +19,18 @@ class MemeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let collection = collection,
-            let photo = collectionController?.fetchFirstImage(from: collection) else {
-            navigationController?.popViewController(animated: true)
-            return
+        DispatchQueue.global(qos: .userInitiated).async {
+            // Doing this in a background thread because the fetchFirstImage function can take a while
+            guard let collection = self.collection,
+                let photo = self.collectionController?.fetchFirstImage(from: collection) else {
+                    self.navigationController?.popViewController(animated: true)
+                return
+            }
+            
+            DispatchQueue.main.async {
+                self.imageView.fetchImage(asset: photo, contentMode: .aspectFit)
+            }
         }
-        
-        imageView.fetchImage(asset: photo, contentMode: .aspectFit)
     }
 
 }
