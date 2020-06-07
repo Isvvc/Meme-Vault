@@ -26,7 +26,7 @@ class ActionSetsTableViewController: UITableViewController {
         guard let actionController = actionController else { return }
         
         let oldIndex = actionController.defaultActionSetIndex
-        actionController.defaultActionSetIndex = indexPath.row
+        actionController.setDefault(index: indexPath.row)
         
         let oldIndexPath = IndexPath(row: oldIndex, section: 0)
         tableView.reloadRows(at: [oldIndexPath], with: .automatic)
@@ -117,6 +117,7 @@ extension ActionSetsTableViewController: ActionSetViewControllerDelegate {
             let selectedActionSetIndex = actionController?.actionSets.firstIndex(of: actionSet) {
             let indexPath = IndexPath(row: selectedActionSetIndex, section: 0)
             tableView.reloadRows(at: [indexPath], with: .automatic)
+            actionController?.saveToPersistentStore()
         }
     }
 }
