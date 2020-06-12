@@ -24,7 +24,6 @@ class CollectionTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         self.navigationItem.rightBarButtonItem = self.editButtonItem
         
         if let collection = collection {
@@ -32,6 +31,9 @@ class CollectionTableViewController: UITableViewController {
         }
         
         tableView.register(UINib(nibName: "ToggleTableViewCell", bundle: nil), forCellReuseIdentifier: "ToggleCell")
+        
+        let navBarTap = UITapGestureRecognizer(target: self, action: #selector(updateName(sender:)))
+        navigationController?.navigationBar.addGestureRecognizer(navBarTap)
     }
     
     //MARK: Cell loading
@@ -216,6 +218,34 @@ class CollectionTableViewController: UITableViewController {
         }
         
         present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc func updateName(sender: Any) {
+        guard navigationController?.topViewController == self,
+            let collection = collection else { return }
+        
+        let alert = UIAlertController(title: "Collection Name", message: nil, preferredStyle: .alert)
+        
+        var nameTextField: UITextField?
+        alert.addTextField { textField in
+            textField.placeholder = "Name"
+            textField.autocapitalizationType = .words
+            nameTextField = textField
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        let save = UIAlertAction(title: "Save", style: .default) { _ in
+            guard let name = nameTextField?.text, !name.isEmpty else { return }
+            
+            self.collectionController?.rename(collection: collection, to: name)
+            self.title = name
+        }
+        
+        alert.addAction(cancel)
+        alert.addAction(save)
+        
+        present(alert, animated: true, completion: nil)
     }
     
     // MARK: - Navigation

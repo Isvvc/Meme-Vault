@@ -62,6 +62,11 @@ class CollectionController {
         saveToPersistentStore()
     }
     
+    func rename(collection: AlbumCollection, to name: String) {
+        collection.name = name
+        saveToPersistentStore()
+    }
+    
     //MARK: Condition CRUD
     
     @discardableResult func deleteCondition(at conditionIndex: Int, fromCollectionAtIndex collectionIndex: Int) -> (reload: [Int], delete: [Int]) {
