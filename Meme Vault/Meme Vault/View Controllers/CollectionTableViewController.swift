@@ -239,7 +239,9 @@ class CollectionTableViewController: UITableViewController {
             guard let name = nameTextField?.text, !name.isEmpty else { return }
             
             self.collectionController?.rename(collection: collection, to: name)
-            self.title = name
+            DispatchQueue.main.async {
+                self.title = name
+            }
         }
         
         alert.addAction(cancel)
