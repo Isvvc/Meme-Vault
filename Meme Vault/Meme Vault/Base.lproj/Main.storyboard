@@ -241,7 +241,13 @@
                             <outlet property="delegate" destination="vyV-VR-WHI" id="9AS-lI-X9S"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Collections" id="IL3-ZR-IBf"/>
+                    <navigationItem key="navigationItem" title="Collections" id="IL3-ZR-IBf">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="h9I-Cj-qvy">
+                            <connections>
+                                <action selector="addCollection:" destination="vyV-VR-WHI" id="k2d-1h-xQX"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <segue destination="VTK-3P-ebL" kind="show" identifier="Collection" id="r1F-1D-t1A"/>
                         <segue destination="Ky6-JI-Esr" kind="show" identifier="Meme" id="irt-n7-HGd"/>

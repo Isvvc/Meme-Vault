@@ -36,6 +36,25 @@ class CollectionController {
         }
     }
     
+    //MARK: Collection CRUD
+    
+    @discardableResult func createCollection() -> AlbumCollection {
+        let collection = AlbumCollection(name: "\(Int.random(in: 0..<100))", conditions: [])
+        collections.append(collection)
+        saveToPersistentStore()
+        return collection
+    }
+    
+    func deleteCollection(collection: AlbumCollection) {
+        guard let index = collections.firstIndex(of: collection) else { return }
+        deleteCollection(at: index)
+    }
+    
+    func deleteCollection(at index: Int) {
+        collections.remove(at: index)
+        saveToPersistentStore()
+    }
+    
     //MARK: Condition CRUD
     
     @discardableResult func deleteCondition(at conditionIndex: Int, fromCollectionAtIndex collectionIndex: Int) -> (reload: [Int], delete: [Int]) {

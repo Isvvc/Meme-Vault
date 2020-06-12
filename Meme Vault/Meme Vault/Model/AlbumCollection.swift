@@ -8,7 +8,7 @@
 
 import Photos
 
-class AlbumCollection: Codable {
+class AlbumCollection: NSObject, Codable {
     var name: String
     var conditions: [Condition]
     var oldestFirst: Bool = true
