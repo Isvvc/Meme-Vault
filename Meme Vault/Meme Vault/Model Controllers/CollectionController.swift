@@ -55,6 +55,13 @@ class CollectionController {
         saveToPersistentStore()
     }
     
+    func moveCollection(from fromIndex: Int, to toIndex: Int) {
+        let collection = collections[fromIndex]
+        collections.remove(at: fromIndex)
+        collections.insert(collection, at: toIndex)
+        saveToPersistentStore()
+    }
+    
     //MARK: Condition CRUD
     
     @discardableResult func deleteCondition(at conditionIndex: Int, fromCollectionAtIndex collectionIndex: Int) -> (reload: [Int], delete: [Int]) {
