@@ -8,7 +8,7 @@
 
 import Photos
 
-class AlbumCollection {
+class AlbumCollection: Codable {
     var name: String
     var conditions: [Condition]
     var oldestFirst: Bool = true
@@ -114,7 +114,7 @@ class AlbumCollection {
         let previousCondition = conditions[index - 1]
         if previousCondition.id == nil,
             previousCondition.conjunction != .none {
-            // The condition is directly after an opening parenthasis
+            // The condition is directly after an opening parenthesis
             return true
         }
         

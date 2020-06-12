@@ -143,6 +143,7 @@ class ActionSetCollectionViewController: UICollectionViewController {
     override func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         if let temp = actionSet?.actions.remove(at: sourceIndexPath.item) {
             actionSet?.actions.insert(temp, at: destinationIndexPath.item)
+            actionController?.saveToPersistentStore()
         }
         
         let reloadStartIndex = min(sourceIndexPath.row, destinationIndexPath.row)
@@ -185,6 +186,7 @@ extension ActionSetCollectionViewController: ActionCellDelegate {
         switch oldAction {
         case .name(skipIfDone: _, preset: let preset):
             actionSet?.actions[sender.tag] = .name(skipIfDone: sender.isOn, preset: preset)
+            actionController?.saveToPersistentStore()
         default:
             break
         }
