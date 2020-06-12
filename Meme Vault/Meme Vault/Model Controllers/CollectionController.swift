@@ -36,6 +36,51 @@ class CollectionController {
         }
     }
     
+    //MARK: Condition CRUD
+    
+    @discardableResult func deleteCondition(at conditionIndex: Int, fromCollectionAtIndex collectionIndex: Int) -> (reload: [Int], delete: [Int]) {
+        let collection = collections[collectionIndex]
+        return deleteCondition(at: conditionIndex, from: collection)
+    }
+    
+    @discardableResult func deleteCondition(at index: Int, from collection: AlbumCollection) -> (reload: [Int], delete: [Int]) {
+        let conditon = collection.conditions[index]
+        var reload: [Int] = []
+        var delete: [Int] = [index]
+        
+        let isFirst = collection.conditionIsFirst(index: index)
+        
+        if conditon.id == nil,
+            conditon.conjunction != .none {
+            // This is an opening parenthesis. Find its closing parenthesis, delete that, and reload all cells between.
+            let closingParenthesisIndex = collection.indexOfCorrespondingClosingParenthesis(forConditionAt: index)
+            for i in index..<closingParenthesisIndex-1 {
+                reload.append(i)
+            }
+            
+            collection.conditions.remove(at: closingParenthesisIndex)
+            delete.append(closingParenthesisIndex)
+        } else if isFirst {
+            // The next cell (the new first) will have its condition hidden
+            // After this cell is deleted, the next cell will have the indexPath that this one has now
+            reload.append(index)
+        }
+        
+        collection.conditions.remove(at: index)
+        
+        saveToPersistentStore()
+        
+        return (reload, delete)
+    }
+    
+    func moveCondition(from fromIndex: Int, to toIndex: Int, in collection: AlbumCollection) {
+        let condition = collection.conditions[fromIndex]
+        collection.conditions.remove(at: fromIndex)
+        collection.conditions.insert(condition, at: toIndex)
+        
+        saveToPersistentStore()
+    }
+    
     @discardableResult func addCondition(to collection: AlbumCollection) -> Condition {
         let collection = collection.addCondition()
         saveToPersistentStore()
@@ -47,6 +92,8 @@ class CollectionController {
         saveToPersistentStore()
         return result
     }
+    
+    //MARK: Fetching
     
     /// Fetches the first image in the user's photos that is in a collection.
     /// - Parameter collection: The `albumCollection` to find an image from.

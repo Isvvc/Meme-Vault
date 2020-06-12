@@ -17,7 +17,7 @@ class CollectionTableViewController: UITableViewController {
     
     //MARK: Properties
     
-    //var collectionController: CollectionController?
+    var collectionController: CollectionController?
     var collection: AlbumCollection?
     var newCondition: Condition?
 
@@ -105,31 +105,13 @@ class CollectionTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            guard let collection = collection else { return }
+            guard let collection = collection,
+                let collectionController = collectionController else { return }
             
-            let conditon = collection.conditions[indexPath.row]
-            var cellsToReload: [IndexPath] = []
-            var cellsToDelete: [IndexPath] = [indexPath]
+            let cellsToUpdate = collectionController.deleteCondition(at: indexPath.row, from: collection)
             
-            let isFirst = collection.conditionIsFirst(conditon)
-            
-            if conditon.id == nil,
-                conditon.conjunction != .none {
-                // This is an opening parenthesis. Find its closing parenthesis, delete that, and reload all cells between.
-                let closingParenthesisIndex = collection.indexOfCorrespondingClosingParenthesis(forConditionAt: indexPath.row)
-                for i in indexPath.row..<closingParenthesisIndex-1 {
-                    cellsToReload.append(IndexPath(row: i, section: indexPath.section))
-                }
-                
-                collection.conditions.remove(at: closingParenthesisIndex)
-                cellsToDelete.append(IndexPath(row: closingParenthesisIndex, section: indexPath.section))
-            } else if isFirst {
-                // The next cell (the new first) will have its condition hidden
-                // After this cell is deleted, the next cell will have the indexPath that this one has now
-                cellsToReload.append(indexPath)
-            }
-            
-            collection.conditions.remove(at: indexPath.row)
+            let cellsToDelete: [IndexPath] = cellsToUpdate.delete.map { IndexPath(row: $0, section: indexPath.section) }
+            let cellsToReload: [IndexPath] = cellsToUpdate.reload.map { IndexPath(row: $0, section: indexPath.section) }
             
             tableView.deleteRows(at: cellsToDelete, with: .automatic)
             loadCells(at: cellsToReload)
@@ -138,9 +120,7 @@ class CollectionTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
         guard let collection = collection else { return }
-        let condition = collection.conditions[fromIndexPath.row]
-        collection.conditions.remove(at: fromIndexPath.row)
-        collection.conditions.insert(condition, at: to.row)
+        collectionController?.moveCondition(from: fromIndexPath.row, to: to.row, in: collection)
         
         // Ideally this should only be reloading the cells between the old and new positions,
         // but I can't for the life of me get it to do that right for some reason
@@ -194,13 +174,14 @@ class CollectionTableViewController: UITableViewController {
     //MARK: Actions
     
     @IBAction func addCondition(_ sender: Any) {
-        guard let collection = collection else { return }
+        guard let collectionController = collectionController,
+            let collection = collection else { return }
         
         let alertController = UIAlertController(title: "Add Condition", message: nil, preferredStyle: .actionSheet)
         
         let conditionAction = UIAlertAction(title: "Condition", style: .default) { _ in
             DispatchQueue.main.async {
-                self.newCondition = collection.addCondition()
+                self.newCondition = collectionController.addCondition(to: collection)
                 self.tableView.insertRows(at: [IndexPath(row: collection.conditions.count - 1, section: 1)], with: .automatic)
                 self.performSegue(withIdentifier: "Condition", sender: self)
             }
@@ -208,7 +189,7 @@ class CollectionTableViewController: UITableViewController {
         
         let parenthesesAction = UIAlertAction(title: "Parentheses", style: .default) { _ in
             DispatchQueue.main.async {
-                collection.addParentheses()
+                collectionController.addParentheses(to: collection)
                 
                 let count = collection.conditions.count
                 let indexPaths: [IndexPath] = [
