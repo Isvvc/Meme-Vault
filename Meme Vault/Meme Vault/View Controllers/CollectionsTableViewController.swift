@@ -84,6 +84,8 @@ class CollectionsTableViewController: UITableViewController {
         collectionController.createCollection()
         let indexPath = IndexPath(row: collectionController.collections.count - 1, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
+        tableView.selectRow(at: indexPath, animated: true, scrollPosition: .bottom)
+        performSegue(withIdentifier: "Collection", sender: self)
     }
     
     // MARK: - Navigation

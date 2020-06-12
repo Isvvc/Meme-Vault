@@ -39,7 +39,7 @@ class CollectionController {
     //MARK: Collection CRUD
     
     @discardableResult func createCollection() -> AlbumCollection {
-        let collection = AlbumCollection(name: "\(Int.random(in: 0..<100))", conditions: [])
+        let collection = AlbumCollection()
         collections.append(collection)
         saveToPersistentStore()
         return collection
