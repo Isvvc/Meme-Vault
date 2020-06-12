@@ -240,6 +240,7 @@ extension CollectionTableViewController: ConditionTableDelegate {
     func update(_ condition: Condition) {
         guard let index = collection?.conditions.firstIndex(of: condition) else { return }
         tableView.reloadRows(at: [IndexPath(row: index, section: 1)], with: .none)
+        collectionController?.saveToPersistentStore()
     }
 }
 
@@ -249,6 +250,7 @@ extension CollectionTableViewController: ControlCellDelegate {
     func valueChanged<Control>(_ sender: Control) where Control : UIControl {
         if let toggle = sender as? UISwitch {
             collection?.oldestFirst = toggle.isOn
+            collectionController?.saveToPersistentStore()
         }
     }
 }
