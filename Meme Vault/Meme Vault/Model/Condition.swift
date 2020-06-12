@@ -8,9 +8,9 @@
 
 import Photos
 
-class Condition: NSObject {
+class Condition: NSObject, Codable {
     
-    public enum Conjunction: Int, CaseIterable {
+    public enum Conjunction: Int, CaseIterable, Codable {
         case and
         case or
         
