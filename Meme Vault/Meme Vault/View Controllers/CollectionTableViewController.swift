@@ -19,7 +19,7 @@ class CollectionTableViewController: UITableViewController {
     
     var collectionController: CollectionController?
     var collection: AlbumCollection?
-    var newCondition: Condition?
+    var newConditionIndex: Int?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -181,7 +181,8 @@ class CollectionTableViewController: UITableViewController {
         
         let conditionAction = UIAlertAction(title: "Condition", style: .default) { _ in
             DispatchQueue.main.async {
-                self.newCondition = collectionController.addCondition(to: collection)
+                collectionController.addCondition(to: collection)
+                self.newConditionIndex = collection.conditions.count - 1
                 self.tableView.insertRows(at: [IndexPath(row: collection.conditions.count - 1, section: 1)], with: .automatic)
                 self.performSegue(withIdentifier: "Condition", sender: self)
             }
@@ -223,10 +224,11 @@ class CollectionTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let conditionVC = segue.destination as? ConditionTableViewController {
             conditionVC.delegate = self
+            conditionVC.collection = collection
             if let indexPath = tableView.indexPathForSelectedRow {
-                conditionVC.condition = collection?.conditions[indexPath.row]
-            } else if let newCondition = newCondition {
-                conditionVC.condition = newCondition
+                conditionVC.conditionIndex = indexPath.row
+            } else if let newConditionIndex = newConditionIndex {
+                conditionVC.conditionIndex = newConditionIndex
                 conditionVC.newCondition = true
             }
         }

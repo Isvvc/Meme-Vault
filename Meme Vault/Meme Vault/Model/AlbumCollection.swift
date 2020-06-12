@@ -114,7 +114,7 @@ class AlbumCollection: Codable {
         let previousCondition = conditions[index - 1]
         if previousCondition.id == nil,
             previousCondition.conjunction != .none {
-            // The condition is directly after an opening parenthasis
+            // The condition is directly after an opening parenthesis
             return true
         }
         

@@ -15,7 +15,8 @@ protocol ConditionTableDelegate {
 
 class ConditionTableViewController: UITableViewController {
     
-    var condition: Condition?
+    var collection: AlbumCollection?
+    var conditionIndex: Int?
     var newCondition: Bool = false
     var delegate: ConditionTableDelegate?
 
@@ -36,18 +37,24 @@ class ConditionTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        guard let conditionIndex = conditionIndex,
+            let collection = collection else { return 0 }
+        let condition = collection.conditions[conditionIndex]
+        
         return 1
-            + (condition?.id != nil || newCondition).int
-            + (condition?.conjunction != nil).int
+            + (condition.id != nil || newCondition).int
+            + (!collection.conditionIsFirst(index: conditionIndex)).int
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let identifier: String
         
+        let isFirst = collection?.conditionIsFirst(index: conditionIndex ?? 0) ?? false
+        
         switch indexPath.row {
-        case 0 - (condition?.conjunction == nil).int:
+        case 0 - (isFirst).int:
             identifier = "ConjunctionCell"
-        case 1 - (condition?.conjunction == nil).int:
+        case 1 - (isFirst).int:
             identifier = "NotCell"
         default:
             identifier = "AlbumCell"
@@ -55,21 +62,24 @@ class ConditionTableViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: identifier, for: indexPath)
         
+        guard let conditionIndex = conditionIndex,
+            let condition = collection?.conditions[conditionIndex] else { return cell }
+        
         switch indexPath.row {
-        case 0 - (condition?.conjunction == nil).int:
+        case 0 - (isFirst).int:
             if let conjunctionCell = cell as? ConjunctionTableViewCell {
-                conjunctionCell.segmentedControl.selectedSegmentIndex = condition?.conjunction?.rawValue ?? 0
+                conjunctionCell.segmentedControl.selectedSegmentIndex = condition.conjunction?.rawValue ?? 0
                 conjunctionCell.delegate = self
             }
             
-        case 1 - (condition?.conjunction == nil).int:
+        case 1 - (isFirst).int:
             if let notCell = cell as? NotTableViewCell {
-                notCell.toggle.isOn = condition?.not ?? false
+                notCell.toggle.isOn = condition.not
                 notCell.delegate = self
             }
             
         default:
-            if let id = condition?.id {
+            if let id = condition.id {
                 let collections = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [id], options: nil)
                 cell.textLabel?.text = collections.firstObject?.localizedTitle
             } else {
@@ -78,6 +88,14 @@ class ConditionTableViewController: UITableViewController {
         }
 
         return cell
+    }
+    
+    //MARK: Table view delegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row != 2 {
+            tableView.deselectRow(at: indexPath, animated: true)
+        }
     }
 
     // MARK: - Navigation
@@ -94,7 +112,8 @@ class ConditionTableViewController: UITableViewController {
 
 extension ConditionTableViewController: AlbumsTableDelegate {
     func selectAlbum(_ album: PHAssetCollection) {
-        guard let condition = condition else { return }
+        guard let conditionIndex = conditionIndex,
+            let condition = collection?.conditions[conditionIndex] else { return }
         condition.id = album.localIdentifier
         print(album.localIdentifier)
         navigationController?.popViewController(animated: true)
@@ -107,17 +126,15 @@ extension ConditionTableViewController: AlbumsTableDelegate {
 
 extension ConditionTableViewController: ControlCellDelegate {
     func valueChanged<Control: UIControl>(_ sender: Control) {
+        guard let conditionIndex = conditionIndex,
+            let condition = collection?.conditions[conditionIndex] else { return }
         
         if let segmentedControl = sender as? UISegmentedControl {
-            guard let condition = condition else { return }
             condition.conjunction = Condition.Conjunction(rawValue: segmentedControl.selectedSegmentIndex)
             delegate?.update(condition)
-            
         } else if let toggle = sender as? UISwitch {
-            guard let condition = condition else { return }
             condition.not = toggle.isOn
             delegate?.update(condition)
-            
         }
     }
 }
