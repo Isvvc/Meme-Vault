@@ -46,6 +46,7 @@
 		59B054AB246A5A5700C31CE3 /* UIImageView+PHAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B054AA246A5A5700C31CE3 /* UIImageView+PHAsset.swift */; };
 		59B924FA243D7E13002440E2 /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924F9243D7E13002440E2 /* LoginTableViewController.swift */; };
 		59B924FE243D84BA002440E2 /* ProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924FD243D84BA002440E2 /* ProviderController.swift */; };
+		59B98A5F2495899600FEAAF7 /* MemesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B98A5E2495899600FEAAF7 /* MemesTableViewController.swift */; };
 		59C68168247210090037EB6D /* ToggleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C68166247210090037EB6D /* ToggleTableViewCell.swift */; };
 		59C68169247210090037EB6D /* ToggleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59C68167247210090037EB6D /* ToggleTableViewCell.xib */; };
 		59C7612B249582E300A54004 /* MemeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C7612A249582E300A54004 /* MemeController.swift */; };
@@ -93,6 +94,7 @@
 		59B054AA246A5A5700C31CE3 /* UIImageView+PHAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+PHAsset.swift"; sourceTree = "<group>"; };
 		59B924F9243D7E13002440E2 /* LoginTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
 		59B924FD243D84BA002440E2 /* ProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderController.swift; sourceTree = "<group>"; };
+		59B98A5E2495899600FEAAF7 /* MemesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemesTableViewController.swift; sourceTree = "<group>"; };
 		59C68166247210090037EB6D /* ToggleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleTableViewCell.swift; sourceTree = "<group>"; };
 		59C68167247210090037EB6D /* ToggleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToggleTableViewCell.xib; sourceTree = "<group>"; };
 		59C7612A249582E300A54004 /* MemeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeController.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				598D596D244F8055005899A7 /* ConditionTableViewController.swift */,
 				59B054A8246A589500C31CE3 /* MemeViewController.swift */,
 				59F43D2924945C8D0078C7AC /* ActionSetPickerTableViewController.swift */,
+				59B98A5E2495899600FEAAF7 /* MemesTableViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -330,6 +333,7 @@
 				598D5972244F92BD005899A7 /* ConjunctionTableViewCell.swift in Sources */,
 				597D63232436854600056FD1 /* NameTableViewController.swift in Sources */,
 				5978B84424465F7800CACC7A /* ButtonCollectionReusableView.swift in Sources */,
+				59B98A5F2495899600FEAAF7 /* MemesTableViewController.swift in Sources */,
 				597D63342436AB4B00056FD1 /* FileBrowserTableViewController.swift in Sources */,
 				59B054A9246A589500C31CE3 /* MemeViewController.swift in Sources */,
 				598962A62421C01C00B3C670 /* ActionController.swift in Sources */,

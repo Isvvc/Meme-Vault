@@ -8,12 +8,13 @@
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Destination" inverseName="children" inverseEntity="Destination"/>
     </entity>
     <entity name="Meme" representedClassName="Meme" syncable="YES" codeGenerationType="class">
+        <attribute name="creationDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="destination" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Destination" inverseName="memes" inverseEntity="Destination"/>
     </entity>
     <elements>
         <element name="Destination" positionX="-63" positionY="-18" width="128" height="118"/>
-        <element name="Meme" positionX="-54" positionY="27" width="128" height="88"/>
+        <element name="Meme" positionX="-54" positionY="27" width="128" height="103"/>
     </elements>
 </model>

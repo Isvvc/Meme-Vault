@@ -25,7 +25,7 @@ class MemeViewController: UIViewController {
     var currentActionIndex: Int = 0
     var collectionController: CollectionController?
     var collection: AlbumCollection?
-    var memeController: MemeController? = MemeController()
+    var memeController: MemeController?
     var meme: Meme?
     var asset: PHAsset?
     var contentRequestID: PHContentEditingInputRequestID?
