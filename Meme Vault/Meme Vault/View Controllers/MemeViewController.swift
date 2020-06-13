@@ -25,6 +25,8 @@ class MemeViewController: UIViewController {
     var currentActionIndex: Int = 0
     var collectionController: CollectionController?
     var collection: AlbumCollection?
+    var asset: PHAsset?
+    var contentRequestID: PHContentEditingInputRequestID?
     
     var actionSet: ActionSet? {
         actionController?.actionSets[actionSetIndex]
@@ -33,6 +35,12 @@ class MemeViewController: UIViewController {
         guard currentActionIndex < actionSet?.actions.count ?? 0,
             let action = actionSet?.actions[currentActionIndex] else { return nil }
         return action
+    }
+    
+    var name: String? {
+        guard let name = nameTextField.text,
+            !name.isEmpty else { return nil }
+        return name
     }
     
     //MARK: View loading
@@ -48,6 +56,14 @@ class MemeViewController: UIViewController {
         performCurrentAction()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if let contentRequestID = contentRequestID {
+            asset?.cancelContentEditingInputRequest(contentRequestID)
+        }
+    }
+    
     private func setUpViews() {
         // Load the image
         DispatchQueue.global(qos: .userInitiated).async {
@@ -57,6 +73,8 @@ class MemeViewController: UIViewController {
                     self.navigationController?.popViewController(animated: true)
                 return
             }
+            
+            self.asset = photo
             
             DispatchQueue.main.async {
                 self.imageView.fetchImage(asset: photo, contentMode: .aspectFit)
@@ -74,7 +92,9 @@ class MemeViewController: UIViewController {
                                        name: UIResponder.keyboardWillChangeFrameNotification,
                                        object: nil)
         
+        // Name text field
         nameTextField.delegate = self
+        nameTextField.autocapitalizationType = .sentences
     }
     
     @objc private func adjustForKeyboard(notification: Notification) {
@@ -102,7 +122,7 @@ class MemeViewController: UIViewController {
         switch action {
         case .name(skipIfDone: let skipIfDone, preset: _):
             if skipIfDone,
-                !(nameTextField.text?.isEmpty ?? true) {
+                name != nil {
                 break
             }
             nameTextField.becomeFirstResponder()
@@ -110,8 +130,64 @@ class MemeViewController: UIViewController {
         case .upload:
             print("Uploading... (not really; this is just a placeholder)")
         
+        case .share:
+            shareAsset()
+        
         default:
             break
+        }
+    }
+    
+    
+    /// Returns the name the current image's file should have based on the `textField` and original file extension.
+    /// - Parameter contentEditingInput: The content editing input from the asset's `requestContentEditingInput` call.
+    /// - Returns: the name inputted with the file extension if the name in the text field is not empty, otherwise `nil`.
+    func fileName(contentEditingInput: PHContentEditingInput) -> String? {
+        guard let name = name,
+            let url = contentEditingInput.fullSizeImageURL else { return nil }
+        return "\(name).\(url.pathExtension.lowercased())"
+    }
+    
+    
+    /// Copies the current asset to the Documents directory, opens it in a Share Sheet, then deletes the copy.
+    func shareAsset() {
+        // I fell like a lot of this "should" be done in a controller class,
+        // but as far as I can tell, it would require an escaping closure within another escaping closure
+        // to handle opening the copied file in the share sheet and then deleting it once it's gone.
+        // That feel like it'd just make things too complicated,
+        // so I'm doing it all here the in the view controller.
+        let fileManager = FileManager.default
+        
+        contentRequestID = asset?.requestContentEditingInput(with: nil) { contentEditingInput, _ in
+            guard let contentEditingInput = contentEditingInput,
+                let url = contentEditingInput.fullSizeImageURL,
+                let fileName = self.fileName(contentEditingInput: contentEditingInput),
+                let documents = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+            
+            do {
+                // Save a copy to the Documents directory
+                let filePath = documents.appendingPathComponent(fileName)
+                let data = try Data(contentsOf: url)
+                try data.write(to: filePath)
+                
+                // Share the copy in the Share Sheet
+                DispatchQueue.main.async {
+                    let activityController = UIActivityViewController(activityItems: [filePath], applicationActivities: nil)
+                    activityController.popoverPresentationController?.sourceView = self.view
+                    activityController.completionWithItemsHandler = { _, _, _, _ in
+                        // Delete the copy in the Documents directory
+                        do {
+                            try fileManager.removeItem(at: filePath)
+                        } catch {
+                            NSLog("\(error)")
+                        }
+                    }
+                    
+                    self.present(activityController, animated: true, completion: nil)
+                }
+            } catch {
+                NSLog("\(error)")
+            }
         }
     }
     
