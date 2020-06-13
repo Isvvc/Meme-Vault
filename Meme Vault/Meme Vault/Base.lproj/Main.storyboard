@@ -188,7 +188,7 @@
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="x3y-FO-d01">
                                 <rect key="frame" x="0.0" y="88" width="414" height="475"/>
                             </imageView>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bk0-lE-mad">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="bk0-lE-mad">
                                 <rect key="frame" x="8" y="571" width="398" height="34"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -223,6 +223,7 @@
                         <outlet property="containerHeight" destination="hta-qS-TD3" id="gi2-bV-rJ3"/>
                         <outlet property="containerView" destination="uJa-bu-qfM" id="WAl-GZ-1Vn"/>
                         <outlet property="imageView" destination="x3y-FO-d01" id="Hwb-Vy-PCU"/>
+                        <outlet property="nameTextField" destination="bk0-lE-mad" id="y9d-sp-K4V"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u3N-iH-17H" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

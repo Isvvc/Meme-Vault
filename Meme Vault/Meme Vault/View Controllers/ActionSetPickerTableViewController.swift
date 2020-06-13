@@ -9,7 +9,7 @@
 import UIKit
 
 protocol ActionSetPickerDelegate {
-    func choose(actionSet: ActionSet)
+    func choose(actionSetAtIndex: Int)
 }
 
 class ActionSetPickerTableViewController: UITableViewController {
@@ -49,13 +49,11 @@ class ActionSetPickerTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard let actionController = actionController else { return }
         
         let oldChosen = chosen
         chosen = indexPath.row
-        let actionSet = actionController.actionSets[chosen]
         
-        delegate?.choose(actionSet: actionSet)
+        delegate?.choose(actionSetAtIndex: indexPath.row)
         
         if let oldCell = tableView.cellForRow(at: IndexPath(row: oldChosen, section: 0)) {
             oldCell.accessoryType = .none
