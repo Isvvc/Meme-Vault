@@ -20,6 +20,8 @@ class ActionSetPickerTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        chosen = actionController?.defaultActionSetIndex ?? 0
     }
 
     // MARK: - Table view data source
