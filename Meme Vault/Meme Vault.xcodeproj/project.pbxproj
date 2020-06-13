@@ -47,6 +47,7 @@
 		59B924FA243D7E13002440E2 /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924F9243D7E13002440E2 /* LoginTableViewController.swift */; };
 		59B924FE243D84BA002440E2 /* ProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924FD243D84BA002440E2 /* ProviderController.swift */; };
 		59B98A5F2495899600FEAAF7 /* MemesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B98A5E2495899600FEAAF7 /* MemesTableViewController.swift */; };
+		59B98A6224958F6C00FEAAF7 /* OverlayContainer in Frameworks */ = {isa = PBXBuildFile; productRef = 59B98A6124958F6C00FEAAF7 /* OverlayContainer */; };
 		59C68168247210090037EB6D /* ToggleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C68166247210090037EB6D /* ToggleTableViewCell.swift */; };
 		59C68169247210090037EB6D /* ToggleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59C68167247210090037EB6D /* ToggleTableViewCell.xib */; };
 		59C7612B249582E300A54004 /* MemeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C7612A249582E300A54004 /* MemeController.swift */; };
@@ -109,6 +110,7 @@
 			files = (
 				597DF37C248D7D7100F93AEF /* SwiftyJSON in Frameworks */,
 				597D63322436A9B900056FD1 /* FilesProvider in Frameworks */,
+				59B98A6224958F6C00FEAAF7 /* OverlayContainer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,6 +243,7 @@
 			packageProductDependencies = (
 				597D63312436A9B900056FD1 /* FilesProvider */,
 				597DF37B248D7D7100F93AEF /* SwiftyJSON */,
+				59B98A6124958F6C00FEAAF7 /* OverlayContainer */,
 			);
 			productName = "Meme Vault";
 			productReference = 594ACC4E242088BA00DEFCBF /* Meme Vault.app */;
@@ -273,6 +276,7 @@
 			packageReferences = (
 				597D63302436A9B900056FD1 /* XCRemoteSwiftPackageReference "FileProvider" */,
 				597DF37A248D7D7100F93AEF /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				59B98A6024958F6C00FEAAF7 /* XCRemoteSwiftPackageReference "OverlayContainer" */,
 			);
 			productRefGroup = 594ACC4F242088BA00DEFCBF /* Products */;
 			projectDirPath = "";
@@ -556,6 +560,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		59B98A6024958F6C00FEAAF7 /* XCRemoteSwiftPackageReference "OverlayContainer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/applidium/OverlayContainer.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.4.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -568,6 +580,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 597DF37A248D7D7100F93AEF /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		59B98A6124958F6C00FEAAF7 /* OverlayContainer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59B98A6024958F6C00FEAAF7 /* XCRemoteSwiftPackageReference "OverlayContainer" */;
+			productName = OverlayContainer;
 		};
 /* End XCSwiftPackageProductDependency section */
 
