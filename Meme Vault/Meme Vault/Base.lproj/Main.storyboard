@@ -213,13 +213,33 @@
         <scene sceneID="EkF-bu-Pwz">
             <objects>
                 <tableViewController id="vyV-VR-WHI" customClass="CollectionsTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="2eT-yi-BK1">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="2eT-yi-BK1">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <view key="tableFooterView" contentMode="scaleToFill" id="Pv0-dQ-Qhh">
+                            <rect key="frame" x="0.0" y="117" width="414" height="44"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <subviews>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HK9-KP-ZDW">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                    <state key="normal" title="New Collection"/>
+                                    <connections>
+                                        <action selector="addCollection:" destination="vyV-VR-WHI" eventType="touchUpInside" id="sV7-VC-fAK"/>
+                                    </connections>
+                                </button>
+                            </subviews>
+                            <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="HK9-KP-ZDW" secondAttribute="bottom" id="5Jv-nY-ZDf"/>
+                                <constraint firstItem="HK9-KP-ZDW" firstAttribute="top" secondItem="Pv0-dQ-Qhh" secondAttribute="top" id="Oez-R0-R12"/>
+                                <constraint firstAttribute="trailing" secondItem="HK9-KP-ZDW" secondAttribute="trailing" id="aZa-GM-8oa"/>
+                                <constraint firstItem="HK9-KP-ZDW" firstAttribute="leading" secondItem="Pv0-dQ-Qhh" secondAttribute="leading" id="pjb-wp-exz"/>
+                            </constraints>
+                        </view>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="CollectionCell" textLabel="pah-sh-NS2" style="IBUITableViewCellStyleDefault" id="s64-5i-fd4">
-                                <rect key="frame" x="0.0" y="28" width="414" height="43.5"/>
+                                <rect key="frame" x="0.0" y="55.5" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="s64-5i-fd4" id="wMA-Bi-hoS">
                                     <rect key="frame" x="0.0" y="0.0" width="383" height="43.5"/>
@@ -243,6 +263,7 @@
                     </tableView>
                     <navigationItem key="navigationItem" title="Collections" id="IL3-ZR-IBf"/>
                     <connections>
+                        <outlet property="newCollectionView" destination="Pv0-dQ-Qhh" id="Lxr-jV-KfN"/>
                         <segue destination="VTK-3P-ebL" kind="show" identifier="Collection" id="r1F-1D-t1A"/>
                         <segue destination="Ky6-JI-Esr" kind="show" identifier="Meme" id="irt-n7-HGd"/>
                     </connections>

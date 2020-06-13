@@ -22,16 +22,25 @@ class CollectionTableViewController: UITableViewController {
     var newConditionIndex: Int?
 
     override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        self.navigationItem.rightBarButtonItem = self.editButtonItem
-        
-        if let collection = collection {
-            title = collection.name
+        guard let collection = collection else {
+            navigationController?.popViewController(animated: true)
+            return
         }
         
+        super.viewDidLoad()
+
         tableView.register(UINib(nibName: "ToggleTableViewCell", bundle: nil), forCellReuseIdentifier: "ToggleCell")
+        
+        self.navigationItem.rightBarButtonItem = self.editButtonItem
+        
+        let navBarTap = UITapGestureRecognizer(target: self, action: #selector(updateName(sender:)))
+        navigationController?.navigationBar.addGestureRecognizer(navBarTap)
+        
+        title = collection.name
+        
+        if collection.isNewCollection {
+            updateName(sender: self)
+        }
     }
     
     //MARK: Cell loading
@@ -126,14 +135,6 @@ class CollectionTableViewController: UITableViewController {
         // but I can't for the life of me get it to do that right for some reason
         tableView.reloadData()
     }
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
     
     //MARK: Table view delegate
     
@@ -216,6 +217,48 @@ class CollectionTableViewController: UITableViewController {
         }
         
         present(alertController, animated: true, completion: nil)
+    }
+    
+    @objc func updateName(sender: Any) {
+        guard navigationController?.topViewController == self,
+            let collection = collection else { return }
+        
+        let alert = UIAlertController(title: "Collection Name", message: nil, preferredStyle: .alert)
+        
+        var nameTextField: UITextField?
+        alert.addTextField { textField in
+            textField.placeholder = "Name"
+            textField.autocapitalizationType = .words
+            nameTextField = textField
+        }
+        
+        let cancelHandler: ((UIAlertAction) -> Void) = { _ in
+            if collection.isNewCollection {
+                self.collectionController?.deleteCollection(collection: collection)
+                DispatchQueue.main.async {
+                    self.navigationController?.popViewController(animated: true)
+                }
+            }
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: cancelHandler)
+                
+        let save = UIAlertAction(title: "Save", style: .default) { alertAction in
+            guard let name = nameTextField?.text,
+                !name.isEmpty else {
+                return cancelHandler(alertAction)
+            }
+            
+            self.collectionController?.rename(collection: collection, to: name)
+            DispatchQueue.main.async {
+                self.title = name
+            }
+        }
+        
+        alert.addAction(cancel)
+        alert.addAction(save)
+        
+        present(alert, animated: true)
     }
     
     // MARK: - Navigation

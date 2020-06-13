@@ -8,13 +8,23 @@
 
 import Photos
 
-class AlbumCollection: Codable {
+class AlbumCollection: NSObject, Codable {
+    static let newCollectionName = "New Collection"
+    
     var name: String
     var conditions: [Condition]
     var oldestFirst: Bool = true
     
-    init(name: String, conditions: [Condition]) {
-        self.name = name
+    var isNewCollection: Bool {
+        name == AlbumCollection.newCollectionName
+    }
+    
+    init(name: String? = nil, conditions: [Condition] = []) {
+        if let name = name {
+            self.name = name
+        } else {
+            self.name = AlbumCollection.newCollectionName
+        }
         self.conditions = conditions
     }
     
