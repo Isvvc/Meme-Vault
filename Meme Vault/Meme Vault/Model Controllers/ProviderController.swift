@@ -50,7 +50,8 @@ class ProviderController {
     }
     
     private func login() {
-        guard let host = host, let credential = credential else { return }
+        guard let host = host,
+            let credential = credential else { return }
         
         webdavProvider = WebDAVFileProvider(baseURL: host, credential: credential)
         webdavProvider?.delegate = self

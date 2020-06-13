@@ -49,6 +49,7 @@
 		59C68168247210090037EB6D /* ToggleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C68166247210090037EB6D /* ToggleTableViewCell.swift */; };
 		59C68169247210090037EB6D /* ToggleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59C68167247210090037EB6D /* ToggleTableViewCell.xib */; };
 		59D3AF8A24466EF500B066BA /* AlbumCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59D3AF8924466EF500B066BA /* AlbumCollection.swift */; };
+		59F43D2A24945C8D0078C7AC /* ActionSetPickerTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59F43D2924945C8D0078C7AC /* ActionSetPickerTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +95,7 @@
 		59C68166247210090037EB6D /* ToggleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleTableViewCell.swift; sourceTree = "<group>"; };
 		59C68167247210090037EB6D /* ToggleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToggleTableViewCell.xib; sourceTree = "<group>"; };
 		59D3AF8924466EF500B066BA /* AlbumCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumCollection.swift; sourceTree = "<group>"; };
+		59F43D2924945C8D0078C7AC /* ActionSetPickerTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSetPickerTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -159,6 +161,7 @@
 				59090B3C244676D300E2EF5B /* CollectionTableViewController.swift */,
 				598D596D244F8055005899A7 /* ConditionTableViewController.swift */,
 				59B054A8246A589500C31CE3 /* MemeViewController.swift */,
+				59F43D2924945C8D0078C7AC /* ActionSetPickerTableViewController.swift */,
 			);
 			path = "View Controllers";
 			sourceTree = "<group>";
@@ -326,6 +329,7 @@
 				597D63342436AB4B00056FD1 /* FileBrowserTableViewController.swift in Sources */,
 				59B054A9246A589500C31CE3 /* MemeViewController.swift in Sources */,
 				598962A62421C01C00B3C670 /* ActionController.swift in Sources */,
+				59F43D2A24945C8D0078C7AC /* ActionSetPickerTableViewController.swift in Sources */,
 				594ACC7124208F5400DEFCBF /* ActionCollectionViewCell.swift in Sources */,
 				594ACC54242088BA00DEFCBF /* SceneDelegate.swift in Sources */,
 				5978B84624466A3100CACC7A /* CollectionsTableViewController.swift in Sources */,

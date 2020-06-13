@@ -44,7 +44,7 @@ class LoginTableViewController: UITableViewController {
             cell.textField.autocapitalizationType = .none
             
             switch (indexPath.section, indexPath.row) {
-            case (0,0):  // Server
+            case (0, 0):  // Server
                 cell.textField.placeholder = "https://nextcloud.example.com/remote.php/webdav/"
                 cell.textField.returnKeyType = .next
                 cell.textField.text = providerController?.host?.absoluteString
