@@ -25,6 +25,8 @@ class MemeViewController: UIViewController {
     var currentActionIndex: Int = 0
     var collectionController: CollectionController?
     var collection: AlbumCollection?
+    var memeController: MemeController? = MemeController()
+    var meme: Meme?
     var asset: PHAsset?
     var contentRequestID: PHContentEditingInputRequestID?
     
@@ -53,7 +55,6 @@ class MemeViewController: UIViewController {
         }
         
         setUpViews()
-        performCurrentAction()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -75,9 +76,15 @@ class MemeViewController: UIViewController {
             }
             
             self.asset = photo
+            self.meme = self.memeController?.fetchOrCreateMeme(for: photo, context: CoreDataStack.shared.mainContext)
             
             DispatchQueue.main.async {
                 self.imageView.fetchImage(asset: photo, contentMode: .aspectFit)
+                if let name = self.meme?.name {
+                    self.nameTextField.text = name
+                }
+                
+                self.performCurrentAction()
             }
         }
         
@@ -123,6 +130,8 @@ class MemeViewController: UIViewController {
         case .name(skipIfDone: let skipIfDone, preset: _):
             if skipIfDone,
                 name != nil {
+                currentActionIndex += 1
+                performCurrentAction()
                 break
             }
             nameTextField.becomeFirstResponder()
@@ -154,8 +163,9 @@ class MemeViewController: UIViewController {
         // I fell like a lot of this "should" be done in a controller class,
         // but as far as I can tell, it would require an escaping closure within another escaping closure
         // to handle opening the copied file in the share sheet and then deleting it once it's gone.
-        // That feel like it'd just make things too complicated,
+        // That feels like it'd just make things too complicated,
         // so I'm doing it all here the in the view controller.
+        
         let fileManager = FileManager.default
         
         contentRequestID = asset?.requestContentEditingInput(with: nil) { contentEditingInput, _ in
@@ -169,6 +179,7 @@ class MemeViewController: UIViewController {
                 let filePath = documents.appendingPathComponent(fileName)
                 let data = try Data(contentsOf: url)
                 try data.write(to: filePath)
+                print("Saved copy of file.")
                 
                 // Share the copy in the Share Sheet
                 DispatchQueue.main.async {
@@ -178,6 +189,7 @@ class MemeViewController: UIViewController {
                         // Delete the copy in the Documents directory
                         do {
                             try fileManager.removeItem(at: filePath)
+                            print("Deleted copy of file.")
                         } catch {
                             NSLog("\(error)")
                         }
@@ -189,6 +201,12 @@ class MemeViewController: UIViewController {
                 NSLog("\(error)")
             }
         }
+    }
+    
+    func setName() {
+        guard let name = name,
+            let meme = meme else { return }
+        memeController?.setName(to: name, for: meme, context: CoreDataStack.shared.mainContext)
     }
     
     //MARK: Navigation
@@ -208,6 +226,10 @@ extension MemeViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
+        // Save the name
+        setName()
+        
+        // Move to the action after the `name` action
         let nameActionIndex: Int?
         
         switch currentAction {
