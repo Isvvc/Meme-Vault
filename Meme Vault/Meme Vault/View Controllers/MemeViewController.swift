@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import OverlayContainer
 
 class MemeViewController: UIViewController {
     
@@ -20,11 +21,16 @@ class MemeViewController: UIViewController {
     
     //MARK: Properties
     
+    var overlayContainerView: PassThroughView?
+    var overlayController: OverlayContainerViewController?
+    
     var actionController: ActionController?
     var actionSetIndex: Int = 0
     var currentActionIndex: Int = 0
+    
     var collectionController: CollectionController?
     var collection: AlbumCollection?
+    
     var memeController: MemeController?
     var meme: Meme?
     var asset: PHAsset?
@@ -65,14 +71,21 @@ class MemeViewController: UIViewController {
         }
     }
     
+    override func viewSafeAreaInsetsDidChange() {
+        guard let overlayContainerView = overlayContainerView else { return }
+        overlayContainerView.pinToSuperview(with: view.safeAreaInsets)
+    }
+    
     private func setUpViews() {
         // Load the image
         DispatchQueue.global(qos: .userInitiated).async {
             // Doing this in a background thread because the fetchFirstImage function can take a while
             guard let collection = self.collection,
                 let photo = self.collectionController?.fetchFirstImage(from: collection) else {
-                    self.navigationController?.popViewController(animated: true)
-                return
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                    return
             }
             
             self.asset = photo
@@ -102,6 +115,22 @@ class MemeViewController: UIViewController {
         // Name text field
         nameTextField.delegate = self
         nameTextField.autocapitalizationType = .sentences
+        
+        // Add Destinations overlay
+        if let navigationVC = storyboard?.instantiateViewController(identifier: "DestinationsNav") as? UINavigationController,
+            let destinationsVC = navigationVC.viewControllers.first as? DestinationsTableViewController {
+
+            let overlayContainerView = PassThroughView()
+            self.overlayContainerView = overlayContainerView
+            view.addSubview(overlayContainerView)
+            
+            let overlayController = OverlayContainerViewController()
+            overlayController.delegate = self
+            overlayController.viewControllers = [navigationVC]
+            addChild(overlayController, in: overlayContainerView)
+            overlayController.drivingScrollView = destinationsVC.tableView
+            self.overlayController = overlayController
+        }
     }
     
     @objc private func adjustForKeyboard(notification: Notification) {
@@ -262,5 +291,31 @@ extension MemeViewController: ActionSetPickerDelegate {
         actionSetIndex = index
         currentActionIndex = 0
         performCurrentAction()
+    }
+}
+
+//MARK: Overlay container view controller delegate
+
+extension MemeViewController: OverlayContainerViewControllerDelegate {
+    
+    enum OverlayNotch: Int, CaseIterable {
+        case minimum, medium, maximum
+    }
+
+    func numberOfNotches(in containerViewController: OverlayContainerViewController) -> Int {
+        return OverlayNotch.allCases.count
+    }
+
+    func overlayContainerViewController(_ containerViewController: OverlayContainerViewController,
+                                        heightForNotchAt index: Int,
+                                        availableSpace: CGFloat) -> CGFloat {
+        switch OverlayNotch.allCases[index] {
+        case .maximum:
+            return availableSpace * 7 / 8
+        case .medium:
+            return 200
+        case .minimum:
+            return 40
+        }
     }
 }
