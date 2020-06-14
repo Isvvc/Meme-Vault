@@ -135,6 +135,14 @@ class MemeViewController: UIViewController {
             addChild(overlayController, in: overlayContainerView)
             overlayController.drivingScrollView = destinationsVC.tableView
             self.overlayController = overlayController
+            
+            // Add shadow
+            let navLayer = navigationVC.view.layer
+            // navLayer.cornerRadius = 8 // Doesn't work because `masksToBounds` is set to `false`
+            navLayer.shadowColor = UIColor.black.cgColor
+            navLayer.shadowOpacity = 0.125
+            navLayer.shadowRadius = 8
+            navLayer.masksToBounds = false
         }
     }
     
