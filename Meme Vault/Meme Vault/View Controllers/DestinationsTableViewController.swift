@@ -61,7 +61,12 @@ class DestinationsTableViewController: UITableViewController {
         }
         
         if !editDestinations {
-            navigationItem.rightBarButtonItem = nil
+            if parentDestination == nil {
+                navigationItem.rightBarButtonItem = nil
+            } else {
+                let chooseButton = UIBarButtonItem(title: "Choose", style: .done, target: self, action: #selector(chooseParentDestination(sender:)))
+                navigationItem.rightBarButtonItem = chooseButton
+            }
         }
     }
     
@@ -104,6 +109,11 @@ class DestinationsTableViewController: UITableViewController {
         alert.addAction(pathAction)
         
         present(alert, animated: true, completion: nil)
+    }
+    
+    @objc func chooseParentDestination(sender: Any) {
+        guard let parentDestination = parentDestination else { return }
+        delegate?.choose(destination: parentDestination)
     }
     
     // MARK: - Table view data source

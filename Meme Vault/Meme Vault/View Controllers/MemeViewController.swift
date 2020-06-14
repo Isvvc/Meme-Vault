@@ -144,6 +144,8 @@ class MemeViewController: UIViewController {
             navLayer.shadowRadius = 8
             navLayer.masksToBounds = false
         }
+        
+        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
     }
     
     @objc private func adjustForKeyboard(notification: Notification) {
@@ -176,13 +178,20 @@ class MemeViewController: UIViewController {
                 performCurrentAction()
                 break
             }
+            title = "Name"
             nameTextField.becomeFirstResponder()
         
         case .upload:
+            title = "Uplading"
             print("Uploading... (not really; this is just a placeholder)")
         
         case .share:
+            title = "Share"
             shareAsset()
+            
+        case .destination:
+            title = "Destination"
+            overlayController?.moveOverlay(toNotchAt: 2, animated: true)
         
         default:
             break
@@ -271,6 +280,10 @@ class MemeViewController: UIViewController {
 //MARK: Text field delegate
 
 extension MemeViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
@@ -337,20 +350,25 @@ extension MemeViewController: OverlayContainerViewControllerDelegate {
             return 40
         }
     }
+    
+    func overlayContainerViewController(_ containerViewController: OverlayContainerViewController, didMoveOverlay overlayViewController: UIViewController, toNotchAt index: Int) {
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = (index != 2)
+    }
 }
 
 //MARK: Destinations table delegate
 
 extension MemeViewController: DestinationsTableDelegate {
-    func enter(destination: Destination) {
-        self.destination = destination
-        setDestination()
-    }
-    
     func choose(destination: Destination) {
         self.destination = destination
         setDestination()
+        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
         
         // Move to the action after the `destination` action
+        if let destinationActionIndex = actionSet?.actions.firstIndex(of: .destination) {
+            currentActionIndex = destinationActionIndex + 1
+        }
+        
+        performCurrentAction()
     }
 }
