@@ -38,6 +38,11 @@ class MemesTableViewController: UITableViewController {
         
         self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
 
     // MARK: - Table view data source
 
@@ -50,7 +55,7 @@ class MemesTableViewController: UITableViewController {
 
         let meme = frc.object(at: indexPath)
         cell.textLabel?.text = meme.name
-        cell.detailTextLabel?.text = meme.id
+        cell.detailTextLabel?.text = meme.destination?.name
 
         return cell
     }

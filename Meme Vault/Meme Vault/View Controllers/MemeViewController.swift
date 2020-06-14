@@ -36,6 +36,8 @@ class MemeViewController: UIViewController {
     var asset: PHAsset?
     var contentRequestID: PHContentEditingInputRequestID?
     
+    var destination: Destination?
+    
     var actionSet: ActionSet? {
         actionController?.actionSets[actionSetIndex]
     }
@@ -119,6 +121,9 @@ class MemeViewController: UIViewController {
         // Add Destinations overlay
         if let navigationVC = storyboard?.instantiateViewController(identifier: "DestinationsNav") as? UINavigationController,
             let destinationsVC = navigationVC.viewControllers.first as? DestinationsTableViewController {
+            
+            destinationsVC.editDestinations = false
+            destinationsVC.delegate = self
 
             let overlayContainerView = PassThroughView()
             self.overlayContainerView = overlayContainerView
@@ -238,6 +243,12 @@ class MemeViewController: UIViewController {
         memeController?.setName(to: name, for: meme, context: CoreDataStack.shared.mainContext)
     }
     
+    func setDestination() {
+        guard let destination = destination,
+            let meme = meme else { return }
+        memeController?.setDestination(to: destination, for: meme, context: CoreDataStack.shared.mainContext)
+    }
+    
     //MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -317,5 +328,21 @@ extension MemeViewController: OverlayContainerViewControllerDelegate {
         case .minimum:
             return 40
         }
+    }
+}
+
+//MARK: Destinations table delegate
+
+extension MemeViewController: DestinationsTableDelegate {
+    func enter(destination: Destination) {
+        self.destination = destination
+        setDestination()
+    }
+    
+    func choose(destination: Destination) {
+        self.destination = destination
+        setDestination()
+        
+        // Move to the action after the `destination` action
     }
 }
