@@ -81,7 +81,7 @@ class MemeViewController: UIViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             // Doing this in a background thread because the fetchFirstImage function can take a while
             guard let collection = self.collection,
-                let photo = self.collectionController?.fetchFirstImage(from: collection) else {
+                let photo = self.collectionController?.fetchFirstImage(from: collection, context: CoreDataStack.shared.mainContext) else {
                     DispatchQueue.main.async {
                         self.navigationController?.popViewController(animated: true)
                     }
@@ -176,7 +176,8 @@ class MemeViewController: UIViewController {
                 performCurrentAction()
             } else {
                 title = "Name"
-                nameTextField.becomeFirstResponder()
+                // For some reason this causes the view controller to lag out if this is the first action called
+//                nameTextField.becomeFirstResponder()
             }
         
         case .upload:
@@ -196,8 +197,9 @@ class MemeViewController: UIViewController {
                 overlayController?.moveOverlay(toNotchAt: 2, animated: true)
             }
         
-        default:
-            break
+        case .delete:
+            guard let meme = meme else { return }
+            memeController?.flagForDeletion(meme: meme, context: CoreDataStack.shared.mainContext)
         }
     }
     

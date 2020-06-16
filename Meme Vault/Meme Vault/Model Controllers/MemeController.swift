@@ -33,8 +33,21 @@ class MemeController {
         CoreDataStack.shared.save(context: context)
     }
     
+    /// Deletes a `Meme` object.
+    /// - Parameters:
+    ///   - meme: The meme to delete
+    ///   - context: The managed object context to use to perform the deletion
     func delete(meme: Meme, context: NSManagedObjectContext) {
         context.delete(meme)
+        CoreDataStack.shared.save(context: context)
+    }
+    
+    /// Flags a meme for deletion. Note that this does not delete the `Meme` object, but rather flags it so its `PHAsset` can be deleted at a later time.
+    /// - Parameters:
+    ///   - meme: The meme to flag
+    ///   - context: The managed object context to save
+    func flagForDeletion(meme: Meme, context: NSManagedObjectContext) {
+        meme.delete = true
         CoreDataStack.shared.save(context: context)
     }
     

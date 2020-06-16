@@ -54,7 +54,13 @@ class MemesTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MemeCell", for: indexPath)
 
         let meme = frc.object(at: indexPath)
-        cell.textLabel?.text = meme.name
+        
+        if let name = meme.name {
+            cell.textLabel?.text = "\(name)\(meme.delete ? " (Trash)" : "")"
+        } else {
+            cell.textLabel?.text = "[Unnamed]"
+        }
+        
         cell.detailTextLabel?.text = meme.destination?.name
 
         return cell

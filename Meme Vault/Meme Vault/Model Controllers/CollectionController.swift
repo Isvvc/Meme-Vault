@@ -7,6 +7,7 @@
 //
 
 import Photos
+import CoreData
 
 class CollectionController {
     
@@ -129,23 +130,37 @@ class CollectionController {
     /// Fetches the first image in the user's photos that is in a collection.
     /// - Parameter collection: The `albumCollection` to find an image from.
     /// - Returns: a `PHAsset` of the first (oldest or newest depending on the collection's `oldestFirst` property) that is in a collection. If no images are in the collection, returns `nil`.
-    func fetchFirstImage(from collection: AlbumCollection) -> PHAsset? {
+    func fetchFirstImage(from collection: AlbumCollection, context: NSManagedObjectContext) -> PHAsset? {
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: collection.oldestFirst)]
         let allAssets = PHAsset.fetchAssets(with: fetchOptions)
         
-        var i = 0
-        while i < allAssets.count {
-            let asset = allAssets.object(at: i)
-            if collection.contains(asset: asset, cache: cache) {
-                cache.clear()
-                return asset
+        do {
+            let fetchRequest: NSFetchRequest<Meme> = Meme.fetchRequest()
+            let memes = try context.fetch(fetchRequest)
+            
+            var i = 0
+            while i < allAssets.count {
+                let asset = allAssets.object(at: i)
+                if collection.contains(asset: asset, cache: cache) {
+                    let meme = memes.first(where: { $0.id == asset.localIdentifier })
+                    
+                    // If there is an existing meme object for this asset,
+                    // skip it if it's marked for delete.
+                    // If there is not, return it
+                    if !(meme?.delete ?? false) {
+                        cache.clear()
+                        return asset
+                    }
+                }
+                
+                i += 1
             }
             
-            i += 1
+            cache.clear()
+        } catch {
+            NSLog("Error fetching Meme objects: \(error)")
         }
-        
-        cache.clear()
         return nil
     }
     
