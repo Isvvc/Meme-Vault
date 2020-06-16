@@ -118,6 +118,22 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vmq-LZ-obg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="1229" y="1353"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="mPS-ae-Mqz">
+            <objects>
+                <navigationController storyboardIdentifier="DestinationsNav" id="teO-7h-hil" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="JDf-TU-w93">
+                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="raC-eB-Iam" kind="relationship" relationship="rootViewController" id="EXE-T9-dtO"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Rzf-jR-B4x" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
             <point key="canvasLocation" x="1229" y="642"/>
         </scene>
         <!--Destinations-->
@@ -1008,6 +1024,7 @@
     <inferredMetricsTieBreakers>
         <segue reference="vWX-eg-jEl"/>
         <segue reference="WnB-5s-WJs"/>
+        <segue reference="EXE-T9-dtO"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cloud.fill" catalog="system" width="128" height="84"/>

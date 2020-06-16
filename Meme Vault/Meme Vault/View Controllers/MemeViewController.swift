@@ -8,6 +8,7 @@
 
 import UIKit
 import Photos
+import OverlayContainer
 
 class MemeViewController: UIViewController {
     
@@ -20,15 +21,22 @@ class MemeViewController: UIViewController {
     
     //MARK: Properties
     
+    var overlayContainerView: PassThroughView?
+    var overlayController: OverlayContainerViewController?
+    
     var actionController: ActionController?
     var actionSetIndex: Int = 0
     var currentActionIndex: Int = 0
+    
     var collectionController: CollectionController?
     var collection: AlbumCollection?
+    
     var memeController: MemeController?
     var meme: Meme?
     var asset: PHAsset?
     var contentRequestID: PHContentEditingInputRequestID?
+    
+    var destination: Destination?
     
     var actionSet: ActionSet? {
         actionController?.actionSets[actionSetIndex]
@@ -65,14 +73,21 @@ class MemeViewController: UIViewController {
         }
     }
     
+    override func viewSafeAreaInsetsDidChange() {
+        guard let overlayContainerView = overlayContainerView else { return }
+        overlayContainerView.pinToSuperview(with: view.safeAreaInsets)
+    }
+    
     private func setUpViews() {
         // Load the image
         DispatchQueue.global(qos: .userInitiated).async {
             // Doing this in a background thread because the fetchFirstImage function can take a while
             guard let collection = self.collection,
                 let photo = self.collectionController?.fetchFirstImage(from: collection) else {
-                    self.navigationController?.popViewController(animated: true)
-                return
+                    DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                    return
             }
             
             self.asset = photo
@@ -102,6 +117,35 @@ class MemeViewController: UIViewController {
         // Name text field
         nameTextField.delegate = self
         nameTextField.autocapitalizationType = .sentences
+        
+        // Add Destinations overlay
+        if let navigationVC = storyboard?.instantiateViewController(identifier: "DestinationsNav") as? UINavigationController,
+            let destinationsVC = navigationVC.viewControllers.first as? DestinationsTableViewController {
+            
+            destinationsVC.editDestinations = false
+            destinationsVC.delegate = self
+
+            let overlayContainerView = PassThroughView()
+            self.overlayContainerView = overlayContainerView
+            view.addSubview(overlayContainerView)
+            
+            let overlayController = OverlayContainerViewController()
+            overlayController.delegate = self
+            overlayController.viewControllers = [navigationVC]
+            addChild(overlayController, in: overlayContainerView)
+            overlayController.drivingScrollView = destinationsVC.tableView
+            self.overlayController = overlayController
+            
+            // Add shadow
+            let navLayer = navigationVC.view.layer
+            // navLayer.cornerRadius = 8 // Doesn't work because `masksToBounds` is set to `false`
+            navLayer.shadowColor = UIColor.black.cgColor
+            navLayer.shadowOpacity = 0.125
+            navLayer.shadowRadius = 8
+            navLayer.masksToBounds = false
+        }
+        
+        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
     }
     
     @objc private func adjustForKeyboard(notification: Notification) {
@@ -134,13 +178,20 @@ class MemeViewController: UIViewController {
                 performCurrentAction()
                 break
             }
+            title = "Name"
             nameTextField.becomeFirstResponder()
         
         case .upload:
+            title = "Uplading"
             print("Uploading... (not really; this is just a placeholder)")
         
         case .share:
+            title = "Share"
             shareAsset()
+            
+        case .destination:
+            title = "Destination"
+            overlayController?.moveOverlay(toNotchAt: 2, animated: true)
         
         default:
             break
@@ -209,6 +260,12 @@ class MemeViewController: UIViewController {
         memeController?.setName(to: name, for: meme, context: CoreDataStack.shared.mainContext)
     }
     
+    func setDestination() {
+        guard let destination = destination,
+            let meme = meme else { return }
+        memeController?.setDestination(to: destination, for: meme, context: CoreDataStack.shared.mainContext)
+    }
+    
     //MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -223,6 +280,10 @@ class MemeViewController: UIViewController {
 //MARK: Text field delegate
 
 extension MemeViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
@@ -261,6 +322,53 @@ extension MemeViewController: ActionSetPickerDelegate {
     func choose(actionSetAtIndex index: Int) {
         actionSetIndex = index
         currentActionIndex = 0
+        performCurrentAction()
+    }
+}
+
+//MARK: Overlay container view controller delegate
+
+extension MemeViewController: OverlayContainerViewControllerDelegate {
+    
+    enum OverlayNotch: Int, CaseIterable {
+        case minimum, medium, maximum
+    }
+
+    func numberOfNotches(in containerViewController: OverlayContainerViewController) -> Int {
+        return OverlayNotch.allCases.count
+    }
+
+    func overlayContainerViewController(_ containerViewController: OverlayContainerViewController,
+                                        heightForNotchAt index: Int,
+                                        availableSpace: CGFloat) -> CGFloat {
+        switch OverlayNotch.allCases[index] {
+        case .maximum:
+            return availableSpace * 7 / 8
+        case .medium:
+            return 200
+        case .minimum:
+            return 40
+        }
+    }
+    
+    func overlayContainerViewController(_ containerViewController: OverlayContainerViewController, didMoveOverlay overlayViewController: UIViewController, toNotchAt index: Int) {
+        navigationController?.interactivePopGestureRecognizer?.isEnabled = (index != 2)
+    }
+}
+
+//MARK: Destinations table delegate
+
+extension MemeViewController: DestinationsTableDelegate {
+    func choose(destination: Destination) {
+        self.destination = destination
+        setDestination()
+        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
+        
+        // Move to the action after the `destination` action
+        if let destinationActionIndex = actionSet?.actions.firstIndex(of: .destination) {
+            currentActionIndex = destinationActionIndex + 1
+        }
+        
         performCurrentAction()
     }
 }

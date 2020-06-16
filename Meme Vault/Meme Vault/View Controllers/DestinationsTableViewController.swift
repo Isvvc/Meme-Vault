@@ -9,11 +9,22 @@
 import UIKit
 import CoreData
 
+protocol DestinationsTableDelegate {
+    func enter(destination: Destination)
+    func choose(destination: Destination)
+}
+
+extension DestinationsTableDelegate {
+    func enter(destination: Destination) {}
+}
+
 class DestinationsTableViewController: UITableViewController {
     
     var destinationController: DestinationController?
     var providerController: ProviderController?
     var parentDestination: Destination?
+    var delegate: DestinationsTableDelegate?
+    var editDestinations = true
     
     var newDestinationName: String?
     
@@ -47,6 +58,15 @@ class DestinationsTableViewController: UITableViewController {
         
         if let parentName = parentDestination?.name {
             title = parentName
+        }
+        
+        if !editDestinations {
+            if parentDestination == nil {
+                navigationItem.rightBarButtonItem = nil
+            } else {
+                let chooseButton = UIBarButtonItem(title: "Choose", style: .done, target: self, action: #selector(chooseParentDestination(sender:)))
+                navigationItem.rightBarButtonItem = chooseButton
+            }
         }
     }
     
@@ -91,6 +111,11 @@ class DestinationsTableViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    @objc func chooseParentDestination(sender: Any) {
+        guard let parentDestination = parentDestination else { return }
+        delegate?.choose(destination: parentDestination)
+    }
+    
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -107,13 +132,10 @@ class DestinationsTableViewController: UITableViewController {
         return cell
     }
 
-    /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
+        return editDestinations
     }
-    */
 
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -125,7 +147,6 @@ class DestinationsTableViewController: UITableViewController {
 
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let navigationVC = segue.destination as? UINavigationController,
             let fileBrowserVC = navigationVC.viewControllers.first as? FileBrowserTableViewController {
@@ -150,9 +171,12 @@ class DestinationsTableViewController: UITableViewController {
             let indexPath = tableView.indexPathForSelectedRow {
             let destination = frc.object(at: indexPath)
             destinationsVC.parentDestination = destination
+            delegate?.enter(destination: destination)
             
             destinationsVC.destinationController = destinationController
             destinationsVC.providerController = providerController
+            destinationsVC.delegate = delegate
+            destinationsVC.editDestinations = editDestinations
         }
     }
 

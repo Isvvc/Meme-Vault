@@ -47,6 +47,9 @@
 		59B924FA243D7E13002440E2 /* LoginTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924F9243D7E13002440E2 /* LoginTableViewController.swift */; };
 		59B924FE243D84BA002440E2 /* ProviderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B924FD243D84BA002440E2 /* ProviderController.swift */; };
 		59B98A5F2495899600FEAAF7 /* MemesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B98A5E2495899600FEAAF7 /* MemesTableViewController.swift */; };
+		59B98A6224958F6C00FEAAF7 /* OverlayContainer in Frameworks */ = {isa = PBXBuildFile; productRef = 59B98A6124958F6C00FEAAF7 /* OverlayContainer */; };
+		59B98A6B2495A26700FEAAF7 /* UIViewController+Children.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B98A692495A26700FEAAF7 /* UIViewController+Children.swift */; };
+		59B98A6C2495A26700FEAAF7 /* UIView+Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59B98A6A2495A26700FEAAF7 /* UIView+Constraints.swift */; };
 		59C68168247210090037EB6D /* ToggleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C68166247210090037EB6D /* ToggleTableViewCell.swift */; };
 		59C68169247210090037EB6D /* ToggleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 59C68167247210090037EB6D /* ToggleTableViewCell.xib */; };
 		59C7612B249582E300A54004 /* MemeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59C7612A249582E300A54004 /* MemeController.swift */; };
@@ -95,6 +98,8 @@
 		59B924F9243D7E13002440E2 /* LoginTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginTableViewController.swift; sourceTree = "<group>"; };
 		59B924FD243D84BA002440E2 /* ProviderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProviderController.swift; sourceTree = "<group>"; };
 		59B98A5E2495899600FEAAF7 /* MemesTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemesTableViewController.swift; sourceTree = "<group>"; };
+		59B98A692495A26700FEAAF7 /* UIViewController+Children.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Children.swift"; sourceTree = "<group>"; };
+		59B98A6A2495A26700FEAAF7 /* UIView+Constraints.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Constraints.swift"; sourceTree = "<group>"; };
 		59C68166247210090037EB6D /* ToggleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleTableViewCell.swift; sourceTree = "<group>"; };
 		59C68167247210090037EB6D /* ToggleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ToggleTableViewCell.xib; sourceTree = "<group>"; };
 		59C7612A249582E300A54004 /* MemeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemeController.swift; sourceTree = "<group>"; };
@@ -109,6 +114,7 @@
 			files = (
 				597DF37C248D7D7100F93AEF /* SwiftyJSON in Frameworks */,
 				597D63322436A9B900056FD1 /* FilesProvider in Frameworks */,
+				59B98A6224958F6C00FEAAF7 /* OverlayContainer in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -193,6 +199,8 @@
 				598D596F244F8F29005899A7 /* Bool+Int.swift */,
 				598D5975244F979A005899A7 /* ControlCellDelegate.swift */,
 				59B054AA246A5A5700C31CE3 /* UIImageView+PHAsset.swift */,
+				59B98A6A2495A26700FEAAF7 /* UIView+Constraints.swift */,
+				59B98A692495A26700FEAAF7 /* UIViewController+Children.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -241,6 +249,7 @@
 			packageProductDependencies = (
 				597D63312436A9B900056FD1 /* FilesProvider */,
 				597DF37B248D7D7100F93AEF /* SwiftyJSON */,
+				59B98A6124958F6C00FEAAF7 /* OverlayContainer */,
 			);
 			productName = "Meme Vault";
 			productReference = 594ACC4E242088BA00DEFCBF /* Meme Vault.app */;
@@ -273,6 +282,7 @@
 			packageReferences = (
 				597D63302436A9B900056FD1 /* XCRemoteSwiftPackageReference "FileProvider" */,
 				597DF37A248D7D7100F93AEF /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
+				59B98A6024958F6C00FEAAF7 /* XCRemoteSwiftPackageReference "OverlayContainer" */,
 			);
 			productRefGroup = 594ACC4F242088BA00DEFCBF /* Products */;
 			projectDirPath = "";
@@ -313,6 +323,8 @@
 				598D596E244F8055005899A7 /* ConditionTableViewController.swift in Sources */,
 				594ACC6E24208F1B00DEFCBF /* ActionSetCollectionViewController.swift in Sources */,
 				59685A4A2421A63400710539 /* UIAlertController+Fixes.swift in Sources */,
+				59B98A6C2495A26700FEAAF7 /* UIView+Constraints.swift in Sources */,
+				59B98A6B2495A26700FEAAF7 /* UIViewController+Children.swift in Sources */,
 				598962A32421BEE600B3C670 /* ActionSet.swift in Sources */,
 				59090B3D244676D300E2EF5B /* CollectionTableViewController.swift in Sources */,
 				59C7612B249582E300A54004 /* MemeController.swift in Sources */,
@@ -556,6 +568,14 @@
 				minimumVersion = 5.0.0;
 			};
 		};
+		59B98A6024958F6C00FEAAF7 /* XCRemoteSwiftPackageReference "OverlayContainer" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/applidium/OverlayContainer.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.4.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -568,6 +588,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 597DF37A248D7D7100F93AEF /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		59B98A6124958F6C00FEAAF7 /* OverlayContainer */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 59B98A6024958F6C00FEAAF7 /* XCRemoteSwiftPackageReference "OverlayContainer" */;
+			productName = OverlayContainer;
 		};
 /* End XCSwiftPackageProductDependency section */
 
