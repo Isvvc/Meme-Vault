@@ -36,8 +36,6 @@ class MemeViewController: UIViewController {
     var asset: PHAsset?
     var contentRequestID: PHContentEditingInputRequestID?
     
-    var destination: Destination?
-    
     var actionSet: ActionSet? {
         actionController?.actionSets[actionSetIndex]
     }
@@ -176,10 +174,10 @@ class MemeViewController: UIViewController {
                 name != nil {
                 currentActionIndex += 1
                 performCurrentAction()
-                break
+            } else {
+                title = "Name"
+                nameTextField.becomeFirstResponder()
             }
-            title = "Name"
-            nameTextField.becomeFirstResponder()
         
         case .upload:
             title = "Uplading"
@@ -191,7 +189,12 @@ class MemeViewController: UIViewController {
             
         case .destination:
             title = "Destination"
-            overlayController?.moveOverlay(toNotchAt: 2, animated: true)
+            if meme?.destination != nil {
+                currentActionIndex += 1
+                performCurrentAction()
+            } else {
+                overlayController?.moveOverlay(toNotchAt: 2, animated: true)
+            }
         
         default:
             break
@@ -260,9 +263,9 @@ class MemeViewController: UIViewController {
         memeController?.setName(to: name, for: meme, context: CoreDataStack.shared.mainContext)
     }
     
-    func setDestination() {
-        guard let destination = destination,
-            let meme = meme else { return }
+    func setDestination(_ destination: Destination) {
+        guard let meme = meme,
+            let destination = meme.destination else { return }
         memeController?.setDestination(to: destination, for: meme, context: CoreDataStack.shared.mainContext)
     }
     
@@ -360,8 +363,7 @@ extension MemeViewController: OverlayContainerViewControllerDelegate {
 
 extension MemeViewController: DestinationsTableDelegate {
     func choose(destination: Destination) {
-        self.destination = destination
-        setDestination()
+        setDestination(destination)
         overlayController?.moveOverlay(toNotchAt: 1, animated: true)
         
         // Move to the action after the `destination` action
