@@ -264,8 +264,7 @@ class MemeViewController: UIViewController {
     }
     
     func setDestination(_ destination: Destination) {
-        guard let meme = meme,
-            let destination = meme.destination else { return }
+        guard let meme = meme else { return }
         memeController?.setDestination(to: destination, for: meme, context: CoreDataStack.shared.mainContext)
     }
     
