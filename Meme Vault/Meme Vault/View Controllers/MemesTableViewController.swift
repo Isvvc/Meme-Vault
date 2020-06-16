@@ -56,7 +56,7 @@ class MemesTableViewController: UITableViewController {
         let meme = frc.object(at: indexPath)
         
         if let name = meme.name {
-            cell.textLabel?.text = "\(name)\(meme.delete ? " (Trash)" : "")"
+            cell.textLabel?.text = "\(name)\(meme.delete ? " (Trash)" : "")\(meme.uploaded ? " (Uploaded)" : "")"
         } else {
             cell.textLabel?.text = "[Unnamed]"
         }

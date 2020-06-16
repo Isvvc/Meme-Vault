@@ -12,10 +12,11 @@
         <attribute name="delete" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="id" optional="YES" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="uploaded" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <relationship name="destination" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Destination" inverseName="memes" inverseEntity="Destination"/>
     </entity>
     <elements>
         <element name="Destination" positionX="-63" positionY="-18" width="128" height="118"/>
-        <element name="Meme" positionX="-54" positionY="27" width="128" height="118"/>
+        <element name="Meme" positionX="-54" positionY="27" width="128" height="133"/>
     </elements>
 </model>

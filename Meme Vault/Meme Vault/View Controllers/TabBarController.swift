@@ -26,6 +26,7 @@ class TabBarController: UITabBarController {
                     collectionsVC.actionController = actionController
                     collectionsVC.collectionController = collectionController
                     collectionsVC.memeController = memeController
+                    collectionsVC.providerController = providerController
                 } else if let settingsVC = firstVC as? SettingsTableViewController {
                     settingsVC.actionController = actionController
                     settingsVC.providerController = providerController

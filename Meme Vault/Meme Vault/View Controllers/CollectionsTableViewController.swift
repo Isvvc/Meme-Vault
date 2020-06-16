@@ -19,6 +19,7 @@ class CollectionsTableViewController: UITableViewController {
     var actionController: ActionController?
     var collectionController: CollectionController?
     var memeController: MemeController?
+    var providerController: ProviderController?
     var editCollections = false
 
     override func viewDidLoad() {
@@ -103,6 +104,7 @@ class CollectionsTableViewController: UITableViewController {
                 memeVC.collection = collectionController?.collections[indexPath.row]
                 memeVC.actionController = actionController
                 memeVC.memeController = memeController
+                memeVC.providerController = providerController
             }
             
         }

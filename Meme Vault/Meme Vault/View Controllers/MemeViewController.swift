@@ -36,6 +36,8 @@ class MemeViewController: UIViewController {
     var asset: PHAsset?
     var contentRequestID: PHContentEditingInputRequestID?
     
+    var providerController: ProviderController?
+    
     var actionSet: ActionSet? {
         actionController?.actionSets[actionSetIndex]
     }
@@ -182,7 +184,8 @@ class MemeViewController: UIViewController {
         
         case .upload:
             title = "Uplading"
-            print("Uploading... (not really; this is just a placeholder)")
+            guard let meme = meme else { return }
+            providerController?.upload(meme: meme, asset: asset)
         
         case .share:
             title = "Share"
@@ -259,10 +262,11 @@ class MemeViewController: UIViewController {
         }
     }
     
-    func setName() {
+    @discardableResult func setName() -> Bool {
         guard let name = name,
-            let meme = meme else { return }
+            let meme = meme else { return false }
         memeController?.setName(to: name, for: meme, context: CoreDataStack.shared.mainContext)
+        return true
     }
     
     func setDestination(_ destination: Destination) {
@@ -292,7 +296,7 @@ extension MemeViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         
         // Save the name
-        setName()
+        guard setName() else { return true }
         
         // Move to the action after the `name` action
         let nameActionIndex: Int?

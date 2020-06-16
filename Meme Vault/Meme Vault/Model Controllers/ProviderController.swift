@@ -6,7 +6,8 @@
 //  Copyright © 2020 Isaac Lyons. All rights reserved.
 //
 
-import Foundation
+import Photos
+import CoreData
 import FilesProvider
 
 class ProviderController {
@@ -15,11 +16,15 @@ class ProviderController {
     private(set) var host: URL?
     private(set) var credential: URLCredential?
     
+    private var uploadQueue: [String: Meme] = [:]
+    
     init() {
         host = UserDefaults.standard.url(forKey: "host")
         loadCredentials()
         login()
     }
+    
+    //MARK: Credentials
     
     func login(host: URL, username: String, password: String) {
         self.host = host
@@ -56,6 +61,65 @@ class ProviderController {
         webdavProvider = WebDAVFileProvider(baseURL: host, credential: credential)
         webdavProvider?.delegate = self
     }
+    
+    //MARK: Networking
+    
+    private func appendFileName(to path: String, name: String, fileExtension: String) -> String {
+        var output = path
+        
+        if output.last != "/" {
+            output.append("/")
+        }
+        
+        output += "\(name).\(fileExtension)"
+        return output
+    }
+    
+    private func appendFileName(to path: String, name: String, sourceURL: URL) -> String {
+        appendFileName(to: path, name: name, fileExtension: sourceURL.pathExtension.lowercased())
+    }
+    
+    func upload(meme: Meme, asset givenAsset: PHAsset? = nil) {
+        guard !meme.uploaded else { return print("Meme already uploaded!") }
+        
+        guard let name = meme.name,
+            let destinationPath = meme.destination?.path else { return }
+        
+        guard uploadQueue[destinationPath] == nil else { return print("Item already queued for \(destinationPath)") }
+        
+        let asset: PHAsset
+        
+        if let givenAsset = givenAsset {
+            asset = givenAsset
+        } else if let id = meme.id,
+            let fetchedAsset = PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil).firstObject {
+            asset = fetchedAsset
+        } else {
+            return
+        }
+        
+        asset.requestContentEditingInput(with: nil) { (contentEditingInput, info) in
+            guard let sourceURL = contentEditingInput?.fullSizeImageURL else { return }
+            print(sourceURL)
+            let uploadPath = self.appendFileName(to: destinationPath, name: name, sourceURL: sourceURL)
+            print(uploadPath)
+            self.uploadQueue[uploadPath] = meme
+            self.webdavProvider?.copyItem(localFile: sourceURL, to: uploadPath, overwrite: true, completionHandler: nil)
+        }
+    }
+    
+    /// Mark a `Meme` as having completed upload, whether it succeeded or failed.
+    /// - Parameters:
+    ///   - destination: The destination path of the upload.
+    ///   - context: The `NSManagedObjectContext` to use to save the fact that the upload succeeded. **Important**: Leave this `nil` if the upload was not successful.
+    func uploadComplete(destination: String, context: NSManagedObjectContext?) {
+        if let context = context {
+            let meme = uploadQueue[destination]
+            meme?.uploaded = true
+            CoreDataStack.shared.save(context: context)
+        }
+        uploadQueue.removeValue(forKey: destination)
+    }
 }
 
 //MARK: File provider delegate
@@ -65,11 +129,13 @@ extension ProviderController: FileProviderDelegate {
         switch operation {
         case .copy(source: let source, destination: let dest):
             print("\(source) copied to \(dest).")
+            uploadComplete(destination: dest, context: CoreDataStack.shared.mainContext)
         case .remove(path: let path):
             print("\(path) has been deleted.")
         default:
             if let destination = operation.destination {
                 print("\(operation.actionDescription) from \(operation.source) to \(destination) succeed.")
+                uploadComplete(destination: destination, context: CoreDataStack.shared.mainContext)
             } else {
                 print("\(operation.actionDescription) on \(operation.source) succeed.")
             }
@@ -80,11 +146,13 @@ extension ProviderController: FileProviderDelegate {
         switch operation {
         case .copy(source: let source, destination: let dest):
             print("copying \(source) to \(dest) has been failed.")
+            uploadComplete(destination: dest, context: nil)
         case .remove:
             print("file can't be deleted.")
         default:
             if let destination = operation.destination {
                 print("\(operation.actionDescription) from \(operation.source) to \(destination) failed.")
+                uploadComplete(destination: destination, context: nil)
             } else {
                 print("\(operation.actionDescription) on \(operation.source) failed.")
             }
