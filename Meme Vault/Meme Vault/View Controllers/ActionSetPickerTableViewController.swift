@@ -10,6 +10,7 @@ import UIKit
 
 protocol ActionSetPickerDelegate {
     func choose(actionSetAtIndex: Int)
+    func performAction(at index: Int)
 }
 
 class ActionSetPickerTableViewController: UITableViewController {
@@ -22,6 +23,9 @@ class ActionSetPickerTableViewController: UITableViewController {
         super.viewDidLoad()
         
         chosen = actionController?.defaultActionSetIndex ?? 0
+        navigationController?.hidesBarsOnSwipe = true
+        
+        performSegue(withIdentifier: "ActionSet", sender: self)
     }
 
     // MARK: - Table view data source
@@ -41,7 +45,7 @@ class ActionSetPickerTableViewController: UITableViewController {
         if indexPath.row == chosen {
             cell.accessoryType = .checkmark
         } else {
-            cell.accessoryType = .none
+            cell.accessoryType = .disclosureIndicator
         }
 
         return cell
@@ -50,18 +54,30 @@ class ActionSetPickerTableViewController: UITableViewController {
     //MARK: Table view delegate
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        let oldChosen = chosen
-        chosen = indexPath.row
-        
-        delegate?.choose(actionSetAtIndex: indexPath.row)
-        
-        if let oldCell = tableView.cellForRow(at: IndexPath(row: oldChosen, section: 0)) {
-            oldCell.accessoryType = .none
+        if indexPath.row != chosen {
+            let oldChosen = chosen
+            chosen = indexPath.row
+            
+            delegate?.choose(actionSetAtIndex: indexPath.row)
+            
+            if let oldCell = tableView.cellForRow(at: IndexPath(row: oldChosen, section: 0)) {
+                oldCell.accessoryType = .disclosureIndicator
+            }
+            if let newCell = tableView.cellForRow(at: IndexPath(row: chosen, section: 0)) {
+                newCell.accessoryType = .checkmark
+            }
         }
-        if let newCell = tableView.cellForRow(at: IndexPath(row: chosen, section: 0)) {
-            newCell.accessoryType = .checkmark
+        
+        performSegue(withIdentifier: "ActionSet", sender: self)
+    }
+    
+    //MARK: Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let actionsVC = segue.destination as? ActionsTableViewController {
+            actionsVC.actionController = actionController
+            actionsVC.actionSet = actionController?.actionSets[chosen]
+            actionsVC.delegate = delegate
         }
     }
 

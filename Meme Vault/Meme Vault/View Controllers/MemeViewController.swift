@@ -145,7 +145,7 @@ class MemeViewController: UIViewController {
             navLayer.masksToBounds = false
         }
         
-        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
+//        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
     }
     
     @objc private func adjustForKeyboard(notification: Notification) {
@@ -277,7 +277,8 @@ class MemeViewController: UIViewController {
     //MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let actionSetPicker = segue.destination as? ActionSetPickerTableViewController {
+        if let navigationVC = segue.destination as? UINavigationController,
+            let actionSetPicker = navigationVC.viewControllers.first as? ActionSetPickerTableViewController {
             actionSetPicker.actionController = actionController
             actionSetPicker.delegate = self
         }
@@ -330,6 +331,11 @@ extension MemeViewController: ActionSetPickerDelegate {
     func choose(actionSetAtIndex index: Int) {
         actionSetIndex = index
         currentActionIndex = 0
+//        performCurrentAction()
+    }
+    
+    func performAction(at index: Int) {
+        currentActionIndex = index
         performCurrentAction()
     }
 }

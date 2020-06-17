@@ -18,6 +18,7 @@
 		594ACC6A24208A9700DEFCBF /* ActionSetsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594ACC6924208A9700DEFCBF /* ActionSetsTableViewController.swift */; };
 		594ACC6E24208F1B00DEFCBF /* ActionSetCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594ACC6D24208F1B00DEFCBF /* ActionSetCollectionViewController.swift */; };
 		594ACC7124208F5400DEFCBF /* ActionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594ACC7024208F5400DEFCBF /* ActionCollectionViewCell.swift */; };
+		594AD30A249AB35F00EA7138 /* ActionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 594AD309249AB35F00EA7138 /* ActionsTableViewController.swift */; };
 		59685A4A2421A63400710539 /* UIAlertController+Fixes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59685A492421A63400710539 /* UIAlertController+Fixes.swift */; };
 		59685A4C2421AC9600710539 /* AlbumsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59685A4B2421AC9600710539 /* AlbumsTableViewController.swift */; };
 		5978B84424465F7800CACC7A /* ButtonCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5978B84324465F7800CACC7A /* ButtonCollectionReusableView.swift */; };
@@ -71,6 +72,7 @@
 		594ACC6924208A9700DEFCBF /* ActionSetsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSetsTableViewController.swift; sourceTree = "<group>"; };
 		594ACC6D24208F1B00DEFCBF /* ActionSetCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionSetCollectionViewController.swift; sourceTree = "<group>"; };
 		594ACC7024208F5400DEFCBF /* ActionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionCollectionViewCell.swift; sourceTree = "<group>"; };
+		594AD309249AB35F00EA7138 /* ActionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsTableViewController.swift; sourceTree = "<group>"; };
 		59685A492421A63400710539 /* UIAlertController+Fixes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIAlertController+Fixes.swift"; sourceTree = "<group>"; };
 		59685A4B2421AC9600710539 /* AlbumsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumsTableViewController.swift; sourceTree = "<group>"; };
 		5978B84324465F7800CACC7A /* ButtonCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCollectionReusableView.swift; sourceTree = "<group>"; };
@@ -172,6 +174,7 @@
 				598D596D244F8055005899A7 /* ConditionTableViewController.swift */,
 				59B054A8246A589500C31CE3 /* MemeViewController.swift */,
 				59F43D2924945C8D0078C7AC /* ActionSetPickerTableViewController.swift */,
+				594AD309249AB35F00EA7138 /* ActionsTableViewController.swift */,
 				59B98A5E2495899600FEAAF7 /* MemesTableViewController.swift */,
 			);
 			path = "View Controllers";
@@ -338,6 +341,7 @@
 				598D5974244F952B005899A7 /* NotTableViewCell.swift in Sources */,
 				597D6327243697EE00056FD1 /* SettingsTableViewController.swift in Sources */,
 				59322142246B5DCD00D2D2DF /* Cache.swift in Sources */,
+				594AD30A249AB35F00EA7138 /* ActionsTableViewController.swift in Sources */,
 				59D3AF8A24466EF500B066BA /* AlbumCollection.swift in Sources */,
 				597D63252436856D00056FD1 /* TextFieldTableViewCell.swift in Sources */,
 				594ACC6A24208A9700DEFCBF /* ActionSetsTableViewController.swift in Sources */,
