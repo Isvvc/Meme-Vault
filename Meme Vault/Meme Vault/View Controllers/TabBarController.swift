@@ -14,6 +14,7 @@ class TabBarController: UITabBarController {
     let providerController = ProviderController()
     let destinationController = DestinationController()
     let collectionController = CollectionController()
+    let memeController = MemeController()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,12 +23,17 @@ class TabBarController: UITabBarController {
             if let navigationVC = vc as? UINavigationController,
                 let firstVC = navigationVC.viewControllers.first {
                 if let collectionsVC = firstVC as? CollectionsTableViewController {
+                    collectionsVC.actionController = actionController
                     collectionsVC.collectionController = collectionController
+                    collectionsVC.memeController = memeController
+                    collectionsVC.providerController = providerController
                 } else if let settingsVC = firstVC as? SettingsTableViewController {
                     settingsVC.actionController = actionController
                     settingsVC.providerController = providerController
                     settingsVC.destinationController = destinationController
                     settingsVC.collectionController = collectionController
+                } else if let memesVC = firstVC as? MemesTableViewController {
+                    memesVC.memeController = memeController
                 }
             }
         }

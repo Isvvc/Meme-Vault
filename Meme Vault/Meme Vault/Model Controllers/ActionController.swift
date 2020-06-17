@@ -40,11 +40,18 @@ class ActionController {
         }
     }
     
+    //MARK: CRUD
+    
     @discardableResult func createActionSet(name: String = "New Action Set", actions: [ActionSet.Action] = []) -> ActionSet {
         let action = ActionSet(name: name, actions: actions)
         actionSets.append(action)
         saveToPersistentStore()
         return action
+    }
+    
+    func deleteActionSet(at index: Int) {
+        actionSets.remove(at: index)
+        saveToPersistentStore()
     }
     
     func setDefault(actionSet: ActionSet) {
