@@ -20,6 +20,8 @@ class ActionsTableViewController: UITableViewController {
         
         title = actionSet?.name
         navigationController?.setNavigationBarHidden(true, animated: true)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(actionChanged(_:)), name: .actionChanged, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -49,9 +51,18 @@ class ActionsTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: IndexPath(row: currentActionIndex, section: 0), animated: true)
-        
         currentActionIndex = indexPath.row
         delegate?.performAction(at: currentActionIndex)
+    }
+    
+    //MARK: Private
+    
+    @objc private func actionChanged(_ notification: Notification) {
+        guard let index = notification.userInfo?["index"] as? Int else { return }
+        
+        tableView.deselectRow(at: IndexPath(row: currentActionIndex, section: 0), animated: true)
+        currentActionIndex = index
+        tableView.selectRow(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .bottom)
     }
 
 }

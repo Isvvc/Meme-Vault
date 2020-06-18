@@ -169,6 +169,7 @@ class MemeViewController: UIViewController {
     
     func performCurrentAction() {
         guard let action = currentAction else { return }
+        NotificationCenter.default.post(name: .actionChanged, object: self, userInfo: ["index": currentActionIndex])
         
         switch action {
         case .name(skipIfDone: let skipIfDone, preset: _):
@@ -252,6 +253,9 @@ class MemeViewController: UIViewController {
                         } catch {
                             NSLog("\(error)")
                         }
+                        
+                        self.currentActionIndex += 1
+                        self.performCurrentAction()
                     }
                     
                     self.present(activityController, animated: true, completion: nil)
@@ -289,10 +293,6 @@ class MemeViewController: UIViewController {
 //MARK: Text field delegate
 
 extension MemeViewController: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
-    }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
@@ -331,7 +331,6 @@ extension MemeViewController: ActionSetPickerDelegate {
     func choose(actionSetAtIndex index: Int) {
         actionSetIndex = index
         currentActionIndex = 0
-//        performCurrentAction()
     }
     
     func performAction(at index: Int) {
