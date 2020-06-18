@@ -374,7 +374,7 @@ extension MemeViewController: OverlayContainerViewControllerDelegate {
 extension MemeViewController: DestinationsTableDelegate {
     func choose(destination: Destination) {
         setDestination(destination)
-        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
+        overlayController?.moveOverlay(toNotchAt: 0, animated: true)
         
         // Move to the action after the `destination` action
         if let destinationActionIndex = actionSet?.actions.firstIndex(of: .destination) {
