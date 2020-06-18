@@ -10,4 +10,5 @@ import Foundation
 
 extension Notification.Name {
     static var actionChanged = Notification.Name("actionChanged")
+    static var uploadComplete = Notification.Name("uploadComplete")
 }

@@ -22,6 +22,7 @@ class ActionsTableViewController: UITableViewController {
         navigationController?.setNavigationBarHidden(true, animated: true)
         
         NotificationCenter.default.addObserver(self, selector: #selector(actionChanged(_:)), name: .actionChanged, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(uploadComplete(_:)), name: .uploadComplete, object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -63,6 +64,19 @@ class ActionsTableViewController: UITableViewController {
         tableView.deselectRow(at: IndexPath(row: currentActionIndex, section: 0), animated: true)
         currentActionIndex = index
         tableView.selectRow(at: IndexPath(row: index, section: 0), animated: true, scrollPosition: .bottom)
+    }
+    
+    @objc private func uploadComplete(_ notification: Notification) {
+        guard let success = notification.userInfo?["success"] as? Bool,
+            let index = actionSet?.actions.firstIndex(of: .upload) else { return }
+        
+        let cell = tableView.cellForRow(at: IndexPath(row: index, section: 0))
+        
+        if success {
+            cell?.textLabel?.textColor = .systemGreen
+        } else {
+            cell?.textLabel?.textColor = .systemRed
+        }
     }
 
 }

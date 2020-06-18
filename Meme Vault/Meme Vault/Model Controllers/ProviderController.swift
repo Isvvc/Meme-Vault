@@ -80,7 +80,10 @@ class ProviderController {
     }
     
     func upload(meme: Meme, asset givenAsset: PHAsset? = nil) {
-        guard !meme.uploaded else { return print("Meme already uploaded!") }
+        guard !meme.uploaded else {
+            NotificationCenter.default.post(name: .uploadComplete, object: self, userInfo: ["success": true])
+            return print("Meme already uploaded!")
+        }
         
         guard let name = meme.name,
             let destinationPath = meme.destination?.path else { return }
@@ -113,11 +116,20 @@ class ProviderController {
     ///   - destination: The destination path of the upload.
     ///   - context: The `NSManagedObjectContext` to use to save the fact that the upload succeeded. **Important**: Leave this `nil` if the upload was not successful.
     func uploadComplete(destination: String, context: NSManagedObjectContext?) {
+        var userInfo: [AnyHashable: Any] = [:]
+        
         if let context = context {
+            // Upload was successful
             let meme = uploadQueue[destination]
             meme?.uploaded = true
             CoreDataStack.shared.save(context: context)
+            
+            userInfo["success"] = true
+        } else {
+            userInfo["success"] = false
         }
+        
+        NotificationCenter.default.post(name: .uploadComplete, object: self, userInfo: userInfo)
         uploadQueue.removeValue(forKey: destination)
     }
 }
