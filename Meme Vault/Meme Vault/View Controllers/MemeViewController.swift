@@ -27,6 +27,7 @@ class MemeViewController: UIViewController {
     var actionController: ActionController?
     var actionSetIndex: Int = 0
     var currentActionIndex: Int = 0
+    var firstAction = true
     
     var collectionController: CollectionController?
     var collection: AlbumCollection?
@@ -180,7 +181,9 @@ class MemeViewController: UIViewController {
             } else {
                 title = "Name"
                 // For some reason this causes the view controller to lag out if this is the first action called
-//                nameTextField.becomeFirstResponder()
+                if !firstAction {
+                    nameTextField.becomeFirstResponder()
+                }
             }
         
         case .upload:
@@ -205,6 +208,8 @@ class MemeViewController: UIViewController {
             guard let meme = meme else { return }
             memeController?.flagForDeletion(meme: meme, context: CoreDataStack.shared.mainContext)
         }
+        
+        firstAction = false
     }
     
     
