@@ -89,7 +89,7 @@ class MemeViewController: UIViewController {
         
         // Load the image
         collectionController.beginFetchingImages(from: collection, context: CoreDataStack.shared.mainContext)
-        loadNextImage()
+        loadNextImage(performActionWhenDone: false)
         
         // Add Trash button
         let trashImage = UIImage(systemName: "trash")
@@ -158,10 +158,7 @@ class MemeViewController: UIViewController {
         }
     }
     
-    func loadNextImage() {
-        currentActionIndex = 0
-        nameTextField.text = nil
-        
+    func loadNextImage(performActionWhenDone: Bool = true) {
         DispatchQueue.global(qos: .userInitiated).async {
             // Doing this in a background thread because the fetchFirstImage function can take a while
             guard let photo = self.collectionController?.fetchNextImage() else {
@@ -178,8 +175,14 @@ class MemeViewController: UIViewController {
                 if let name = self.meme?.name {
                     self.nameTextField.text = name
                 }
+
+                self.currentActionIndex = 0
+                self.nameTextField.text = nil
+                self.firstAction = true
                 
-                self.performCurrentAction()
+                if performActionWhenDone {
+                    self.performCurrentAction()
+                }
             }
         }
     }
@@ -198,10 +201,7 @@ class MemeViewController: UIViewController {
                 performCurrentAction()
             } else {
                 title = "Name"
-                // For some reason this causes the view controller to lag out if this is the first action called
-                if !firstAction {
-                    nameTextField.becomeFirstResponder()
-                }
+                nameTextField.becomeFirstResponder()
             }
         
         case .upload:
@@ -223,7 +223,9 @@ class MemeViewController: UIViewController {
             }
         
         case .delete:
-            trash()
+            if !firstAction {
+                trash()
+            }
         }
         
         firstAction = false

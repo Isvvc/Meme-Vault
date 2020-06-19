@@ -23,10 +23,6 @@ class ActionsTableViewController: UITableViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(actionChanged(_:)), name: .actionChanged, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(uploadComplete(_:)), name: .uploadComplete, object: nil)
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
         
         tableView.selectRow(at: IndexPath(row: currentActionIndex, section: 0), animated: true, scrollPosition: .none)
         delegate?.performAction(at: currentActionIndex)
