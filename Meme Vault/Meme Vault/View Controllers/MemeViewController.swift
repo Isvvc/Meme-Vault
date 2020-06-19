@@ -80,29 +80,21 @@ class MemeViewController: UIViewController {
     }
     
     private func setUpViews() {
-        // Load the image
-        DispatchQueue.global(qos: .userInitiated).async {
-            // Doing this in a background thread because the fetchFirstImage function can take a while
-            guard let collection = self.collection,
-                let photo = self.collectionController?.fetchFirstImage(from: collection, context: CoreDataStack.shared.mainContext) else {
-                    DispatchQueue.main.async {
-                        self.navigationController?.popViewController(animated: true)
-                    }
-                    return
-            }
-            
-            self.asset = photo
-            self.meme = self.memeController?.fetchOrCreateMeme(for: photo, context: CoreDataStack.shared.mainContext)
-            
-            DispatchQueue.main.async {
-                self.imageView.fetchImage(asset: photo, contentMode: .aspectFit)
-                if let name = self.meme?.name {
-                    self.nameTextField.text = name
-                }
-                
-                self.performCurrentAction()
+        guard let collectionController = collectionController,
+            let collection = collection else {
+            return DispatchQueue.main.async {
+                self.navigationController?.popViewController(animated: true)
             }
         }
+        
+        // Load the image
+        collectionController.beginFetchingImages(from: collection, context: CoreDataStack.shared.mainContext)
+        loadNextImage()
+        
+        // Add Trash button
+        let trashImage = UIImage(systemName: "trash")
+        let trashButton = UIBarButtonItem(image: trashImage, style: .plain, target: self, action: #selector(trash))
+        navigationItem.rightBarButtonItem = trashButton
         
         // Adjust size based on keyboard
         let notificationCenter = NotificationCenter.default
@@ -166,6 +158,32 @@ class MemeViewController: UIViewController {
         }
     }
     
+    func loadNextImage() {
+        currentActionIndex = 0
+        nameTextField.text = nil
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            // Doing this in a background thread because the fetchFirstImage function can take a while
+            guard let photo = self.collectionController?.fetchNextImage() else {
+                    return DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+            }
+            
+            self.asset = photo
+            self.meme = self.memeController?.fetchOrCreateMeme(for: photo, context: CoreDataStack.shared.mainContext)
+            
+            DispatchQueue.main.async {
+                self.imageView.fetchImage(asset: photo, contentMode: .aspectFit)
+                if let name = self.meme?.name {
+                    self.nameTextField.text = name
+                }
+                
+                self.performCurrentAction()
+            }
+        }
+    }
+    
     //MARK: Actions
     
     func performCurrentAction() {
@@ -205,13 +223,11 @@ class MemeViewController: UIViewController {
             }
         
         case .delete:
-            guard let meme = meme else { return }
-            memeController?.flagForDeletion(meme: meme, context: CoreDataStack.shared.mainContext)
+            trash()
         }
         
         firstAction = false
     }
-    
     
     /// Returns the name the current image's file should have based on the `textField` and original file extension.
     /// - Parameter contentEditingInput: The content editing input from the asset's `requestContentEditingInput` call.
@@ -281,6 +297,14 @@ class MemeViewController: UIViewController {
     func setDestination(_ destination: Destination) {
         guard let meme = meme else { return }
         memeController?.setDestination(to: destination, for: meme, context: CoreDataStack.shared.mainContext)
+    }
+    
+    @objc func trash() {
+        guard let meme = meme else { return }
+        memeController?.flagForDeletion(meme: meme, context: CoreDataStack.shared.mainContext)
+        
+        // Move to the next image
+        loadNextImage()
     }
     
     //MARK: Navigation

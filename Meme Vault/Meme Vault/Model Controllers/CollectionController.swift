@@ -12,7 +12,12 @@ import CoreData
 class CollectionController {
     
     var collections: [AlbumCollection]
-    var cache = Cache<String, Set<PHAsset>>()
+    
+    private var collectionCache = Cache<String, Set<PHAsset>>()
+    private var allAssetsCache: PHFetchResult<PHAsset>? = nil
+    private var currentAssetIndex: Int = 0
+    private var allMemesCache: [Meme] = []
+    private var currentCollection: AlbumCollection?
     
     // Load a test collection based on albums I have on my phone.
     // This won't work on any other devices
@@ -127,41 +132,60 @@ class CollectionController {
     
     //MARK: Fetching
     
+    func fetchImage() -> PHAsset? {
+        guard let collection = currentCollection,
+            let allAssetsCache = allAssetsCache else { return nil }
+        
+        while currentAssetIndex < allAssetsCache.count {
+            let asset = allAssetsCache.object(at: currentAssetIndex)
+            
+            if collection.contains(asset: asset, cache: collectionCache) {
+                let meme = allMemesCache.first(where: { $0.id == asset.localIdentifier })
+                
+                // If there is an existing meme object for this asset,
+                // skip it if it's marked for delete.
+                // If there is not, return it
+                if !(meme?.delete ?? false) {
+                    return asset
+                }
+            }
+            
+            currentAssetIndex += 1
+        }
+        
+        return nil
+    }
+    
+    func beginFetchingImages(from collection: AlbumCollection, context: NSManagedObjectContext) {
+        collectionCache.clear()
+        
+        currentCollection = collection
+        
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: collection.oldestFirst)]
+        allAssetsCache = PHAsset.fetchAssets(with: fetchOptions)
+        currentAssetIndex = 0
+        
+        do {
+            let fetchRequest: NSFetchRequest<Meme> = Meme.fetchRequest()
+            allMemesCache = try context.fetch(fetchRequest)
+        } catch {
+            NSLog("Error fetching Meme objects: \(error)")
+        }
+    }
+    
     /// Fetches the first image in the user's photos that is in a collection.
     /// - Parameter collection: The `albumCollection` to find an image from.
     /// - Returns: a `PHAsset` of the first (oldest or newest depending on the collection's `oldestFirst` property) that is in a collection. If no images are in the collection, returns `nil`.
     func fetchFirstImage(from collection: AlbumCollection, context: NSManagedObjectContext) -> PHAsset? {
-        let fetchOptions = PHFetchOptions()
-        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: collection.oldestFirst)]
-        let allAssets = PHAsset.fetchAssets(with: fetchOptions)
-        
-        do {
-            let fetchRequest: NSFetchRequest<Meme> = Meme.fetchRequest()
-            let memes = try context.fetch(fetchRequest)
-            
-            var i = 0
-            while i < allAssets.count {
-                let asset = allAssets.object(at: i)
-                if collection.contains(asset: asset, cache: cache) {
-                    let meme = memes.first(where: { $0.id == asset.localIdentifier })
-                    
-                    // If there is an existing meme object for this asset,
-                    // skip it if it's marked for delete.
-                    // If there is not, return it
-                    if !(meme?.delete ?? false) {
-                        cache.clear()
-                        return asset
-                    }
-                }
-                
-                i += 1
-            }
-            
-            cache.clear()
-        } catch {
-            NSLog("Error fetching Meme objects: \(error)")
-        }
-        return nil
+        beginFetchingImages(from: collection, context: context)
+        return fetchNextImage()
+    }
+    
+    func fetchNextImage() -> PHAsset? {
+        let asset = fetchImage()
+        currentAssetIndex += 1
+        return asset
     }
     
     //MARK: Persistent storage
