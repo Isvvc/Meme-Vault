@@ -17,6 +17,7 @@ class ProviderController {
     private(set) var credential: URLCredential?
     
     private var uploadQueue: [String: Meme] = [:]
+    private var contentRequestIDs: [PHAsset: PHContentEditingInputRequestID] = [:]
     
     init() {
         host = UserDefaults.standard.url(forKey: "host")
@@ -101,13 +102,18 @@ class ProviderController {
             return
         }
         
-        asset.requestContentEditingInput(with: nil) { (contentEditingInput, info) in
+        contentRequestIDs[asset] = asset.requestContentEditingInput(with: nil) { contentEditingInput, info in
             guard let sourceURL = contentEditingInput?.fullSizeImageURL else { return }
             print(sourceURL)
             let uploadPath = self.appendFileName(to: destinationPath, name: name, sourceURL: sourceURL)
             print(uploadPath)
             self.uploadQueue[uploadPath] = meme
             self.webdavProvider?.copyItem(localFile: sourceURL, to: uploadPath, overwrite: true, completionHandler: nil)
+            
+            // Cancel the content editing request since we don't actually want to edit the image.
+            if let contentRequestID = self.contentRequestIDs[asset] {
+                asset.cancelContentEditingInputRequest(contentRequestID)
+            }
         }
     }
     
