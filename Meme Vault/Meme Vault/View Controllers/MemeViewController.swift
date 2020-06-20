@@ -35,7 +35,6 @@ class MemeViewController: UIViewController {
     var memeController: MemeController?
     var meme: Meme?
     var asset: PHAsset?
-    var contentRequestID: PHContentEditingInputRequestID?
     
     var providerController: ProviderController?
     
@@ -64,14 +63,6 @@ class MemeViewController: UIViewController {
         }
         
         setUpViews()
-    }
-    
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        if let contentRequestID = contentRequestID {
-            asset?.cancelContentEditingInputRequest(contentRequestID)
-        }
     }
     
     override func viewSafeAreaInsetsDidChange() {
@@ -232,12 +223,12 @@ class MemeViewController: UIViewController {
     }
     
     /// Returns the name the current image's file should have based on the `textField` and original file extension.
-    /// - Parameter contentEditingInput: The content editing input from the asset's `requestContentEditingInput` call.
+    /// - Parameter dataUTI: the dataUTI String from the asset's `requestImageDataAndOrientation` call.
     /// - Returns: the name inputted with the file extension if the name in the text field is not empty, otherwise `nil`.
-    func fileName(contentEditingInput: PHContentEditingInput) -> String? {
+    func fileName(dataUTI: String) -> String? {
         guard let name = name,
-            let url = contentEditingInput.fullSizeImageURL else { return nil }
-        return "\(name).\(url.pathExtension.lowercased())"
+            let typeURL = URL(string: dataUTI) else { return nil }
+        return "\(name).\(typeURL.pathExtension)"
     }
     
     
@@ -249,19 +240,23 @@ class MemeViewController: UIViewController {
         // That feels like it'd just make things too complicated,
         // so I'm doing it all here the in the view controller.
         
+        guard let asset = asset else { return }
+        
         let fileManager = FileManager.default
         
-        contentRequestID = asset?.requestContentEditingInput(with: nil) { contentEditingInput, _ in
-            guard let contentEditingInput = contentEditingInput,
-                let url = contentEditingInput.fullSizeImageURL,
-                let fileName = self.fileName(contentEditingInput: contentEditingInput),
+        let options = PHImageRequestOptions()
+        options.version = .current
+        
+        PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { imageData, dataUTI, _, _ in
+            guard let dataUTI = dataUTI,
+                let imageData = imageData,
+                let fileName = self.fileName(dataUTI: dataUTI),
                 let documents = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
             
             do {
                 // Save a copy to the Documents directory
                 let filePath = documents.appendingPathComponent(fileName)
-                let data = try Data(contentsOf: url)
-                try data.write(to: filePath)
+                try imageData.write(to: filePath)
                 print("Saved copy of file.")
                 
                 // Share the copy in the Share Sheet

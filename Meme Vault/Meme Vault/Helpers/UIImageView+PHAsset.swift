@@ -23,14 +23,9 @@ extension UIImageView {
         let options = PHImageRequestOptions()
         options.version = .current
         
-        PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { imageData, dataUTI, orientation, info in
+        PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { imageData, dataUTI, _, _ in
             guard let imageData = imageData else { return }
             self.image = UIImage(data: imageData)
-
-            if let dataUTI = dataUTI,
-                let typeURL = URL(string: dataUTI) {
-                print(typeURL.pathExtension)
-            }
         }
     }
 }
