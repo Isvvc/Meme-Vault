@@ -49,6 +49,7 @@ class NameTableViewController: UITableViewController {
             textField?.delegate = self
             textField?.text = name
             textField?.becomeFirstResponder()
+            textField?.clearButtonMode = .whileEditing
         }
 
         return cell
