@@ -30,8 +30,22 @@ class AlbumCollection: NSObject, Codable {
     
     //MARK: CRUD
     
-    @discardableResult func addCondition(conjunction: Condition.Conjunction? = .and, not: Bool = false, id: String? = nil) -> Condition {
-        let condition = Condition(conjunction: conjunction, not: not, id: id)
+    @discardableResult func addCondition(conjunction: Condition.Conjunction? = .and, not: Bool = false, id: String? = nil) -> Condition? {
+        
+        // There must be an album ID or else it'll be seen as an open parenthesis
+        let albumID: String
+        if let id = id {
+            albumID = id
+        } else {
+            // If an ID isn't given, fetch the first album alphabetically
+            let options = PHFetchOptions()
+            options.fetchLimit = 1
+            let fetchResults = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: options)
+            guard let firstID = fetchResults.firstObject?.localIdentifier else { return nil }
+            albumID = firstID
+        }
+        
+        let condition = Condition(conjunction: conjunction, not: not, id: albumID)
         conditions.append(condition)
         return condition
     }

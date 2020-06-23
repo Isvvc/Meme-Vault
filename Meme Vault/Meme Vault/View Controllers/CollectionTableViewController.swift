@@ -182,7 +182,7 @@ class CollectionTableViewController: UITableViewController {
         
         let conditionAction = UIAlertAction(title: "Condition", style: .default) { _ in
             DispatchQueue.main.async {
-                collectionController.addCondition(to: collection)
+                guard collectionController.addCondition(to: collection) != nil else { return }
                 self.newConditionIndex = collection.conditions.count - 1
                 self.tableView.insertRows(at: [IndexPath(row: collection.conditions.count - 1, section: 1)], with: .automatic)
                 self.performSegue(withIdentifier: "Condition", sender: self)
@@ -272,7 +272,6 @@ class CollectionTableViewController: UITableViewController {
                 conditionVC.conditionIndex = indexPath.row
             } else if let newConditionIndex = newConditionIndex {
                 conditionVC.conditionIndex = newConditionIndex
-                conditionVC.newCondition = true
             }
         }
     }

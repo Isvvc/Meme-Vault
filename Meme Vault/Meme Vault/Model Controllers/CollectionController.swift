@@ -118,8 +118,8 @@ class CollectionController {
         saveToPersistentStore()
     }
     
-    @discardableResult func addCondition(to collection: AlbumCollection) -> Condition {
-        let collection = collection.addCondition()
+    @discardableResult func addCondition(to collection: AlbumCollection) -> Condition? {
+        guard let collection = collection.addCondition() else { return nil }
         saveToPersistentStore()
         return collection
     }

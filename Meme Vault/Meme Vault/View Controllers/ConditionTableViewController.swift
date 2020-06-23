@@ -17,7 +17,6 @@ class ConditionTableViewController: UITableViewController {
     
     var collection: AlbumCollection?
     var conditionIndex: Int?
-    var newCondition: Bool = false
     var delegate: ConditionTableDelegate?
 
     override func viewDidLoad() {
@@ -42,7 +41,7 @@ class ConditionTableViewController: UITableViewController {
         let condition = collection.conditions[conditionIndex]
         
         return 1
-            + (condition.id != nil || newCondition).int
+            + (condition.id != nil).int
             + (!collection.conditionIsFirst(index: conditionIndex)).int
     }
 
@@ -117,7 +116,8 @@ extension ConditionTableViewController: AlbumsTableDelegate {
         condition.id = album.localIdentifier
         print(album.localIdentifier)
         navigationController?.popViewController(animated: true)
-        tableView.reloadRows(at: [IndexPath(row: 2 - (condition.conjunction == nil).int, section: 0)], with: .none)
+        let isFirst = collection?.conditionIsFirst(index: conditionIndex) ?? false
+        tableView.reloadRows(at: [IndexPath(row: 2 - isFirst.int, section: 0)], with: .none)
         delegate?.update(condition)
     }
 }
