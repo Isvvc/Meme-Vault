@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 protocol ActionSetViewControllerDelegate {
     func actionChanged(actionSet: ActionSet?)
@@ -19,6 +20,7 @@ class ActionSetCollectionViewController: UICollectionViewController {
     var actionController: ActionController?
     var actionSet: ActionSet?
     var delegate: ActionSetViewControllerDelegate?
+    var activeActionIndex: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -68,11 +70,18 @@ class ActionSetCollectionViewController: UICollectionViewController {
         delegate?.actionChanged(actionSet: actionSet)
     }
     
+    @objc private func chooseAlbum(sender: UIControl) {
+        activeActionIndex = sender.tag
+        performSegue(withIdentifier: "Albums", sender: self)
+    }
+    
     private func updateTags(afterIndex: Int) {
         let totalItems = collectionView.numberOfItems(inSection: 0)
         for index in afterIndex..<totalItems {
             guard let cell = collectionView.cellForItem(at: IndexPath(item: index, section: 0)) as? ActionCollectionViewCell else { continue }
             cell.removeButton.tag = index
+            cell.toggleSwitch.tag = index
+            cell.actionButton.tag = index
         }
     }
 
@@ -93,6 +102,8 @@ class ActionSetCollectionViewController: UICollectionViewController {
         
         cell.action = action
         cell.toggleSwitch.tag = indexPath.row
+        cell.actionButton.tag = indexPath.row
+        cell.actionButton.addTarget(self, action: #selector(chooseAlbum(sender:)), for: .touchUpInside)
         cell.delegate = self
     
         return cell
@@ -156,6 +167,8 @@ class ActionSetCollectionViewController: UICollectionViewController {
         if let nameVC = segue.destination as? NameTableViewController {
             nameVC.delegate = self
             nameVC.name = actionSet?.name
+        } else if let albumsVC = segue.destination as? AlbumsTableViewController {
+            albumsVC.delegate = self
         }
     }
 
@@ -169,10 +182,11 @@ extension ActionSetCollectionViewController: UICollectionViewDelegateFlowLayout 
         
         let height: CGFloat
         switch action {
-        case .name(skipIfDone: _, preset: _):
+        case .name, .addToAlbum, .removeFromAlbum:
             height = 96
         default:
-            height = 64
+            //height = 64
+            height = 96
         }
         return CGSize(width: UIScreen.main.bounds.width - (2 * 20), height: height)
     }
@@ -201,5 +215,32 @@ extension ActionSetCollectionViewController: NameTableDelegate {
     func setName(_ name: String) {
         actionSet?.name = name
         delegate?.actionChanged(actionSet: actionSet)
+    }
+}
+
+extension ActionSetCollectionViewController: AlbumsTableDelegate {
+    func selectAlbum(_ album: PHAssetCollection) {
+        guard let actionSet = actionSet,
+            let activeActionIndex = activeActionIndex else { return }
+        
+        let action: ActionSet.Action
+        switch actionSet.actions[activeActionIndex] {
+        case .addToAlbum:
+            action = .addToAlbum(id: album.localIdentifier)
+        case .removeFromAlbum:
+            action = .removeFromAlbum(id: album.localIdentifier)
+        default:
+            return
+        }
+        
+        actionSet.actions[activeActionIndex] = action
+        actionController?.saveToPersistentStore()
+        
+        let cell = collectionView.cellForItem(at: IndexPath(item: activeActionIndex, section: 0)) as? ActionCollectionViewCell
+//        cell?.switchLabel.text = album.localizedTitle
+        cell?.action = action
+        cell?.layoutSubviews()
+        
+        navigationController?.popViewController(animated: true)
     }
 }

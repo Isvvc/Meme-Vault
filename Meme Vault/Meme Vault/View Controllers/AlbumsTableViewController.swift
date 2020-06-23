@@ -15,7 +15,6 @@ protocol AlbumsTableDelegate {
 
 class AlbumsTableViewController: UITableViewController {
     
-    var actionController: ActionController?
     var delegate: AlbumsTableDelegate?
     
     var userCollections: PHFetchResult<PHCollection>?

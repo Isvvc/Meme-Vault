@@ -188,6 +188,26 @@ class CollectionController {
         return asset
     }
     
+    //MARK: Asset collections
+    
+    func add(asset: PHAsset, toAssetCollectionWithID assetCollectionID: String) {
+        guard let collection = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [assetCollectionID], options: nil).firstObject else { return }
+        
+        PHPhotoLibrary.shared().performChanges({
+            let request = PHAssetCollectionChangeRequest(for: collection)
+            request?.addAssets([asset] as NSFastEnumeration)
+        })
+    }
+    
+    func remove(asset: PHAsset, fromAssetCollectionWithID assetCollectionID: String) {
+        guard let collection = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [assetCollectionID], options: nil).firstObject else { return }
+        
+        PHPhotoLibrary.shared().performChanges({
+            let request = PHAssetCollectionChangeRequest(for: collection)
+            request?.removeAssets([asset] as NSFastEnumeration)
+        })
+    }
+    
     //MARK: Persistent storage
     
     private var persistentFileURL: URL? {

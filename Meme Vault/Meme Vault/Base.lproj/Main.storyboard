@@ -806,6 +806,10 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XwY-EJ-9Zk">
+                                            <rect key="frame" x="259" y="62" width="99" height="30"/>
+                                            <state key="normal" title="Choose album"/>
+                                        </button>
                                     </subviews>
                                     <constraints>
                                         <constraint firstItem="kD3-pX-hVc" firstAttribute="top" secondItem="jgq-SU-I04" secondAttribute="topMargin" constant="8" id="3N9-VK-fOJ"/>
@@ -815,13 +819,17 @@
                                         <constraint firstItem="kD3-pX-hVc" firstAttribute="leading" secondItem="jgq-SU-I04" secondAttribute="leadingMargin" constant="8" id="HvQ-vM-2GA"/>
                                         <constraint firstItem="oQd-Ym-OLy" firstAttribute="top" secondItem="jgq-SU-I04" secondAttribute="topMargin" id="PQE-Y6-THO"/>
                                         <constraint firstItem="oQd-Ym-OLy" firstAttribute="trailing" secondItem="jgq-SU-I04" secondAttribute="trailingMargin" id="QGy-E1-bIS"/>
+                                        <constraint firstItem="XwY-EJ-9Zk" firstAttribute="trailing" secondItem="jgq-SU-I04" secondAttribute="trailingMargin" constant="-8" id="Sp7-TL-4bi"/>
+                                        <constraint firstItem="XwY-EJ-9Zk" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="yrn-Wy-x0S" secondAttribute="trailing" constant="8" id="b5F-sd-TWD"/>
                                         <constraint firstItem="oQd-Ym-OLy" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="kD3-pX-hVc" secondAttribute="trailing" constant="8" id="d1P-iN-qtl"/>
+                                        <constraint firstItem="XwY-EJ-9Zk" firstAttribute="bottom" secondItem="jgq-SU-I04" secondAttribute="bottomMargin" id="g3r-ca-Ioa"/>
                                         <constraint firstItem="yrn-Wy-x0S" firstAttribute="centerY" secondItem="bTc-uQ-2Kp" secondAttribute="centerY" id="tXT-gG-rfb"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="bTc-uQ-2Kp" secondAttribute="trailing" id="xsL-PX-NaV"/>
                                     </constraints>
                                 </collectionViewCellContentView>
                                 <size key="customSize" width="374" height="100"/>
                                 <connections>
+                                    <outlet property="actionButton" destination="XwY-EJ-9Zk" id="suc-w1-q2t"/>
                                     <outlet property="removeButton" destination="oQd-Ym-OLy" id="h7s-yW-UfN"/>
                                     <outlet property="switchLabel" destination="yrn-Wy-x0S" id="lIp-Cb-ssh"/>
                                     <outlet property="textLabel" destination="kD3-pX-hVc" id="yXh-bR-wlB"/>
@@ -863,6 +871,9 @@
                             </connections>
                         </barButtonItem>
                     </navigationItem>
+                    <connections>
+                        <segue destination="y2v-TK-weF" kind="show" identifier="Albums" id="qe9-tH-RZP"/>
+                    </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ykM-Bd-lnw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -936,7 +947,7 @@
             <objects>
                 <tableViewController id="y2v-TK-weF" customClass="AlbumsTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="izp-q6-lqb">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
@@ -1084,6 +1095,7 @@
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="vWX-eg-jEl"/>
+        <segue reference="qe9-tH-RZP"/>
         <segue reference="WnB-5s-WJs"/>
         <segue reference="iD9-A6-9pT"/>
         <segue reference="EXE-T9-dtO"/>

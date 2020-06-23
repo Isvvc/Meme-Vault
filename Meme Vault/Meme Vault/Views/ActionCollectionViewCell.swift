@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Photos
 
 protocol ActionCellDelegate {
     func switchToggle(sender: UISwitch)
@@ -14,17 +15,20 @@ protocol ActionCellDelegate {
 
 class ActionCollectionViewCell: UICollectionViewCell {
     
+    //MARK: Outlets
+    
     @IBOutlet weak var textLabel: UILabel!
     @IBOutlet weak var removeButton: UIButton!
     @IBOutlet weak var switchLabel: UILabel!
     @IBOutlet weak var toggleSwitch: UISwitch!
+    @IBOutlet weak var actionButton: UIButton!
+    
+    //MARK: Properties
     
     var delegate: ActionCellDelegate?
     var action: ActionSet.Action?
     
-    override func awakeFromNib() {
-        super.awakeFromNib()
-    }
+    // MARK: Layout
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -48,16 +52,40 @@ class ActionCollectionViewCell: UICollectionViewCell {
             toggleSwitch.isOn = skip
             
             switchLabel.isHidden = false
-            toggleSwitch.isEnabled = true
-            toggleSwitch.isHidden = false
+            enableAndShow(toggleSwitch)
+            disableAndHide(actionButton)
+        case .addToAlbum(id: let id), .removeFromAlbum(id: let id):
+            disableAndHide(toggleSwitch)
+            enableAndShow(actionButton)
+            
+            if let id = id {
+                let collections = PHAssetCollection.fetchAssetCollections(withLocalIdentifiers: [id], options: nil)
+                switchLabel.text = collections.firstObject?.localizedTitle
+            } else {
+                switchLabel.text = nil
+            }
         default:
             switchLabel.isHidden = true
-            toggleSwitch.isEnabled = false
-            toggleSwitch.isHidden = true
+            disableAndHide(toggleSwitch)
+            disableAndHide(actionButton)
         }
     }
     
+    //MARK: Actions
+    
     @IBAction func toggleSwitchChanged(_ sender: UISwitch) {
         self.delegate?.switchToggle(sender: sender)
+    }
+    
+    //MARK: Private
+    
+    private func disableAndHide(_ control: UIControl) {
+        control.isEnabled = false
+        control.isHidden = true
+    }
+    
+    private func enableAndShow(_ control: UIControl) {
+        control.isEnabled = true
+        control.isHidden = false
     }
 }

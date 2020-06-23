@@ -217,6 +217,22 @@ class MemeViewController: UIViewController {
             if !firstAction {
                 trash()
             }
+            
+        case .addToAlbum(id: let id):
+            guard let id = id,
+                let asset = asset else { return }
+            collectionController?.add(asset: asset, toAssetCollectionWithID: id)
+            
+            currentActionIndex += 1
+            performCurrentAction()
+            
+        case .removeFromAlbum(id: let id):
+            guard let id = id,
+                let asset = asset else { return }
+            collectionController?.remove(asset: asset, fromAssetCollectionWithID: id)
+            
+            currentActionIndex += 1
+            performCurrentAction()
         }
         
         firstAction = false
