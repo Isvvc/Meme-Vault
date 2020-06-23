@@ -255,9 +255,9 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uJa-bu-qfM">
-                                <rect key="frame" x="0.0" y="613" width="414" height="200"/>
+                                <rect key="frame" x="0.0" y="613" width="414" height="160"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="hta-qS-TD3"/>
+                                    <constraint firstAttribute="height" constant="160" id="hta-qS-TD3"/>
                                 </constraints>
                                 <connections>
                                     <segue destination="8fS-4M-uVr" kind="embed" id="k5t-YM-RwY"/>
@@ -269,7 +269,7 @@
                             <constraint firstItem="njq-kG-7La" firstAttribute="trailing" secondItem="uJa-bu-qfM" secondAttribute="trailing" id="Eb9-XX-YQP"/>
                             <constraint firstItem="x3y-FO-d01" firstAttribute="leading" secondItem="njq-kG-7La" secondAttribute="leading" id="GXS-EG-o6o"/>
                             <constraint firstItem="njq-kG-7La" firstAttribute="trailing" secondItem="x3y-FO-d01" secondAttribute="trailing" id="Sf9-8R-6WY"/>
-                            <constraint firstItem="njq-kG-7La" firstAttribute="bottom" secondItem="uJa-bu-qfM" secondAttribute="bottom" id="WGj-Ey-dtn"/>
+                            <constraint firstItem="njq-kG-7La" firstAttribute="bottom" secondItem="uJa-bu-qfM" secondAttribute="bottom" constant="40" id="WGj-Ey-dtn"/>
                             <constraint firstItem="uJa-bu-qfM" firstAttribute="leading" secondItem="njq-kG-7La" secondAttribute="leading" id="Wzp-IE-rvR"/>
                             <constraint firstItem="bk0-lE-mad" firstAttribute="top" secondItem="x3y-FO-d01" secondAttribute="bottom" constant="8" id="XMO-J7-S6c"/>
                             <constraint firstItem="njq-kG-7La" firstAttribute="trailing" secondItem="bk0-lE-mad" secondAttribute="trailing" constant="8" id="Y4E-6L-dlJ"/>
@@ -281,6 +281,7 @@
                     </view>
                     <navigationItem key="navigationItem" largeTitleDisplayMode="never" id="QwV-ht-Zvg"/>
                     <connections>
+                        <outlet property="containerBottomSpace" destination="WGj-Ey-dtn" id="kmH-NY-ADV"/>
                         <outlet property="containerHeight" destination="hta-qS-TD3" id="gi2-bV-rJ3"/>
                         <outlet property="containerView" destination="uJa-bu-qfM" id="WAl-GZ-1Vn"/>
                         <outlet property="imageView" destination="x3y-FO-d01" id="Hwb-Vy-PCU"/>
@@ -296,7 +297,7 @@
             <objects>
                 <tableViewController id="88b-gb-3CM" customClass="ActionSetPickerTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="eLE-hy-lnL">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="200"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="160"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>
@@ -345,7 +346,7 @@
             <objects>
                 <tableViewController id="qfo-W2-HHe" customClass="ActionsTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="umy-ew-nPD">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="200"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="160"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <prototypes>

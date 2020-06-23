@@ -18,6 +18,7 @@ class MemeViewController: UIViewController {
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var containerHeight: NSLayoutConstraint!
     @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var containerBottomSpace: NSLayoutConstraint!
     
     //MARK: Properties
     
@@ -139,9 +140,9 @@ class MemeViewController: UIViewController {
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
         
         if notification.name == UIResponder.keyboardWillHideNotification {
-            containerHeight.constant = 200
+            containerHeight.constant = 200 - containerBottomSpace.constant
         } else {
-            containerHeight.constant = keyboardViewEndFrame.height - view.safeAreaInsets.bottom
+            containerHeight.constant = keyboardViewEndFrame.height - view.safeAreaInsets.bottom - containerBottomSpace.constant
         }
         
         UIView.animate(withDuration: 0.5) {
