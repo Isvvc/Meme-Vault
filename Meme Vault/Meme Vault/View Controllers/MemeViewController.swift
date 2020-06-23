@@ -226,9 +226,12 @@ class MemeViewController: UIViewController {
     /// - Parameter dataUTI: the dataUTI String from the asset's `requestImageDataAndOrientation` call.
     /// - Returns: the name inputted with the file extension if the name in the text field is not empty, otherwise `nil`.
     func fileName(dataUTI: String) -> String? {
-        guard let name = name,
-            let typeURL = URL(string: dataUTI) else { return nil }
-        return "\(name).\(typeURL.pathExtension)"
+        guard let typeURL = URL(string: dataUTI) else { return nil }
+        if let name = name {
+            return "\(name).\(typeURL.pathExtension)"
+        } else {
+            return typeURL.lastPathComponent
+        }
     }
     
     
