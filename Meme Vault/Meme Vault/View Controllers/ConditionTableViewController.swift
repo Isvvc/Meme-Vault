@@ -94,6 +94,17 @@ class ConditionTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row != 2 {
             tableView.deselectRow(at: indexPath, animated: true)
+            
+            if let cell = tableView.cellForRow(at: indexPath) {
+                if let notCell = cell as? NotTableViewCell {
+                    notCell.toggle.setOn(!notCell.toggle.isOn, animated: true)
+                    valueChanged(notCell.toggle)
+                } else if let conjunctionCell = cell as? ConjunctionTableViewCell {
+                    let selection = conjunctionCell.segmentedControl.selectedSegmentIndex
+                    conjunctionCell.segmentedControl.selectedSegmentIndex = (!selection.bool).int
+                    valueChanged(conjunctionCell.segmentedControl)
+                }
+            }
         }
     }
 
