@@ -217,7 +217,7 @@ class AlbumCollection: NSObject, Codable {
                 let newConditions = Array(splitConditions.prefix(upTo: j))
                 
                 matches = contains(asset: asset, cache: cache, conditions: newConditions)
-                i += j
+                i += j - 2
             } else {
                 matches = condition.matches(asset: asset, cache: cache)
             }
