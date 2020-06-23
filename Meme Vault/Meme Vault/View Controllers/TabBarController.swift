@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class TabBarController: UITabBarController {
     
@@ -36,6 +37,29 @@ class TabBarController: UITabBarController {
                     memesVC.memeController = memeController
                 }
             }
+        }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        /*
+         This is a weird workaround for a weird issue.
+         For some reason, if the first time a Core Data fetch request
+         is made is in the `DestinationsTableViewController` in
+         the `MemeViewController`'s overlay, the shared instance of
+         `CoreDataStack`'s `NSPersistentContainer` will change
+         some time after the FRC is created and before cells are loaded.
+         Setting `container` to `private(set)` didn't make a difference.
+         I have no idea how that happens, but performing a fetch request
+         when the app first starts prevents it from happening.
+         */
+        let fetchRequest: NSFetchRequest<Destination> = Destination.fetchRequest()
+        fetchRequest.fetchLimit = 1
+        do {
+            let _ = try CoreDataStack.shared.mainContext.fetch(fetchRequest)
+        } catch {
+            NSLog("Workaround to prevent crash when setting Destination failed: \(error)")
         }
     }
 

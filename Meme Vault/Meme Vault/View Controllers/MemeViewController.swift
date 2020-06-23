@@ -18,6 +18,7 @@ class MemeViewController: UIViewController {
     @IBOutlet weak var containerView: UIView!
     @IBOutlet weak var containerHeight: NSLayoutConstraint!
     @IBOutlet weak var nameTextField: UITextField!
+    @IBOutlet weak var containerBottomSpace: NSLayoutConstraint!
     
     //MARK: Properties
     
@@ -27,6 +28,7 @@ class MemeViewController: UIViewController {
     var actionController: ActionController?
     var actionSetIndex: Int = 0
     var currentActionIndex: Int = 0
+    var firstAction = true
     
     var collectionController: CollectionController?
     var collection: AlbumCollection?
@@ -34,7 +36,6 @@ class MemeViewController: UIViewController {
     var memeController: MemeController?
     var meme: Meme?
     var asset: PHAsset?
-    var contentRequestID: PHContentEditingInputRequestID?
     
     var providerController: ProviderController?
     
@@ -65,43 +66,27 @@ class MemeViewController: UIViewController {
         setUpViews()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        if let contentRequestID = contentRequestID {
-            asset?.cancelContentEditingInputRequest(contentRequestID)
-        }
-    }
-    
     override func viewSafeAreaInsetsDidChange() {
         guard let overlayContainerView = overlayContainerView else { return }
         overlayContainerView.pinToSuperview(with: view.safeAreaInsets)
     }
     
     private func setUpViews() {
-        // Load the image
-        DispatchQueue.global(qos: .userInitiated).async {
-            // Doing this in a background thread because the fetchFirstImage function can take a while
-            guard let collection = self.collection,
-                let photo = self.collectionController?.fetchFirstImage(from: collection, context: CoreDataStack.shared.mainContext) else {
-                    DispatchQueue.main.async {
-                        self.navigationController?.popViewController(animated: true)
-                    }
-                    return
-            }
-            
-            self.asset = photo
-            self.meme = self.memeController?.fetchOrCreateMeme(for: photo, context: CoreDataStack.shared.mainContext)
-            
-            DispatchQueue.main.async {
-                self.imageView.fetchImage(asset: photo, contentMode: .aspectFit)
-                if let name = self.meme?.name {
-                    self.nameTextField.text = name
-                }
-                
-                self.performCurrentAction()
+        guard let collectionController = collectionController,
+            let collection = collection else {
+            return DispatchQueue.main.async {
+                self.navigationController?.popViewController(animated: true)
             }
         }
+        
+        // Load the image
+        collectionController.beginFetchingImages(from: collection, context: CoreDataStack.shared.mainContext)
+        loadNextImage(performActionWhenDone: false)
+        
+        // Add Trash button
+        let trashImage = UIImage(systemName: "trash")
+        let trashButton = UIBarButtonItem(image: trashImage, style: .plain, target: self, action: #selector(trash))
+        navigationItem.rightBarButtonItem = trashButton
         
         // Adjust size based on keyboard
         let notificationCenter = NotificationCenter.default
@@ -145,7 +130,7 @@ class MemeViewController: UIViewController {
             navLayer.masksToBounds = false
         }
         
-        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
+//        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
     }
     
     @objc private func adjustForKeyboard(notification: Notification) {
@@ -155,9 +140,9 @@ class MemeViewController: UIViewController {
         let keyboardViewEndFrame = view.convert(keyboardScreenEndFrame, from: view.window)
         
         if notification.name == UIResponder.keyboardWillHideNotification {
-            containerHeight.constant = 200
+            containerHeight.constant = 200 - containerBottomSpace.constant
         } else {
-            containerHeight.constant = keyboardViewEndFrame.height - view.safeAreaInsets.bottom
+            containerHeight.constant = keyboardViewEndFrame.height - view.safeAreaInsets.bottom - containerBottomSpace.constant
         }
         
         UIView.animate(withDuration: 0.5) {
@@ -165,10 +150,40 @@ class MemeViewController: UIViewController {
         }
     }
     
+    func loadNextImage(performActionWhenDone: Bool = true) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            // Doing this in a background thread because the fetchFirstImage function can take a while
+            guard let photo = self.collectionController?.fetchNextImage() else {
+                    return DispatchQueue.main.async {
+                        self.navigationController?.popViewController(animated: true)
+                    }
+            }
+            
+            self.asset = photo
+            self.meme = self.memeController?.fetchOrCreateMeme(for: photo, context: CoreDataStack.shared.mainContext)
+            
+            DispatchQueue.main.async {
+                self.imageView.fetchImage(asset: photo, contentMode: .aspectFit)
+                if let name = self.meme?.name {
+                    self.nameTextField.text = name
+                }
+
+                self.currentActionIndex = 0
+                self.nameTextField.text = nil
+                self.firstAction = true
+                
+                if performActionWhenDone {
+                    self.performCurrentAction()
+                }
+            }
+        }
+    }
+    
     //MARK: Actions
     
     func performCurrentAction() {
         guard let action = currentAction else { return }
+        NotificationCenter.default.post(name: .actionChanged, object: self, userInfo: ["index": currentActionIndex])
         
         switch action {
         case .name(skipIfDone: let skipIfDone, preset: _):
@@ -178,8 +193,7 @@ class MemeViewController: UIViewController {
                 performCurrentAction()
             } else {
                 title = "Name"
-                // For some reason this causes the view controller to lag out if this is the first action called
-//                nameTextField.becomeFirstResponder()
+                nameTextField.becomeFirstResponder()
             }
         
         case .upload:
@@ -201,19 +215,40 @@ class MemeViewController: UIViewController {
             }
         
         case .delete:
-            guard let meme = meme else { return }
-            memeController?.flagForDeletion(meme: meme, context: CoreDataStack.shared.mainContext)
+            if !firstAction {
+                trash()
+            }
+            
+        case .addToAlbum(id: let id):
+            guard let id = id,
+                let asset = asset else { return }
+            collectionController?.add(asset: asset, toAssetCollectionWithID: id)
+            
+            currentActionIndex += 1
+            performCurrentAction()
+            
+        case .removeFromAlbum(id: let id):
+            guard let id = id,
+                let asset = asset else { return }
+            collectionController?.remove(asset: asset, fromAssetCollectionWithID: id)
+            
+            currentActionIndex += 1
+            performCurrentAction()
         }
+        
+        firstAction = false
     }
     
-    
     /// Returns the name the current image's file should have based on the `textField` and original file extension.
-    /// - Parameter contentEditingInput: The content editing input from the asset's `requestContentEditingInput` call.
+    /// - Parameter dataUTI: the dataUTI String from the asset's `requestImageDataAndOrientation` call.
     /// - Returns: the name inputted with the file extension if the name in the text field is not empty, otherwise `nil`.
-    func fileName(contentEditingInput: PHContentEditingInput) -> String? {
-        guard let name = name,
-            let url = contentEditingInput.fullSizeImageURL else { return nil }
-        return "\(name).\(url.pathExtension.lowercased())"
+    func fileName(dataUTI: String) -> String? {
+        guard let typeURL = URL(string: dataUTI) else { return nil }
+        if let name = name {
+            return "\(name).\(typeURL.pathExtension)"
+        } else {
+            return typeURL.lastPathComponent
+        }
     }
     
     
@@ -225,19 +260,23 @@ class MemeViewController: UIViewController {
         // That feels like it'd just make things too complicated,
         // so I'm doing it all here the in the view controller.
         
+        guard let asset = asset else { return }
+        
         let fileManager = FileManager.default
         
-        contentRequestID = asset?.requestContentEditingInput(with: nil) { contentEditingInput, _ in
-            guard let contentEditingInput = contentEditingInput,
-                let url = contentEditingInput.fullSizeImageURL,
-                let fileName = self.fileName(contentEditingInput: contentEditingInput),
+        let options = PHImageRequestOptions()
+        options.version = .current
+        
+        PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { imageData, dataUTI, _, _ in
+            guard let dataUTI = dataUTI,
+                let imageData = imageData,
+                let fileName = self.fileName(dataUTI: dataUTI),
                 let documents = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
             
             do {
                 // Save a copy to the Documents directory
                 let filePath = documents.appendingPathComponent(fileName)
-                let data = try Data(contentsOf: url)
-                try data.write(to: filePath)
+                try imageData.write(to: filePath)
                 print("Saved copy of file.")
                 
                 // Share the copy in the Share Sheet
@@ -252,6 +291,9 @@ class MemeViewController: UIViewController {
                         } catch {
                             NSLog("\(error)")
                         }
+                        
+                        self.currentActionIndex += 1
+                        self.performCurrentAction()
                     }
                     
                     self.present(activityController, animated: true, completion: nil)
@@ -274,10 +316,19 @@ class MemeViewController: UIViewController {
         memeController?.setDestination(to: destination, for: meme, context: CoreDataStack.shared.mainContext)
     }
     
+    @objc func trash() {
+        guard let meme = meme else { return }
+        memeController?.flagForDeletion(meme: meme, context: CoreDataStack.shared.mainContext)
+        
+        // Move to the next image
+        loadNextImage()
+    }
+    
     //MARK: Navigation
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let actionSetPicker = segue.destination as? ActionSetPickerTableViewController {
+        if let navigationVC = segue.destination as? UINavigationController,
+            let actionSetPicker = navigationVC.viewControllers.first as? ActionSetPickerTableViewController {
             actionSetPicker.actionController = actionController
             actionSetPicker.delegate = self
         }
@@ -288,10 +339,6 @@ class MemeViewController: UIViewController {
 //MARK: Text field delegate
 
 extension MemeViewController: UITextFieldDelegate {
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
-    }
-    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
@@ -330,6 +377,10 @@ extension MemeViewController: ActionSetPickerDelegate {
     func choose(actionSetAtIndex index: Int) {
         actionSetIndex = index
         currentActionIndex = 0
+    }
+    
+    func performAction(at index: Int) {
+        currentActionIndex = index
         performCurrentAction()
     }
 }
@@ -369,7 +420,7 @@ extension MemeViewController: OverlayContainerViewControllerDelegate {
 extension MemeViewController: DestinationsTableDelegate {
     func choose(destination: Destination) {
         setDestination(destination)
-        overlayController?.moveOverlay(toNotchAt: 1, animated: true)
+        overlayController?.moveOverlay(toNotchAt: 0, animated: true)
         
         // Move to the action after the `destination` action
         if let destinationActionIndex = actionSet?.actions.firstIndex(of: .destination) {

@@ -17,6 +17,8 @@ class ActionSet: NSObject {
         case destination
         case upload
         case delete
+        case addToAlbum(id: String? = nil)
+        case removeFromAlbum(id: String? = nil)
         
         static var allCases: [Action] {
             return [
@@ -24,7 +26,9 @@ class ActionSet: NSObject {
                 .share,
                 .destination,
                 .upload,
-                .delete
+                .delete,
+                .addToAlbum(),
+                .removeFromAlbum()
             ]
         }
         
@@ -40,6 +44,10 @@ class ActionSet: NSObject {
                 return "Upload"
             case .delete:
                 return "Delete"
+            case .addToAlbum:
+                return "Add to album"
+            case .removeFromAlbum:
+                return "Remove from album"
             }
         }
         
@@ -55,6 +63,10 @@ class ActionSet: NSObject {
                 return "upload"
             case .delete:
                 return "delete"
+            case .addToAlbum(id: let id):
+                return JSON(["addToAlbum": id])
+            case .removeFromAlbum(id: let id):
+                return JSON(["removeFromAlbum": id])
             }
         }
         
@@ -74,6 +86,10 @@ class ActionSet: NSObject {
                 }
             } else if let skipIfDone = json["skipIfDone"].bool {
                 self = .name(skipIfDone: skipIfDone)
+            } else if let addToAlbum = json["addToAlbum"].string {
+                self = .addToAlbum(id: addToAlbum)
+            } else if let removeFromAlbum = json["removeFromAlbum"].string {
+                self = .removeFromAlbum(id: removeFromAlbum)
             } else {
                 return nil
             }

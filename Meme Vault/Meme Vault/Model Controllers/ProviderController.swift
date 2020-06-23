@@ -17,6 +17,7 @@ class ProviderController {
     private(set) var credential: URLCredential?
     
     private var uploadQueue: [String: Meme] = [:]
+    private var contentRequestIDs: [PHAsset: PHContentEditingInputRequestID] = [:]
     
     init() {
         host = UserDefaults.standard.url(forKey: "host")
@@ -80,7 +81,10 @@ class ProviderController {
     }
     
     func upload(meme: Meme, asset givenAsset: PHAsset? = nil) {
-        guard !meme.uploaded else { return print("Meme already uploaded!") }
+        guard !meme.uploaded else {
+            NotificationCenter.default.post(name: .uploadComplete, object: self, userInfo: ["success": true])
+            return print("Meme already uploaded!")
+        }
         
         guard let name = meme.name,
             let destinationPath = meme.destination?.path else { return }
@@ -98,13 +102,18 @@ class ProviderController {
             return
         }
         
-        asset.requestContentEditingInput(with: nil) { (contentEditingInput, info) in
+        contentRequestIDs[asset] = asset.requestContentEditingInput(with: nil) { contentEditingInput, info in
             guard let sourceURL = contentEditingInput?.fullSizeImageURL else { return }
             print(sourceURL)
             let uploadPath = self.appendFileName(to: destinationPath, name: name, sourceURL: sourceURL)
             print(uploadPath)
             self.uploadQueue[uploadPath] = meme
             self.webdavProvider?.copyItem(localFile: sourceURL, to: uploadPath, overwrite: true, completionHandler: nil)
+            
+            // Cancel the content editing request since we don't actually want to edit the image.
+            if let contentRequestID = self.contentRequestIDs[asset] {
+                asset.cancelContentEditingInputRequest(contentRequestID)
+            }
         }
     }
     
@@ -113,11 +122,20 @@ class ProviderController {
     ///   - destination: The destination path of the upload.
     ///   - context: The `NSManagedObjectContext` to use to save the fact that the upload succeeded. **Important**: Leave this `nil` if the upload was not successful.
     func uploadComplete(destination: String, context: NSManagedObjectContext?) {
+        var userInfo: [AnyHashable: Any] = [:]
+        
         if let context = context {
+            // Upload was successful
             let meme = uploadQueue[destination]
             meme?.uploaded = true
             CoreDataStack.shared.save(context: context)
+            
+            userInfo["success"] = true
+        } else {
+            userInfo["success"] = false
         }
+        
+        NotificationCenter.default.post(name: .uploadComplete, object: self, userInfo: userInfo)
         uploadQueue.removeValue(forKey: destination)
     }
 }
