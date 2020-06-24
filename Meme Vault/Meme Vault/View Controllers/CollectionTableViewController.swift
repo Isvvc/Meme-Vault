@@ -70,6 +70,7 @@ class CollectionTableViewController: UITableViewController {
         
         let label = collection.textForCondition(at: indexPath.row)
         cell.textLabel?.text = label
+        cell.detailTextLabel?.text = nil
         
         if condition.conjunction == .none,
             condition.id == .none {
@@ -107,6 +108,7 @@ class CollectionTableViewController: UITableViewController {
                 // Destination cell
                 cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
                 cell.textLabel?.text = "Destination"
+                cell.detailTextLabel?.text = collectionController?.destination(for: collection)?.name
             }
         default:
             cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
@@ -160,7 +162,7 @@ class CollectionTableViewController: UITableViewController {
                 toggle.setOn(!toggle.isOn, animated: true)
                 valueChanged(toggle)
             default:
-                print("Chose destination")
+                performSegue(withIdentifier: "Destinations", sender: self)
             }
         default:
             let condition = collection.conditions[indexPath.row]
@@ -297,6 +299,9 @@ class CollectionTableViewController: UITableViewController {
             } else if let newConditionIndex = newConditionIndex {
                 conditionVC.conditionIndex = newConditionIndex
             }
+        } else if let destinationsVC = segue.destination as? DestinationsTableViewController {
+            destinationsVC.editDestinations = false
+            destinationsVC.delegate = self
         }
     }
 
@@ -320,5 +325,15 @@ extension CollectionTableViewController: ControlCellDelegate {
             collection?.oldestFirst = toggle.isOn
             collectionController?.saveToPersistentStore()
         }
+    }
+}
+
+extension CollectionTableViewController: DestinationsTableDelegate {
+    func choose(destination: Destination) {
+        navigationController?.popToViewController(self, animated: true)
+        guard let collection = collection else { return }
+        
+        collectionController?.set(destination: destination, for: collection)
+        tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
     }
 }

@@ -12,6 +12,7 @@ import CoreData
 class CollectionController {
     
     var collections: [AlbumCollection]
+    var collectionDestinations: [AlbumCollection: Destination] = [:]
     
     private var collectionCache = Cache<String, Set<PHAsset>>()
     private var allAssetsCache: PHFetchResult<PHAsset>? = nil
@@ -71,6 +72,21 @@ class CollectionController {
     func rename(collection: AlbumCollection, to name: String) {
         collection.name = name
         saveToPersistentStore()
+    }
+    
+    func set(destination: Destination, for collection: AlbumCollection) {
+        collectionDestinations[collection] = destination
+        //saveToPersistentStore()
+    }
+    
+    func removeDestination(from collection: AlbumCollection) {
+        collectionDestinations.removeValue(forKey: collection)
+        //saveToPersistentStore()
+    }
+    
+    func destination(for collection: AlbumCollection?) -> Destination? {
+        guard let collection = collection else { return nil }
+        return collectionDestinations[collection]
     }
     
     //MARK: Condition CRUD
