@@ -119,7 +119,6 @@ class MemeViewController: UIViewController {
             overlayController.delegate = self
             overlayController.viewControllers = [navigationVC]
             addChild(overlayController, in: overlayContainerView)
-            overlayController.drivingScrollView = destinationsVC.tableView
             self.overlayController = overlayController
             
             // Add shadow
@@ -436,5 +435,9 @@ extension MemeViewController: DestinationsTableDelegate {
         }
         
         performCurrentAction()
+    }
+    
+    func enter(vc: DestinationsTableViewController) {
+        overlayController?.drivingScrollView = vc.tableView
     }
 }

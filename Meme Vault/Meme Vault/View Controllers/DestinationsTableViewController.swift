@@ -10,12 +10,12 @@ import UIKit
 import CoreData
 
 protocol DestinationsTableDelegate {
-    func enter(destination: Destination)
+    func enter(vc: DestinationsTableViewController)
     func choose(destination: Destination)
 }
 
 extension DestinationsTableDelegate {
-    func enter(destination: Destination) {}
+    func enter(vc: DestinationsTableViewController) {}
 }
 
 class DestinationsTableViewController: UITableViewController {
@@ -25,6 +25,7 @@ class DestinationsTableViewController: UITableViewController {
     var parentDestination: Destination?
     var delegate: DestinationsTableDelegate?
     var editDestinations = true
+    var givenDestinations: [Destination]?
     
     var newDestinationName: String?
     
@@ -32,7 +33,9 @@ class DestinationsTableViewController: UITableViewController {
         let fetchRequest: NSFetchRequest<Destination> = Destination.fetchRequest()
         
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        if let parentDestination = parentDestination {
+        if let givenDestinations = givenDestinations {
+            fetchRequest.predicate = NSPredicate(format: "SELF in %@", givenDestinations)
+        } else if let parentDestination = parentDestination {
             fetchRequest.predicate = NSPredicate(format: "parent == %@", parentDestination)
         } else {
             fetchRequest.predicate = NSPredicate(format: "parent == nil")
@@ -68,6 +71,12 @@ class DestinationsTableViewController: UITableViewController {
                 navigationItem.rightBarButtonItem = chooseButton
             }
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("Appear")
+        delegate?.enter(vc: self)
     }
     
     //MARK: Actions
@@ -117,7 +126,25 @@ class DestinationsTableViewController: UITableViewController {
     }
     
     func set(destinations: [Destination]) {
+        guard !destinations.isEmpty else { return }
+        
         // Show these destinations first
+        self.givenDestinations = destinations
+        
+        let givenDestinationsButton = UIBarButtonItem(title: "Specific", style: .plain, target: self, action: #selector(openGivenDestinations))
+        navigationItem.rightBarButtonItem = givenDestinationsButton
+        title = "All"
+        
+        openGivenDestinations()
+    }
+    
+    @objc func openGivenDestinations() {
+        guard let destinationsVC = storyboard?.instantiateViewController(withIdentifier: "Destinations") as? DestinationsTableViewController else { return }
+        
+        prepareSegueToDestinationsVC(destinationsVC)
+        destinationsVC.givenDestinations = givenDestinations
+        
+        navigationController?.pushViewController(destinationsVC, animated: true)
     }
     
     // MARK: - Table view data source
@@ -171,17 +198,21 @@ class DestinationsTableViewController: UITableViewController {
                     navigationVC.pushViewController(childFileBrowserVC, animated: false)
                 }
             }
-        } else if let destinationsVC = segue.destination as? DestinationsTableViewController,
-            let indexPath = tableView.indexPathForSelectedRow {
-            let destination = frc.object(at: indexPath)
-            destinationsVC.parentDestination = destination
-            delegate?.enter(destination: destination)
+        } else if let destinationsVC = segue.destination as? DestinationsTableViewController {
+            prepareSegueToDestinationsVC(destinationsVC)
             
-            destinationsVC.destinationController = destinationController
-            destinationsVC.providerController = providerController
-            destinationsVC.delegate = delegate
-            destinationsVC.editDestinations = editDestinations
+            if let indexPath = tableView.indexPathForSelectedRow {
+                let destination = frc.object(at: indexPath)
+                destinationsVC.parentDestination = destination
+            }
         }
+    }
+    
+    private func prepareSegueToDestinationsVC(_ destinationsVC: DestinationsTableViewController) {
+        destinationsVC.destinationController = destinationController
+        destinationsVC.providerController = providerController
+        destinationsVC.delegate = delegate
+        destinationsVC.editDestinations = editDestinations
     }
 
 }

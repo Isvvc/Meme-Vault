@@ -139,7 +139,7 @@
         <!--Destinations-->
         <scene sceneID="WXs-7U-eFt">
             <objects>
-                <tableViewController id="raC-eB-Iam" customClass="DestinationsTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="Destinations" id="raC-eB-Iam" customClass="DestinationsTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Se7-9j-gil">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1107,7 +1107,7 @@
         <segue reference="qe9-tH-RZP"/>
         <segue reference="WnB-5s-WJs"/>
         <segue reference="iD9-A6-9pT"/>
-        <segue reference="H6H-3u-Xei"/>
+        <segue reference="EXE-T9-dtO"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="cloud.fill" catalog="system" width="128" height="84"/>
