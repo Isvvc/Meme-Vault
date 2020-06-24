@@ -15,7 +15,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        let fileManager = FileManager.default
+        if let documents = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
+            let tempImagesFolder = documents.appendingPathComponent("TempImages")
+            if fileManager.fileExists(atPath: tempImagesFolder.path) {
+                // Clear out any left over files
+                do {
+                    let files = try fileManager.contentsOfDirectory(at: tempImagesFolder, includingPropertiesForKeys: nil)
+                    try files.forEach { try fileManager.removeItem(at: $0) }
+                } catch {
+                    NSLog("Error clearing TempImages folder: \(error)")
+                }
+            } else {
+                // Create the folder
+                do {
+                    try fileManager.createDirectory(atPath: tempImagesFolder.path, withIntermediateDirectories: true)
+                } catch {
+                    NSLog("Error creating TempImages folder: \(error)");
+                }
+            }
+        }
+        
         return true
     }
 

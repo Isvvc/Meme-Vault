@@ -252,7 +252,7 @@ class MemeViewController: UIViewController {
     }
     
     
-    /// Copies the current asset to the Documents directory, opens it in a Share Sheet, then deletes the copy.
+    /// Copies the current asset to the TempImages folder in the Documents directory, opens it in a Share Sheet, then deletes the copy.
     func shareAsset() {
         // I fell like a lot of this "should" be done in a controller class,
         // but as far as I can tell, it would require an escaping closure within another escaping closure
@@ -274,8 +274,8 @@ class MemeViewController: UIViewController {
                 let documents = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
             
             do {
-                // Save a copy to the Documents directory
-                let filePath = documents.appendingPathComponent(fileName)
+                // Save a copy to the TempImages directory
+                let filePath = documents.appendingPathComponent("TempImages").appendingPathComponent(fileName)
                 try imageData.write(to: filePath)
                 print("Saved copy of file.")
                 
