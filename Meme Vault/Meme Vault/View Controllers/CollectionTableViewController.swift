@@ -87,7 +87,7 @@ class CollectionTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 1 : collection?.conditions.count ?? 0
+        return section == 0 ? 2 : collection?.conditions.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -95,11 +95,19 @@ class CollectionTableViewController: UITableViewController {
         
         switch indexPath.section {
         case 0:
-            cell = tableView.dequeueReusableCell(withIdentifier: "ToggleCell", for: indexPath)
-            guard let toggleCell = cell as? ToggleTableViewCell else { break }
-            toggleCell.delegate = self
-            toggleCell.label.text = "Oldest first"
-            toggleCell.toggle.isOn = collection?.oldestFirst ?? true
+            switch indexPath.row {
+            case 0:
+                // "Oldest first" toggle cell
+                cell = tableView.dequeueReusableCell(withIdentifier: "ToggleCell", for: indexPath)
+                guard let toggleCell = cell as? ToggleTableViewCell else { break }
+                toggleCell.delegate = self
+                toggleCell.label.text = "Oldest first"
+                toggleCell.toggle.isOn = collection?.oldestFirst ?? true
+            default:
+                // Destination cell
+                cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
+                cell.textLabel?.text = "Destination"
+            }
         default:
             cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
             loadCell(cell, for: indexPath)
@@ -140,12 +148,28 @@ class CollectionTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let collection = collection else { return }
-        let condition = collection.conditions[indexPath.row]
-        // Only segue if the row isn't a ')'
-        if condition.id == nil && condition.conjunction == .none {
-            tableView.deselectRow(at: indexPath, animated: true)
-        } else {
-            performSegue(withIdentifier: "Condition", sender: self)
+        
+        switch indexPath.section {
+        case 0:
+            switch indexPath.row {
+            case 0:
+                tableView.deselectRow(at: indexPath, animated: true)
+                
+                guard let toggleCell = tableView.cellForRow(at: indexPath) as? ToggleTableViewCell else { return }
+                let toggle = toggleCell.toggle!
+                toggle.setOn(!toggle.isOn, animated: true)
+                valueChanged(toggle)
+            default:
+                print("Chose destination")
+            }
+        default:
+            let condition = collection.conditions[indexPath.row]
+            // Only segue if the row isn't a ')'
+            if condition.id == nil && condition.conjunction == .none {
+                tableView.deselectRow(at: indexPath, animated: true)
+            } else {
+                performSegue(withIdentifier: "Condition", sender: self)
+            }
         }
     }
     

@@ -74,9 +74,8 @@ class MemeViewController: UIViewController {
     private func setUpViews() {
         guard let collectionController = collectionController,
             let collection = collection else {
-            return DispatchQueue.main.async {
-                self.navigationController?.popViewController(animated: true)
-            }
+                navigationController?.popViewController(animated: true)
+                return
         }
         
         // Load the image
@@ -411,6 +410,7 @@ extension MemeViewController: OverlayContainerViewControllerDelegate {
     }
     
     func overlayContainerViewController(_ containerViewController: OverlayContainerViewController, didMoveOverlay overlayViewController: UIViewController, toNotchAt index: Int) {
+        // Prevent the user from accidentally swiping back when trying to swipe back on the Destinations overlay
         navigationController?.interactivePopGestureRecognizer?.isEnabled = (index != 2)
     }
 }
