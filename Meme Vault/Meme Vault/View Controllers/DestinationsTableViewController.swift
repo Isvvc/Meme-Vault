@@ -116,6 +116,10 @@ class DestinationsTableViewController: UITableViewController {
         delegate?.choose(destination: parentDestination)
     }
     
+    func set(destinations: [Destination]) {
+        // Show these destinations first
+    }
+    
     // MARK: - Table view data source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

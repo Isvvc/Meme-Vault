@@ -74,6 +74,12 @@ class CollectionController {
         saveToPersistentStore()
     }
     
+    func allCollections(for asset: PHAsset, given givenCollection: AlbumCollection? = nil) -> [AlbumCollection] {
+        collections.filter { $0 == givenCollection || $0.contains(asset: asset, cache: collectionCache) }
+    }
+    
+    //MARK: Destinations
+    
     func set(destination: Destination, for collection: AlbumCollection) {
         collectionDestinations[collection] = destination
         //saveToPersistentStore()
@@ -87,6 +93,10 @@ class CollectionController {
     func destination(for collection: AlbumCollection?) -> Destination? {
         guard let collection = collection else { return nil }
         return collectionDestinations[collection]
+    }
+    
+    func allDestinations(for asset: PHAsset, given givenCollection: AlbumCollection? = nil) -> [Destination] {
+        allCollections(for: asset, given: givenCollection).compactMap { collectionDestinations[$0] }
     }
     
     //MARK: Condition CRUD

@@ -24,6 +24,7 @@ class MemeViewController: UIViewController {
     
     var overlayContainerView: PassThroughView?
     var overlayController: OverlayContainerViewController?
+    var destinationsVC: DestinationsTableViewController?
     
     var actionController: ActionController?
     var actionSetIndex: Int = 0
@@ -108,6 +109,7 @@ class MemeViewController: UIViewController {
             
             destinationsVC.editDestinations = false
             destinationsVC.delegate = self
+            self.destinationsVC = destinationsVC
 
             let overlayContainerView = PassThroughView()
             self.overlayContainerView = overlayContainerView
@@ -160,11 +162,17 @@ class MemeViewController: UIViewController {
             
             self.asset = photo
             self.meme = self.memeController?.fetchOrCreateMeme(for: photo, context: CoreDataStack.shared.mainContext)
+            let destinations = self.collectionController?.allDestinations(for: photo, given: self.collection)
             
             DispatchQueue.main.async {
                 self.imageView.fetchImage(asset: photo, contentMode: .aspectFit)
                 if let name = self.meme?.name {
                     self.nameTextField.text = name
+                }
+                
+                // Load destinations
+                if let destinations = destinations {
+                    self.destinationsVC?.set(destinations: destinations)
                 }
 
                 self.currentActionIndex = 0
