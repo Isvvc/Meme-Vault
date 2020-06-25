@@ -83,6 +83,14 @@ class MemesTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         return false
     }
+    
+    //MARK: Table view delegate
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        let meme = frc.object(at: indexPath)
+        memeController?.deleteAsset(from: meme, context: CoreDataStack.shared.mainContext)
+    }
 
     /*
     // MARK: - Navigation

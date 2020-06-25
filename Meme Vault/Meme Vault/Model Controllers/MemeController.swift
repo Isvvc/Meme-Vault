@@ -74,4 +74,30 @@ class MemeController {
         return createMeme(id: asset.localIdentifier, creationDate: asset.creationDate ?? Date(), context: context)
     }
     
+    func fetchAsset(for meme: Meme) -> PHAsset? {
+        guard let id = meme.id else { return nil }
+        return PHAsset.fetchAssets(withLocalIdentifiers: [id], options: nil).firstObject
+    }
+    
+    //MARK: Assets
+    
+    func delete(asset: PHAsset, completion: ((Bool, Error?) -> Void)? = nil) {
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.deleteAssets([asset] as NSFastEnumeration)
+        }, completionHandler: completion)
+    }
+    
+    func deleteAsset(from meme: Meme, context: NSManagedObjectContext) {
+        guard let asset = fetchAsset(for: meme) else { return }
+        delete(asset: asset) { success, error in
+            if let error = error {
+                return NSLog("Error deleting asset: \(error)")
+            }
+            
+            if success {
+                self.delete(meme: meme, context: context)
+            }
+        }
+    }
+    
 }
