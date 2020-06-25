@@ -54,6 +54,13 @@ class ActionCollectionViewCell: UICollectionViewCell {
             switchLabel.isHidden = false
             enableAndShow(toggleSwitch)
             disableAndHide(actionButton)
+        case .delete(askForConfirmation: let askForConfirmation):
+            switchLabel.text = "Ask for confirmation"
+            toggleSwitch.isOn = askForConfirmation
+            
+            switchLabel.isHidden = false
+            enableAndShow(toggleSwitch)
+            disableAndHide(actionButton)
         case .addToAlbum(id: let id), .removeFromAlbum(id: let id):
             disableAndHide(toggleSwitch)
             enableAndShow(actionButton)

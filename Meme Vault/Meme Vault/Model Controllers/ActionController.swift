@@ -33,7 +33,7 @@ class ActionController {
         loadFromPersistentStore()
         
         if actionSets.isEmpty {
-            let presetActionSet = ActionSet(name: "Queue", actions: [.name(), .destination, .upload, .share, .delete])
+            let presetActionSet = ActionSet(name: "Queue", actions: [.name(), .destination, .upload, .share, .delete()])
             self.actionSets = [presetActionSet]
             
             saveToPersistentStore()

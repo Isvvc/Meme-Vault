@@ -201,6 +201,9 @@ extension ActionSetCollectionViewController: ActionCellDelegate {
         case .name(skipIfDone: _, preset: let preset):
             actionSet?.actions[sender.tag] = .name(skipIfDone: sender.isOn, preset: preset)
             actionController?.saveToPersistentStore()
+        case .delete:
+            actionSet?.actions[sender.tag] = .delete(askForConfirmation: sender.isOn)
+            actionController?.saveToPersistentStore()
         default:
             break
         }

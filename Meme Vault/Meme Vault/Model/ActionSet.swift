@@ -16,7 +16,7 @@ class ActionSet: NSObject {
         case share
         case destination
         case upload
-        case delete
+        case delete(askForConfirmation: Bool = true)
         case addToAlbum(id: String? = nil)
         case removeFromAlbum(id: String? = nil)
         
@@ -26,7 +26,7 @@ class ActionSet: NSObject {
                 .share,
                 .destination,
                 .upload,
-                .delete,
+                .delete(),
                 .addToAlbum(),
                 .removeFromAlbum()
             ]
@@ -61,8 +61,8 @@ class ActionSet: NSObject {
                 return "destination"
             case .upload:
                 return "upload"
-            case .delete:
-                return "delete"
+            case .delete(askForConfirmation: let askForConfirmation):
+                return JSON(["askForConfirmation": askForConfirmation])
             case .addToAlbum(id: let id):
                 return JSON(["addToAlbum": id])
             case .removeFromAlbum(id: let id):
@@ -79,13 +79,13 @@ class ActionSet: NSObject {
                     self = .destination
                 case "upload":
                     self = .upload
-                case "delete":
-                    self = .delete
                 default:
                     return nil
                 }
             } else if let skipIfDone = json["skipIfDone"].bool {
                 self = .name(skipIfDone: skipIfDone)
+            } else if let askForConfirmation = json["askForConfirmation"].bool {
+                self = .delete(askForConfirmation: askForConfirmation)
             } else if let addToAlbum = json["addToAlbum"].string {
                 self = .addToAlbum(id: addToAlbum)
             } else if let removeFromAlbum = json["removeFromAlbum"].string {
