@@ -220,9 +220,9 @@ class MemeViewController: UIViewController {
                 overlayController?.moveOverlay(toNotchAt: 2, animated: true)
             }
         
-        case .delete:
+        case .delete(askForConfirmation: let askForConfirmation):
             if !firstAction {
-                trash()
+                trash(askForConfirmation: askForConfirmation)
             }
             
         case .addToAlbum(id: let id):
@@ -322,12 +322,28 @@ class MemeViewController: UIViewController {
         memeController?.setDestination(to: destination, for: meme, context: CoreDataStack.shared.mainContext)
     }
     
-    @objc func trash() {
+    @objc func trash(askForConfirmation: Bool = false) {
         guard let meme = meme else { return }
-        memeController?.flagForDeletion(meme: meme, context: CoreDataStack.shared.mainContext)
         
-        // Move to the next image
-        loadNextImage()
+        let deleteHandler: (UIAlertAction?) -> Void = { _ in
+            self.memeController?.flagForDeletion(meme: meme, context: CoreDataStack.shared.mainContext)
+            // Move to the next image
+            self.loadNextImage()
+        }
+        
+        if askForConfirmation {
+            let alert = UIAlertController(title: "Delete image", message: "Are you sure you want to delete this image?", preferredStyle: .alert)
+            
+            let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+            let delete = UIAlertAction(title: "Delete", style: .destructive, handler: deleteHandler)
+            
+            alert.addAction(cancel)
+            alert.addAction(delete)
+            
+            present(alert, animated: true, completion: nil)
+        } else {
+            deleteHandler(nil)
+        }
     }
     
     //MARK: Navigation

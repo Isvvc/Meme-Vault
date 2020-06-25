@@ -75,7 +75,6 @@ class DestinationsTableViewController: UITableViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        print("Appear")
         delegate?.enter(vc: self)
     }
     
