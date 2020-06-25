@@ -24,6 +24,7 @@ class MemeViewController: UIViewController {
     
     var overlayContainerView: PassThroughView?
     var overlayController: OverlayContainerViewController?
+    var destinationsVC: DestinationsTableViewController?
     
     var actionController: ActionController?
     var actionSetIndex: Int = 0
@@ -74,9 +75,8 @@ class MemeViewController: UIViewController {
     private func setUpViews() {
         guard let collectionController = collectionController,
             let collection = collection else {
-            return DispatchQueue.main.async {
-                self.navigationController?.popViewController(animated: true)
-            }
+                navigationController?.popViewController(animated: true)
+                return
         }
         
         // Load the image
@@ -109,6 +109,7 @@ class MemeViewController: UIViewController {
             
             destinationsVC.editDestinations = false
             destinationsVC.delegate = self
+            self.destinationsVC = destinationsVC
 
             let overlayContainerView = PassThroughView()
             self.overlayContainerView = overlayContainerView
@@ -118,7 +119,6 @@ class MemeViewController: UIViewController {
             overlayController.delegate = self
             overlayController.viewControllers = [navigationVC]
             addChild(overlayController, in: overlayContainerView)
-            overlayController.drivingScrollView = destinationsVC.tableView
             self.overlayController = overlayController
             
             // Add shadow
@@ -161,11 +161,17 @@ class MemeViewController: UIViewController {
             
             self.asset = photo
             self.meme = self.memeController?.fetchOrCreateMeme(for: photo, context: CoreDataStack.shared.mainContext)
+            let destinations = self.collectionController?.allDestinations(for: photo, given: self.collection)
             
             DispatchQueue.main.async {
                 self.imageView.fetchImage(asset: photo, contentMode: .aspectFit)
                 if let name = self.meme?.name {
                     self.nameTextField.text = name
+                }
+                
+                // Load destinations
+                if let destinations = destinations {
+                    self.destinationsVC?.set(destinations: destinations)
                 }
 
                 self.currentActionIndex = 0
@@ -411,6 +417,7 @@ extension MemeViewController: OverlayContainerViewControllerDelegate {
     }
     
     func overlayContainerViewController(_ containerViewController: OverlayContainerViewController, didMoveOverlay overlayViewController: UIViewController, toNotchAt index: Int) {
+        // Prevent the user from accidentally swiping back when trying to swipe back on the Destinations overlay
         navigationController?.interactivePopGestureRecognizer?.isEnabled = (index != 2)
     }
 }
@@ -428,5 +435,9 @@ extension MemeViewController: DestinationsTableDelegate {
         }
         
         performCurrentAction()
+    }
+    
+    func enter(vc: DestinationsTableViewController) {
+        overlayController?.drivingScrollView = vc.tableView
     }
 }

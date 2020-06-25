@@ -70,6 +70,7 @@ class CollectionTableViewController: UITableViewController {
         
         let label = collection.textForCondition(at: indexPath.row)
         cell.textLabel?.text = label
+        cell.detailTextLabel?.text = nil
         
         if condition.conjunction == .none,
             condition.id == .none {
@@ -87,7 +88,7 @@ class CollectionTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return section == 0 ? 1 : collection?.conditions.count ?? 0
+        return section == 0 ? 2 : collection?.conditions.count ?? 0
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -95,11 +96,20 @@ class CollectionTableViewController: UITableViewController {
         
         switch indexPath.section {
         case 0:
-            cell = tableView.dequeueReusableCell(withIdentifier: "ToggleCell", for: indexPath)
-            guard let toggleCell = cell as? ToggleTableViewCell else { break }
-            toggleCell.delegate = self
-            toggleCell.label.text = "Oldest first"
-            toggleCell.toggle.isOn = collection?.oldestFirst ?? true
+            switch indexPath.row {
+            case 0:
+                // "Oldest first" toggle cell
+                cell = tableView.dequeueReusableCell(withIdentifier: "ToggleCell", for: indexPath)
+                guard let toggleCell = cell as? ToggleTableViewCell else { break }
+                toggleCell.delegate = self
+                toggleCell.label.text = "Oldest first"
+                toggleCell.toggle.isOn = collection?.oldestFirst ?? true
+            default:
+                // Destination cell
+                cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
+                cell.textLabel?.text = "Destination"
+                cell.detailTextLabel?.text = collection?.destination?.name
+            }
         default:
             cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
             loadCell(cell, for: indexPath)
@@ -140,12 +150,28 @@ class CollectionTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let collection = collection else { return }
-        let condition = collection.conditions[indexPath.row]
-        // Only segue if the row isn't a ')'
-        if condition.id == nil && condition.conjunction == .none {
-            tableView.deselectRow(at: indexPath, animated: true)
-        } else {
-            performSegue(withIdentifier: "Condition", sender: self)
+        
+        switch indexPath.section {
+        case 0:
+            switch indexPath.row {
+            case 0:
+                tableView.deselectRow(at: indexPath, animated: true)
+                
+                guard let toggleCell = tableView.cellForRow(at: indexPath) as? ToggleTableViewCell else { return }
+                let toggle = toggleCell.toggle!
+                toggle.setOn(!toggle.isOn, animated: true)
+                valueChanged(toggle)
+            default:
+                performSegue(withIdentifier: "Destinations", sender: self)
+            }
+        default:
+            let condition = collection.conditions[indexPath.row]
+            // Only segue if the row isn't a ')'
+            if condition.id == nil && condition.conjunction == .none {
+                tableView.deselectRow(at: indexPath, animated: true)
+            } else {
+                performSegue(withIdentifier: "Condition", sender: self)
+            }
         }
     }
     
@@ -273,6 +299,9 @@ class CollectionTableViewController: UITableViewController {
             } else if let newConditionIndex = newConditionIndex {
                 conditionVC.conditionIndex = newConditionIndex
             }
+        } else if let destinationsVC = segue.destination as? DestinationsTableViewController {
+            destinationsVC.editDestinations = false
+            destinationsVC.delegate = self
         }
     }
 
@@ -296,5 +325,15 @@ extension CollectionTableViewController: ControlCellDelegate {
             collection?.oldestFirst = toggle.isOn
             collectionController?.saveToPersistentStore()
         }
+    }
+}
+
+extension CollectionTableViewController: DestinationsTableDelegate {
+    func choose(destination: Destination) {
+        navigationController?.popToViewController(self, animated: true)
+        guard let collection = collection else { return }
+        
+        collectionController?.set(destination: destination, for: collection)
+        tableView.reloadRows(at: [IndexPath(row: 1, section: 0)], with: .none)
     }
 }

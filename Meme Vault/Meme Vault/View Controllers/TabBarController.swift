@@ -14,7 +14,7 @@ class TabBarController: UITabBarController {
     let actionController = ActionController()
     let providerController = ProviderController()
     let destinationController = DestinationController()
-    let collectionController = CollectionController()
+    let collectionController = CollectionController(context: CoreDataStack.shared.mainContext)
     let memeController = MemeController()
 
     override func viewDidLoad() {

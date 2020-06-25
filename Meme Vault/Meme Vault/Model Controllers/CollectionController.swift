@@ -12,6 +12,7 @@ import CoreData
 class CollectionController {
     
     var collections: [AlbumCollection]
+    //var collectionDestinations: [AlbumCollection: Destination] = [:]
     
     private var collectionCache = Cache<String, Set<PHAsset>>()
     private var allAssetsCache: PHFetchResult<PHAsset>? = nil
@@ -21,10 +22,10 @@ class CollectionController {
     
     // Load a test collection based on albums I have on my phone.
     // This won't work on any other devices
-    init() {
+    init(context: NSManagedObjectContext) {
         self.collections = []
         
-        loadFromPersistentStore()
+        loadFromPersistentStore(context: context)
         
         if self.collections.isEmpty {
             let presetConditions = [
@@ -71,6 +72,26 @@ class CollectionController {
     func rename(collection: AlbumCollection, to name: String) {
         collection.name = name
         saveToPersistentStore()
+    }
+    
+    func allCollections(for asset: PHAsset, given givenCollection: AlbumCollection? = nil) -> [AlbumCollection] {
+        collections.filter { $0 == givenCollection || $0.contains(asset: asset, cache: collectionCache) }
+    }
+    
+    //MARK: Destinations
+    
+    func set(destination: Destination, for collection: AlbumCollection) {
+        collection.destination = destination
+        saveToPersistentStore()
+    }
+    
+    func removeDestination(from collection: AlbumCollection) {
+        collection.destination = nil
+        saveToPersistentStore()
+    }
+    
+    func allDestinations(for asset: PHAsset, given givenCollection: AlbumCollection? = nil) -> [Destination] {
+        allCollections(for: asset, given: givenCollection).compactMap { $0.destination }
     }
     
     //MARK: Condition CRUD
@@ -221,24 +242,32 @@ class CollectionController {
         guard let url = persistentFileURL else { return }
         
         do {
-            let collectionsData = try PropertyListEncoder().encode(collections)
+            let collectionRepresentations = collections.map { CollectionRepresentation(collection: $0) }
+            let collectionsData = try PropertyListEncoder().encode(collectionRepresentations)
             try collectionsData.write(to: url)
-            
         } catch {
             NSLog("Error writing Collections data: \(error)")
         }
     }
     
-    func loadFromPersistentStore() {
+    func loadFromPersistentStore(context: NSManagedObjectContext) {
         guard let url = persistentFileURL,
             FileManager.default.fileExists(atPath: url.path) else { return }
         
         do {
             let collectionsData = try Data(contentsOf: url)
-            let collections = try PropertyListDecoder().decode([AlbumCollection].self, from: collectionsData)
-            self.collections = collections
+            let collectionRepresentations = try PropertyListDecoder().decode([CollectionRepresentation].self, from: collectionsData)
+            
+            let fetchRequest: NSFetchRequest<Destination> = Destination.fetchRequest()
+            let allDestinations = try context.fetch(fetchRequest)
+            
+            self.collections = collectionRepresentations.map { representation in
+                AlbumCollection(name: representation.name,
+                                conditions: representation.conditions,
+                                destination: allDestinations.first(where: { $0.path == representation.destination }))
+            }
         } catch {
-            NSLog("Error reading Collections data: \(error)")
+            NSLog("Error loading Collections data: \(error)")
         }
     }
     

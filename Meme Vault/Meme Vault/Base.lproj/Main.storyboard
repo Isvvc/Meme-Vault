@@ -139,7 +139,7 @@
         <!--Destinations-->
         <scene sceneID="WXs-7U-eFt">
             <objects>
-                <tableViewController id="raC-eB-Iam" customClass="DestinationsTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="Destinations" id="raC-eB-Iam" customClass="DestinationsTableViewController" customModule="Meme_Vault" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="Se7-9j-gil">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -471,7 +471,7 @@
                             </constraints>
                         </view>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="ConditionCell" textLabel="6WC-9A-dyo" style="IBUITableViewCellStyleDefault" id="tz5-06-gDI">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="ConditionCell" textLabel="6WC-9A-dyo" detailTextLabel="efI-Pd-KmF" style="IBUITableViewCellStyleValue1" id="tz5-06-gDI">
                                 <rect key="frame" x="0.0" y="55.5" width="414" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tz5-06-gDI" id="qha-21-vcF">
@@ -479,7 +479,14 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="6WC-9A-dyo">
-                                            <rect key="frame" x="20" y="0.0" width="355" height="43.5"/>
+                                            <rect key="frame" x="20" y="12" width="33.5" height="20.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="efI-Pd-KmF">
+                                            <rect key="frame" x="331" y="12" width="44" height="20.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
@@ -498,6 +505,7 @@
                     <connections>
                         <outlet property="addConditionButton" destination="heh-Bd-8rU" id="QDa-EI-5lf"/>
                         <segue destination="JbR-XU-gwh" kind="show" identifier="Condition" id="xGl-ww-4vA"/>
+                        <segue destination="raC-eB-Iam" kind="show" identifier="Destinations" id="H6H-3u-Xei"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9xQ-WH-Thk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
