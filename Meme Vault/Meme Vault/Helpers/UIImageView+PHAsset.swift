@@ -11,21 +11,13 @@ import Photos
 
 extension UIImageView {
     func fetchImage(asset: PHAsset, contentMode: PHImageContentMode) {
-        switch contentMode {
-        case .aspectFill:
-            self.contentMode = .scaleAspectFill
-        case .aspectFit:
-            self.contentMode = .scaleAspectFit
-        @unknown default:
-            break
-        }
-        
         let options = PHImageRequestOptions()
         options.version = .current
         
-        PHImageManager.default().requestImageDataAndOrientation(for: asset, options: options) { imageData, dataUTI, _, _ in
-            guard let imageData = imageData else { return }
-            self.image = UIImage(data: imageData)
+        let deviceScale = UIScreen.main.scale
+        let targetSize = CGSize(width: self.frame.width * deviceScale, height: self.frame.height * deviceScale)
+        PHImageManager.default().requestImage(for: asset, targetSize: targetSize, contentMode: contentMode, options: options) { image, _ in
+            self.image = image
         }
     }
 }
