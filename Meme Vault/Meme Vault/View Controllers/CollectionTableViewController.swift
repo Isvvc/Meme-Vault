@@ -108,7 +108,7 @@ class CollectionTableViewController: UITableViewController {
                 // Destination cell
                 cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
                 cell.textLabel?.text = "Destination"
-                cell.detailTextLabel?.text = collectionController?.destination(for: collection)?.name
+                cell.detailTextLabel?.text = collection?.destination?.name
             }
         default:
             cell = tableView.dequeueReusableCell(withIdentifier: "ConditionCell", for: indexPath)
